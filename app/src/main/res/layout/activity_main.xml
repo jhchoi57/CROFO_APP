@@ -14,28 +14,30 @@
     </LinearLayout>
 
     <Button
-        android:text="출발지 설정"
-        android:id="@+id/btnStarting"
+        android:text="출발"
+        android:id="@+id/btnStart"
         android:layout_width="300px"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginLeft="-395dp"/>
+        android:layout_marginLeft="-395dp"
+        android:visibility="invisible"/>
 
     <Button
-        android:text="목적지 설정"
-        android:id="@+id/btnFinishing"
+        android:text="도착"
+        android:id="@+id/btnEnd"
         android:layout_width="300px"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginLeft="17dp"
-        android:layout_marginRight="17dp"/>
+        android:layout_marginRight="17dp"
+        android:visibility="invisible"/>
 
-    <Button
+    <!--<Button
         android:text="길찾기"
         android:id="@+id/btnFinding"
         android:layout_width="300px"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginRight="17dp"/>
+        android:layout_marginRight="17dp"/>-->
 
 </android.widget.LinearLayout>
