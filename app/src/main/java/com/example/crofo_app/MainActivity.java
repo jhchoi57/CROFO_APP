@@ -2,6 +2,7 @@ package com.example.crofo_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -28,14 +29,19 @@ public class MainActivity extends AppCompatActivity {
     TMapView tMapView;
     TMapMarkerItem markerItem1 = new TMapMarkerItem();
     TMapPoint tMapMarkerPoint = new TMapPoint(37.570841, 126.985302); // 임의로 찍어둠 : SKT타워
-    TMapPoint startPoint;
-    TMapPoint endPoint;
+    TMapPoint startPoint = new TMapPoint(0,0);
+    TMapPoint endPoint = new TMapPoint(0,0);
     Button btnStarting;
     Button btnDestination;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 세로모드고정
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        // 빨간줄 무시염 이거 세로모드 고정하는거 권장하지 않아서 뜨는거 컴파일에러 ㄴㄴ
+
         setContentView(R.layout.activity_main);
 
         LinearLayout linearLayoutTmap = (LinearLayout)findViewById(R.id.linearLayoutTmap);
@@ -44,11 +50,10 @@ public class MainActivity extends AppCompatActivity {
         tMapView.setSKTMapApiKey( "l7xx57390f539bd74175a4783fe65224453e" );
         linearLayoutTmap.addView( tMapView );
 
-        System.out.println("안뇽\n");
-        startPoint = new TMapPoint(37.570841, 126.985302);            //SKT타워
-        endPoint = new TMapPoint(37.551135, 126.988205);              //N서울타워
-        Navigation naviTest = new Navigation(startPoint, endPoint, tMapView);
-        naviTest.execute(startPoint, endPoint);
+//        startPoint = new TMapPoint(37.570841, 126.985302);            //SKT타워
+//        endPoint = new TMapPoint(37.551135, 126.988205);              //N서울타워
+//        Navigation naviTest = new Navigation(startPoint, endPoint, tMapView);
+//        naviTest.execute(startPoint, endPoint);
 
         tMapView.setCenterPoint(126.988205, 37.551135);
 
@@ -101,10 +106,25 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.btnStart :
                     startPoint = tMapMarkerPoint;
                     Toast.makeText(getApplicationContext(), "위도 : " + startPoint.getLatitude() + "\n경도 : " + startPoint.getLongitude(), Toast.LENGTH_LONG).show();
+
+                    // 도착지가 0 0 이 아니면 네비게이션 시작
+                    if(endPoint.getLongitude() != 0 && endPoint.getLatitude() != 0){
+                        Navigation navigation = new Navigation(startPoint, endPoint, tMapView);
+                        navigation.execute(startPoint, endPoint);
+                    }
+
                     break;
+
                 case R.id.btnEnd :
                     endPoint = tMapMarkerPoint;
                     Toast.makeText(getApplicationContext(), "위도 : " + endPoint.getLatitude() + "\n경도 : " + endPoint.getLongitude(), Toast.LENGTH_LONG).show();
+
+                    // 출발지가 0 0 이 아니면 네비게이션 시작
+                    if(startPoint.getLongitude() != 0 && startPoint.getLatitude() != 0){
+                        Navigation navigation = new Navigation(startPoint, endPoint, tMapView);
+                        navigation.execute(startPoint, endPoint);
+                    }
+
                     break;
             }
         }

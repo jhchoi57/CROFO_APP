@@ -1,5 +1,6 @@
 package com.example.crofo_app;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.AsyncTask;
 
@@ -49,6 +50,19 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
             tMapPolyLine.setLineWidth(2);                                           //선 굵기
 
             tMapView.addTMapPolyLine("Line123", tMapPolyLine);                  //맵에 추가
+
+            // 화면 중심 시작 지점으로 설정
+            tMapView.setCenterPoint(startPoint.getLongitude(), startPoint.getLatitude());
+
+            // 화면 최대 확대
+            tMapView.setZoomLevel(19);
+
+            // 나침반 모드로 변경
+            tMapView.setCompassMode(true);
+
+            // 현재 위치 트래킹인데 과연 사용할지?
+            //tMapView.setTrackingMode(true);
+
         }
         catch( Exception e )
         {
