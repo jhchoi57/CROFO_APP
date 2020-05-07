@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     TMapPoint endPoint = new TMapPoint(0,0);
     Button btnStarting;
     Button btnDestination;
+    Button btnFinish;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +70,10 @@ public class MainActivity extends AppCompatActivity {
 
         btnStarting = (Button)findViewById(R.id.btnStart);
         btnDestination = (Button)findViewById(R.id.btnEnd);
+        btnFinish = (Button)findViewById(R.id.btnFinish);
         btnStarting.setOnClickListener(mClickListener);
         btnDestination.setOnClickListener(mClickListener);
+        btnFinish.setOnClickListener(mClickListener);
 
         // tMapview 클릭 이벤트
         tMapView.setOnClickListenerCallBack(new TMapView.OnClickListenerCallback(){
@@ -95,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 tMapView.addMarkerItem("markerItem1", markerItem1); // 지도에 마커 추가
                 btnStarting.setVisibility(View.VISIBLE);
                 btnDestination.setVisibility(View.VISIBLE);
+                btnFinish.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -112,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
                         Navigation navigation = new Navigation(startPoint, endPoint, tMapView);
                         navigation.execute(startPoint, endPoint);
                     }
-
                     break;
 
                 case R.id.btnEnd :
@@ -124,7 +127,12 @@ public class MainActivity extends AppCompatActivity {
                         Navigation navigation = new Navigation(startPoint, endPoint, tMapView);
                         navigation.execute(startPoint, endPoint);
                     }
+                    break;
 
+                case R.id.btnFinish :
+                    btnStarting.setVisibility(View.INVISIBLE);
+                    btnDestination.setVisibility(View.INVISIBLE);
+                    btnFinish.setVisibility(View.INVISIBLE);
                     break;
             }
         }
