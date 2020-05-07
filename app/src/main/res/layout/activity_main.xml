@@ -42,7 +42,7 @@
             android:id="@+id/btnCurrentLocationToStarting"
             android:layout_width="450px"
             android:layout_height="wrap_content"
-            android:text="현재위치를 출발지로"
+            android:text="현재 위치를 출발지로"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
             android:visibility="visible" />

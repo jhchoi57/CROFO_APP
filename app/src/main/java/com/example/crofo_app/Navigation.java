@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 
 import com.skt.Tmap.TMapData;
+import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPOIItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapPolyLine;
@@ -38,18 +39,32 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
         super.onPreExecute();
     }
 
+    @SuppressLint("WrongThread")
     @Override
     protected Double doInBackground(TMapPoint... tMapPoints){                       //실행부분
         TMapData tMapData = new TMapData();
         TMapPolyLine tMapPolyLine = null;
         try
         {
-
+            TMapMarkerItem startMarker = new TMapMarkerItem();
+            TMapMarkerItem endMarker = new TMapMarkerItem();
             tMapPolyLine = tMapData.findPathData(tMapPoints[0], tMapPoints[1]);     //길찾기
             tMapPolyLine.setLineColor(Color.BLUE);                                  //선 색
             tMapPolyLine.setLineWidth(2);                                           //선 굵기
 
             tMapView.addTMapPolyLine("Line123", tMapPolyLine);                  //맵에 추가
+
+            // 마커의 좌표 지정
+            startMarker.setTMapPoint( startPoint );
+            endMarker.setTMapPoint( endPoint );
+
+            // 마커의 타이틀 지정
+            startMarker.setName("StartPoint");
+            endMarker.setName("EndPoint");
+
+            // 지도에 마커 추가
+            tMapView.addMarkerItem("StartPoint", startMarker);
+            tMapView.addMarkerItem("EndPoint", endMarker);
 
             // 화면 중심 시작 지점으로 설정
             tMapView.setCenterPoint(startPoint.getLongitude(), startPoint.getLatitude());
@@ -62,6 +77,7 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
 
             // 현재 위치 트래킹인데 과연 사용할지?
             //tMapView.setTrackingMode(true);
+
 
         }
         catch( Exception e )
