@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -60,9 +61,11 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         startActivity(new Intent(this, SplashActivity.class));
 
         super.onCreate(savedInstanceState);
+
         // 세로모드고정
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        // activity_main View 띄우기
         setContentView(R.layout.activity_main);
 
 
@@ -85,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         // 현재 위치 인터넷으로 받기 gps 면 GPS_PROVIDER
         gps.setProvider(gps.NETWORK_PROVIDER);
         gps.OpenGps();
-
 
 
         LinearLayout linearLayoutTmap = (LinearLayout)findViewById(R.id.linearLayoutTmap);
@@ -153,9 +155,21 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 //btnFinish.setVisibility(View.VISIBLE);
             }
         });
+
+
+
+        // 커스텀 다이얼로그를 호출한다.
+        CrossFrame crossFrame = new CrossFrame(MainActivity.this);
+        crossFrame.callFunction();
+
     }
 
-    //
+    // onCreate 끝
+
+
+
+
+
 
     // btnStart, btnEnd 클릭 이벤트
     Button.OnClickListener mClickListener = new View.OnClickListener(){

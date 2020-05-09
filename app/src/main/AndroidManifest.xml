@@ -26,6 +26,8 @@
     <!-- 스플래시 액티비티 ( 로딩창 ) -->
     <activity android:name="SplashActivity"/>
 
+    <!-- CrossFrame Activity -->
+    <activity android:name=".CrossFrame" />
 </application>
 
 </manifest>
