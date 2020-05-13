@@ -8,8 +8,7 @@
     <!-- 타이틀바 -->
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -19,7 +18,8 @@
         <ImageView
             android:layout_width="50px"
             android:layout_height="50px"
-            android:layout_marginLeft="100px"
+            android:layout_marginLeft="90px"
+            android:layout_marginTop="350px"
             android:src="@drawable/person"></ImageView>
 
     </FrameLayout>

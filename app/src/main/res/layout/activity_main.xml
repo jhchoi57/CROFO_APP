@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.widget.LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,52 +9,63 @@
     <LinearLayout
         android:id="@+id/linearLayoutTmap"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="-38dp"
+        tools:layout_editor_absoluteY="0dp">
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="-415dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+    <Button
+        android:id="@+id/btnFinish"
+        android:layout_width="450px"
+        android:layout_height="wrap_content"
+        android:text="길찾기 종료"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.933"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.991" />
 
-        <Button
-            android:id="@+id/btnStart"
-            android:layout_width="450px"
-            android:layout_height="wrap_content"
-            android:text="출발"
-            android:layout_alignParentLeft="true"
-            android:visibility="invisible" />
+    <Button
+        android:id="@+id/btnCurrentLocationToStarting"
+        android:layout_width="450px"
+        android:layout_height="wrap_content"
+        android:text="현재 위치를 출발지로"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.991" />
 
-        <Button
-            android:id="@+id/btnEnd"
-            android:layout_width="450px"
-            android:layout_height="wrap_content"
-            android:text="도착"
-            android:layout_alignParentRight="true"
-            android:visibility="invisible" />
+    <Button
+        android:id="@+id/btnEnd"
+        android:layout_width="450px"
+        android:layout_height="wrap_content"
+        android:text="도착"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.933"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.906" />
 
-        <Button
-            android:id="@+id/btnCurrentLocationToStarting"
-            android:layout_width="450px"
-            android:layout_height="wrap_content"
-            android:text="현재 위치를 출발지로"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:visibility="visible" />
+    <Button
+        android:id="@+id/btnStart"
+        android:layout_width="450px"
+        android:layout_height="wrap_content"
+        android:text="출발"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.906" />
 
-        <Button
-            android:id="@+id/btnFinish"
-            android:layout_width="450px"
-            android:layout_height="wrap_content"
-            android:text="길찾기 종료"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:visibility="invisible" />
-
-    </RelativeLayout>
-</android.widget.LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

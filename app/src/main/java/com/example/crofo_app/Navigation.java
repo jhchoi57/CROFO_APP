@@ -2,7 +2,10 @@ package com.example.crofo_app;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.AsyncTask;
+import android.speech.tts.TextToSpeech;
+import android.widget.Toast;
 
 import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapMarkerItem;
@@ -10,13 +13,14 @@ import com.skt.Tmap.TMapPOIItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapView;
-
+import static android.speech.tts.TextToSpeech.ERROR;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.logging.LogManager;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,6 +30,7 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
     private TMapPoint startPoint;   // 출발지 좌표
     private TMapPoint endPoint;     // 목적지 좌표
     private TMapView tMapView;      // View
+
 
     public Navigation(TMapPoint sPoint, TMapPoint ePoint, TMapView tView){
         super();
@@ -77,7 +82,6 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
 
             // 현재 위치 트래킹인데 과연 사용할지?
             //tMapView.setTrackingMode(true);
-
 
         }
         catch( Exception e )

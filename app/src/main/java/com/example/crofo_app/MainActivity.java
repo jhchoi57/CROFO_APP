@@ -1,6 +1,7 @@
 package com.example.crofo_app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
@@ -18,6 +19,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -35,6 +37,9 @@ import com.skt.Tmap.TMapTapi;
 import com.skt.Tmap.TMapView;
 
 import java.util.ArrayList;
+import java.util.Locale;
+
+import static android.speech.tts.TextToSpeech.ERROR;
 
 public class MainActivity extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback{
 
@@ -48,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     Button btnDestination;
     Button btnFinish;
     Button btnCurrentLocationToStarting;
+    TextToSpeech tts;
 
     @Override
     public void onLocationChange(Location location){
@@ -89,6 +95,17 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         gps.setProvider(gps.NETWORK_PROVIDER);
         gps.OpenGps();
 
+        //tts 한국어로 초기화
+        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != ERROR) {
+                    // 언어를 선택한다.
+                    tts.setLanguage(Locale.KOREAN);
+                }
+            }
+        });
+
 
         LinearLayout linearLayoutTmap = (LinearLayout)findViewById(R.id.linearLayoutTmap);
         tMapView = new TMapView(this);
@@ -100,6 +117,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 //        endPoint = new TMapPoint(37.551135, 126.988205);              //N서울타워
 //        Navigation naviTest = new Navigation(startPoint, endPoint, tMapView);
 //        naviTest.execute(startPoint, endPoint);
+
+
 
         // 시작 중심 좌표
         // 시작 현위치로
@@ -198,6 +217,10 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                         Navigation navigation = new Navigation(startPoint, endPoint, tMapView);
                         navigation.execute(startPoint, endPoint);
                         btnFinish.setVisibility(View.VISIBLE);
+
+                        //tts
+                        CrossAlert crossAlert = new CrossAlert(null);
+                        tts.speak(crossAlert.getAlertSoundFront(),TextToSpeech.QUEUE_FLUSH, null);
                     }
 
                     else{
