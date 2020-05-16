@@ -38,6 +38,8 @@ import com.skt.Tmap.TMapView;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.speech.tts.TextToSpeech.ERROR;
 
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     Button btnFinish;
     Button btnCurrentLocationToStarting;
     TextToSpeech tts;
+    TimerTask timerTask;
 
     @Override
     public void onLocationChange(Location location){
@@ -119,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 //        naviTest.execute(startPoint, endPoint);
 
 
-
         // 시작 중심 좌표
         // 시작 현위치로
         tMapView.setTrackingMode(true);
@@ -181,13 +183,24 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         CrossFrame crossFrame = new CrossFrame(MainActivity.this);
         crossFrame.callFunction();
 
+        startTimerTask();
     }
 
     // onCreate 끝
 
 
 
+    public void startTimerTask(){
+        timerTask = new TimerTask(){
+            @Override
+            public void run(){
+                Toast.makeText(getApplicationContext(),"런런런", Toast.LENGTH_LONG).show();
+            }
+        };
 
+        Timer timer = new Timer();
+        timer.schedule(timerTask,5000);
+    }
 
 
     // btnStart, btnEnd 클릭 이벤트
