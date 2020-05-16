@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         setGps();
         receiveLocation();
 
-        //tts 한국어로 초기화, TMAP 띄우기
+        //tts 한국어로 초기화, Tmap 띄우기
         initTTS();
         setTMAP();
 
