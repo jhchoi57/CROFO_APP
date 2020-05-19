@@ -35,6 +35,10 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
     private TMapPoint startPoint;   // 출발지 좌표
     private TMapPoint endPoint;     // 목적지 좌표
     private TMapView tMapView;      // View
+    private ArrayList<String> turnTypeList = new ArrayList<String>();
+    private ArrayList<String> descriptionList = new ArrayList<String>();
+    private ArrayList<String> coordinatesList = new ArrayList<String>();
+    private ArrayList<String> pointIndexList = new ArrayList<String>();
 
     public Navigation(TMapPoint sPoint, TMapPoint ePoint, TMapView tView){
         super();
@@ -98,9 +102,11 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
                         NodeList nodeListPlacemarkItem = nodeListPlacemark.item(i).getChildNodes();
                         for( int j=0; j<nodeListPlacemarkItem.getLength(); j++ ) {
                             if( nodeListPlacemarkItem.item(j).getNodeName().equals("tmap:turnType") ) {
+                                turnTypeList.add(nodeListPlacemarkItem.item(j).getTextContent().trim());
                                 Log.d("debug", nodeListPlacemarkItem.item(j).getTextContent().trim() );
                             }
                             if( nodeListPlacemarkItem.item(j).getNodeName().equals("description") ) {
+                                descriptionList.add(nodeListPlacemarkItem.item(j).getTextContent().trim());
                                 Log.d("debug", nodeListPlacemarkItem.item(j).getTextContent().trim() );
                             }
                         }
@@ -111,6 +117,7 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
                         NodeList nodeListPointItem = nodeListPoint.item(i).getChildNodes();
                         for( int j=0; j<nodeListPointItem.getLength(); j++ ) {
                             if( nodeListPointItem.item(j).getNodeName().equals("coordinates") ) {
+                                coordinatesList.add(nodeListPointItem.item(j).getTextContent().trim());
                                 Log.d("debug", nodeListPointItem.item(j).getTextContent().trim() );
 
                                 String xy  = nodeListPointItem.item(j).getTextContent().trim();
@@ -124,6 +131,12 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
                             }
                         }
                     }
+
+                    for(int i = 0; i < coordinatesList.size(); i++){
+                        System.out.println("좌표 : " + coordinatesList.get(i));
+                        System.out.println("TurnType 11 직진 12 좌회전 13 우회전 : " + turnTypeList.get(i));
+                    }
+
                 }
             });
 
