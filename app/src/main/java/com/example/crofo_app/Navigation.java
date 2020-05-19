@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.media.Image;
 import android.os.AsyncTask;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.skt.Tmap.TMapData;
@@ -14,6 +15,10 @@ import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapView;
 import static android.speech.tts.TextToSpeech.ERROR;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -30,7 +35,6 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
     private TMapPoint startPoint;   // 출발지 좌표
     private TMapPoint endPoint;     // 목적지 좌표
     private TMapView tMapView;      // View
-
 
     public Navigation(TMapPoint sPoint, TMapPoint ePoint, TMapView tView){
         super();
@@ -53,6 +57,8 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
         {
             TMapMarkerItem startMarker = new TMapMarkerItem();
             TMapMarkerItem endMarker = new TMapMarkerItem();
+
+
             tMapPolyLine = tMapData.findPathData(tMapPoints[0], tMapPoints[1]);     //길찾기
             tMapPolyLine.setLineColor(Color.BLUE);                                  //선 색
             tMapPolyLine.setLineWidth(2);                                           //선 굵기
@@ -82,6 +88,46 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
 
             // 현재 위치 트래킹인데 과연 사용할지?
             //tMapView.setTrackingMode(true);
+
+            tMapData.findPathDataAllType(TMapData.TMapPathType.CAR_PATH, startPoint, endPoint, new TMapData.FindPathDataAllListenerCallback() {
+                @Override
+                public void onFindPathDataAll(Document document) {
+                    Element root = document.getDocumentElement();
+                    NodeList nodeListPlacemark = root.getElementsByTagName("Placemark");
+                    for( int i=0; i<nodeListPlacemark.getLength(); i++ ) {
+                        NodeList nodeListPlacemarkItem = nodeListPlacemark.item(i).getChildNodes();
+                        for( int j=0; j<nodeListPlacemarkItem.getLength(); j++ ) {
+                            if( nodeListPlacemarkItem.item(j).getNodeName().equals("tmap:turnType") ) {
+                                Log.d("debug", nodeListPlacemarkItem.item(j).getTextContent().trim() );
+                            }
+                            if( nodeListPlacemarkItem.item(j).getNodeName().equals("description") ) {
+                                Log.d("debug", nodeListPlacemarkItem.item(j).getTextContent().trim() );
+                            }
+                        }
+                    }
+
+                    NodeList nodeListPoint = root.getElementsByTagName("Point");
+                    for( int i=0; i<nodeListPoint.getLength(); i++ ) {
+                        NodeList nodeListPointItem = nodeListPoint.item(i).getChildNodes();
+                        for( int j=0; j<nodeListPointItem.getLength(); j++ ) {
+                            if( nodeListPointItem.item(j).getNodeName().equals("coordinates") ) {
+                                Log.d("debug", nodeListPointItem.item(j).getTextContent().trim() );
+
+                                String xy  = nodeListPointItem.item(j).getTextContent().trim();
+
+                                String [] splitXY = xy.split(",");
+
+                                TMapPoint point = new TMapPoint(Double.parseDouble(splitXY[1]), Double.parseDouble(splitXY[0]));
+                                TMapMarkerItem Marker = new TMapMarkerItem();
+                                Marker.setTMapPoint(point);
+                                tMapView.addMarkerItem("asd" + point, Marker);
+                            }
+                        }
+                    }
+                }
+            });
+
+
 
         }
         catch( Exception e )
