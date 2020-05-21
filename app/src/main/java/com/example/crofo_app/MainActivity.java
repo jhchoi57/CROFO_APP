@@ -17,16 +17,22 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.content.Context;
 
+import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapView;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -38,6 +44,7 @@ import static android.speech.tts.TextToSpeech.ERROR;
 public class MainActivity extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback{
 
     TMapView tMapView;
+    TMapData tMapData;
     TMapMarkerItem markerItem1 = new TMapMarkerItem();
     TMapPoint tMapMarkerPoint = new TMapPoint(37.570841, 126.985302); // 임의로 찍어둠 : SKT타워
     TMapPoint startPoint = new TMapPoint(0,0);
@@ -48,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     Button btnFinish;
     Button btnCurrentLocationToStarting;
     TextToSpeech tts;
-    TimerTask timerTask;
+    TimerTask gpsCheckTimerTask;
 
     @Override
     public void onLocationChange(Location location){
@@ -77,8 +84,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         setTMAP();
 
         // 시작 중심 좌표, 시작 현위치로
-        tMapView.setTrackingMode(true);
         Toast.makeText(getApplicationContext(), "현재 위치 : " + tMapView.getLocationPoint(), Toast.LENGTH_LONG).show();
+        tMapView.setCenterPoint(tMapView.getLocationPoint().getLongitude(), tMapView.getLocationPoint().getLatitude());
 
         // 마커 아이콘 지정, 버튼 설정, tMapView 클릭 이벤트
         setMarkerIcon();
@@ -90,7 +97,16 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         CrossFrame crossFrame = new CrossFrame(MainActivity.this);
         crossFrame.callFunction();
 
-        //startTimerTask();
+        // 현재 위치 타이머로 5초마다 계속 얻기
+        //tMapView.setTrackingMode(true);
+        initTimerTask();
+        Timer gpsCheckTimer = new Timer();
+        gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 5000);
+
+        // 길찾기 시작되면 어디서 우회전 하는지 어느 방향에서 진입 하는지 받아 올 수 있음
+        // 예시 > 37.563857889963195  126.98510938364018  341.15804530424913(북쪽0도기준)
+        // 서버에 보내고 CrossInfo 리스트로 받아오면 되려나?
+        
     }
 
     // onCreate 끝
@@ -121,6 +137,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                         //tts
                         CrossAlert crossAlert = new CrossAlert(null);
                         tts.speak(crossAlert.getAlertSoundFront(),TextToSpeech.QUEUE_FLUSH, null);
+
+
                     }
 
                     else{
@@ -221,21 +239,19 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         gps.setMinTime(1000);
         gps.setMinDistance(2);
         // 현재 위치 인터넷으로 받기 gps 면 GPS_PROVIDER
-        gps.setProvider(gps.NETWORK_PROVIDER);
+        gps.setProvider(gps.GPS_PROVIDER);
         gps.OpenGps();
     }
 
 
-    public void startTimerTask(){
-        timerTask = new TimerTask(){
+    public void initTimerTask(){
+        gpsCheckTimerTask = new TimerTask(){
             @Override
             public void run(){
-                Toast.makeText(getApplicationContext(),"런런런", Toast.LENGTH_LONG).show();
+                // 타이머로 할 일
+                Log.d("현재위치", String.valueOf(tMapView.getLocationPoint()));
             }
         };
-
-        Timer timer = new Timer();
-        timer.schedule(timerTask,5000);
     }
 
     public void setButton(){

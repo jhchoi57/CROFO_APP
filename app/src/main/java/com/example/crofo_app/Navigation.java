@@ -37,7 +37,7 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
     private TMapView tMapView;      // View
     private ArrayList<String> turnTypeList = new ArrayList<String>();
     private ArrayList<String> descriptionList = new ArrayList<String>();
-    private ArrayList<String> coordinatesList = new ArrayList<String>();
+    private ArrayList<Double[]> coordinatesList = new ArrayList<Double[]>();
     private ArrayList<String> pointIndexList = new ArrayList<String>();
 
     public Navigation(TMapPoint sPoint, TMapPoint ePoint, TMapView tView){
@@ -117,14 +117,15 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
                         NodeList nodeListPointItem = nodeListPoint.item(i).getChildNodes();
                         for( int j=0; j<nodeListPointItem.getLength(); j++ ) {
                             if( nodeListPointItem.item(j).getNodeName().equals("coordinates") ) {
-                                coordinatesList.add(nodeListPointItem.item(j).getTextContent().trim());
+
                                 Log.d("debug", nodeListPointItem.item(j).getTextContent().trim() );
 
                                 String xy  = nodeListPointItem.item(j).getTextContent().trim();
 
                                 String [] splitXY = xy.split(",");
-
                                 TMapPoint point = new TMapPoint(Double.parseDouble(splitXY[1]), Double.parseDouble(splitXY[0]));
+                                Double[] pointDouble = {Double.parseDouble(splitXY[1]), Double.parseDouble(splitXY[0])};
+                                coordinatesList.add(pointDouble);
                                 TMapMarkerItem Marker = new TMapMarkerItem();
                                 Marker.setTMapPoint(point);
                                 tMapView.addMarkerItem("asd" + point, Marker);
@@ -133,8 +134,12 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
                     }
 
                     for(int i = 0; i < coordinatesList.size(); i++){
-                        System.out.println("좌표 : " + coordinatesList.get(i));
-                        System.out.println("TurnType 11 직진 12 좌회전 13 우회전 : " + turnTypeList.get(i));
+                        double trueBearing = 0;
+                        System.out.println("좌표 : " + coordinatesList.get(i)[0] + "    " + coordinatesList.get(i)[1]);
+                        System.out.println("TurnType : " + turnTypeList.get(i));
+                        if(i==0) continue;
+                        trueBearing = getTrueBearing(coordinatesList.get(i), coordinatesList.get(i-1));
+                        System.out.println("교차로 진입 방향 : " + "  " + trueBearing);
                     }
 
                 }
@@ -157,6 +162,57 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
 
     public TMapPoint getEndPoint(){
         return this.endPoint;
+    }
+
+    public double getTrueBearing(Double[] point1, Double[] point2){
+        // point[0] = lat , point[1] = lon
+
+        Double[] point1_radian = new Double[2];
+        Double[] point2_radian = new Double[2];
+
+        // 현재 위치 : 위도나 경도는 지구 중심을 기반으로 하는 각도이기 때문에 라디안 각도로 변환한다.
+        point1_radian[0] = point1[0] * (3.141592 / 180);        //lat
+        point1_radian[1] = point1[1] * (3.141592 / 180);        //lon
+
+        // 목표 위치 : 위도나 경도는 지구 중심을 기반으로 하는 각도이기 때문에 라디안 각도로 변환한다.
+        point2_radian[0] = point2[0] * (3.141592 / 180);        //lat
+        point2_radian[1] = point2[1] * (3.141592 / 180);        //lon
+
+        // radian distance
+
+        double radian_distance = 0;
+
+        radian_distance = Math.acos(Math.sin(point1_radian[0]) * Math.sin(point2_radian[0]) + Math.cos(point1_radian[0]) * Math.cos(point2_radian[0]) * Math.cos(point1_radian[1] - point2_radian[1]));
+
+
+
+        // 목적지 이동 방향을 구한다.(현재 좌표에서 다음 좌표로 이동하기 위해서는 방향을 설정해야 한다. 라디안값이다.
+
+        double radian_bearing = Math.acos((Math.sin(point2_radian[0]) - Math.sin(point1_radian[0]) * Math.cos(radian_distance)) / (Math.cos(point1_radian[0]) * Math.sin(radian_distance)));
+        // acos의 인수로 주어지는 x는 360분법의 각도가 아닌 radian(호도)값이다.
+
+        double true_bearing = 0;
+
+        if (Math.sin(point2_radian[1] - point1_radian[1]) < 0)
+
+        {
+
+            true_bearing = radian_bearing * (180 / 3.141592);
+
+            true_bearing = 360 - true_bearing;
+
+        }
+
+        else
+
+        {
+
+            true_bearing = radian_bearing * (180 / 3.141592);
+
+        }
+
+        return true_bearing;
+
     }
 
 }
