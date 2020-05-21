@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         // 길찾기 시작되면 어디서 우회전 하는지 어느 방향에서 진입 하는지 받아 올 수 있음
         // 예시 > 37.563857889963195  126.98510938364018  341.15804530424913(북쪽0도기준)
         // 서버에 보내고 CrossInfo 리스트로 받아오면 되려나?
-        
+
     }
 
     // onCreate 끝
@@ -178,7 +178,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 case R.id.btnCurrentLocationToStarting:
 
                     // 출발지를 현재 위치로
-                    startPoint = gps.getLocation();
+                    startPoint = tMapView.getLocationPoint();
+                    //startPoint = gps.getLocation();
                     tMapView.setCenterPoint(startPoint.getLongitude(), startPoint.getLatitude());
                     Toast.makeText(getApplicationContext(), "위도 : " + startPoint.getLatitude() + "\n경도 : " + startPoint.getLongitude(), Toast.LENGTH_LONG).show();
 

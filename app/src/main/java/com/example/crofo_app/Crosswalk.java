@@ -5,11 +5,11 @@ import com.skt.Tmap.TMapPoint;
 import java.util.ArrayList;
 
 public class Crosswalk {
-    private ArrayList<Pedestrian> pedestrianList;
-    private ArrayList<Car> carList;
-    private TMapPoint crosswalkLocation;
+    private ArrayList<Pedestrian> pedestrianList;       // 보행자 리스트
+    private ArrayList<Car> carList;                     // 차량 리스트
+    private double[] crosswalkLocation;                // 횡단보도 위치 ( 필요하려나? ) lat lon 순서
 
-    public Crosswalk(ArrayList<Pedestrian> pL, ArrayList<Car> cL, TMapPoint cwL){
+    public Crosswalk(ArrayList<Pedestrian> pL, ArrayList<Car> cL, double[] cwL){
         pedestrianList = pL;
         carList = cL;
         crosswalkLocation = cwL;
@@ -23,7 +23,7 @@ public class Crosswalk {
         return carList;
     }
 
-    public TMapPoint getCrosswalkLocation(){
+    public double[] getCrosswalkLocation(){
         return crosswalkLocation;
     }
 
@@ -35,7 +35,7 @@ public class Crosswalk {
         carList = cL;
     }
 
-    public void setCrosswalkLocation(TMapPoint cwL){
+    public void setCrosswalkLocation(double[] cwL){
         crosswalkLocation = cwL;
     }
 
