@@ -95,7 +95,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         // 커스텀 다이얼로그를 호출한다.
         CrossFrame crossFrame = new CrossFrame(MainActivity.this);
-        crossFrame.callFunction();
+        crossFrame.callCrossFront();
+        crossFrame.callCrossRight();
 
         // 현재 위치 타이머로 5초마다 계속 얻기
         //tMapView.setTrackingMode(true);
