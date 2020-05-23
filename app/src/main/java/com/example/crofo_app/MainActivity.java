@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         serverTestList.add(crossInfoTest2);
         serverTestList.add(crossInfoTest3);
 
-        new CrossRequest(serverTestList).execute("http://192.168.0.13:8080/app"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
+        new CrossRequest(serverTestList).execute("http://192.168.0.13:8080/app/cross/list"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
     }
 
     // onCreate 끝
