@@ -105,9 +105,19 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 5000);
 
         // 길찾기 시작되면 어디서 우회전 하는지 어느 방향에서 진입 하는지 받아 올 수 있음
-        // 예시 > 37.563857889963195  126.98510938364018  341.15804530424913(북쪽0도기준)
-        // 서버에 보내고 CrossInfo 리스트로 받아오면 되려나?
+        // 예시 > 37.563857889963195  126.98510938364018  341.15804530424913(북쪽0도, 360도기준)
+        // 서버에 CrossINfo 리스트로 보내고 전방 우측 횡단보도 채워서 CrossInfo 리스트로 받아오면 되려나?
 
+        ArrayList<CrossInfo> serverTestList = new ArrayList<CrossInfo>();
+        double[] coordinate1 = {37.564091213912015, 126.98609817581536};
+        double[] coordinate2 = {37.564677282550214, 126.9875285844233};
+        double[] coordinate3 = {37.570137763308296, 126.9877839620249};
+        CrossInfo crossInfoTest1 = new CrossInfo(coordinate1, 338.1527729935401);
+        CrossInfo crossInfoTest2 = new CrossInfo(coordinate2, 242.66650609871442);
+        CrossInfo crossInfoTest3 = new CrossInfo(coordinate3, 182.1230581504779);
+        serverTestList.add(crossInfoTest1);
+        serverTestList.add(crossInfoTest2);
+        serverTestList.add(crossInfoTest3);
     }
 
     // onCreate 끝
