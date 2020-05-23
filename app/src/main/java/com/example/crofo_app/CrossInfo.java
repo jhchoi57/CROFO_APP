@@ -15,6 +15,13 @@ public class CrossInfo {
         trueBearing = tB;
     }
 
+    public CrossInfo(double[] cL, double tB){
+        frontCrosswalk = null;
+        rightCrosswalk = null;
+        crossLocation = cL;
+        trueBearing = tB;
+    }
+
     public Crosswalk getFrontCrosswalk(){
         return frontCrosswalk;
     }
@@ -46,5 +53,5 @@ public class CrossInfo {
     public void setTrueBearing(double tB){
         trueBearing = tB;
     }
-    
+
 }
