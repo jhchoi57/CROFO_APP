@@ -46,4 +46,5 @@ public class CrossInfo {
     public void setTrueBearing(double tB){
         trueBearing = tB;
     }
+    
 }
