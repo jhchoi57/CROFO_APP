@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     TMapView tMapView;
     TMapData tMapData;
     TMapMarkerItem markerItem1 = new TMapMarkerItem();
+    TMapMarkerItem markerItemStart = new TMapMarkerItem();
+    TMapMarkerItem markerItemEnd = new TMapMarkerItem();
     TMapPoint tMapMarkerPoint = new TMapPoint(37.570841, 126.985302); // 임의로 찍어둠 : SKT타워
     TMapPoint startPoint = new TMapPoint(0,0);
     TMapPoint endPoint = new TMapPoint(0,0);
@@ -89,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         // 마커 아이콘 지정, 버튼 설정, tMapView 클릭 이벤트
         setMarkerIcon();
+        setStartMarkerIcon();
+        setEndMarkerIcon();
         setButton();
         tMapViewClickEvent();
         tMapViewLongClickEvent();
@@ -133,12 +137,18 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 // 출발지 설정 버튼
                 case R.id.btnStart :
                     startPoint = tMapMarkerPoint;
+                    markerItemStart.setTMapPoint( startPoint ); // 마커의 좌표 지정
+                    tMapView.addMarkerItem("start",markerItemStart);
+                    tMapView.removeMarkerItem("marker");
                     Toast.makeText(getApplicationContext(), "위도 : " + startPoint.getLatitude() + "\n경도 : " + startPoint.getLongitude(), Toast.LENGTH_LONG).show();
                     break;
 
                 // 도착지 설정 버튼
                 case R.id.btnEnd :
                     endPoint = tMapMarkerPoint;
+                    markerItemEnd.setTMapPoint( endPoint ); // 마커의 좌표 지정
+                    tMapView.addMarkerItem("end",markerItemEnd);
+                    tMapView.removeMarkerItem("marker");
                     Toast.makeText(getApplicationContext(), "위도 : " + endPoint.getLatitude() + "\n경도 : " + endPoint.getLongitude(), Toast.LENGTH_LONG).show();
 
                     // 출발지가 0 0 이 아니면 네비게이션 시작
@@ -193,6 +203,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                     // 출발지를 현재 위치로
                     startPoint = tMapView.getLocationPoint();
                     //startPoint = gps.getLocation();
+                    markerItemStart.setTMapPoint( startPoint ); // 마커의 좌표 지정
+                    tMapView.addMarkerItem("start",markerItemStart);
+                    tMapView.removeMarkerItem("marker");
                     tMapView.setCenterPoint(startPoint.getLongitude(), startPoint.getLatitude());
                     Toast.makeText(getApplicationContext(), "위도 : " + startPoint.getLatitude() + "\n경도 : " + startPoint.getLongitude(), Toast.LENGTH_LONG).show();
 
@@ -206,6 +219,18 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         Context context = this;
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.poi_dot);
         markerItem1.setIcon(bitmap);
+    }
+
+    public void setStartMarkerIcon(){
+        Context context = this;
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.start);
+        markerItemStart.setIcon(bitmap);
+    }
+
+    public void setEndMarkerIcon(){
+        Context context = this;
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.end);
+        markerItemEnd.setIcon(bitmap);
     }
 
     public void tMapViewClickEvent(){
@@ -228,8 +253,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             public void onLongPressEvent(ArrayList arrayList, ArrayList arrayList1, TMapPoint tMapPoint) {
                 tMapMarkerPoint = tMapPoint;
                 markerItem1.setTMapPoint( tMapMarkerPoint ); // 마커의 좌표 지정
-                markerItem1.setName(""); // 마커의 타이틀 지정
-                tMapView.addMarkerItem("markerItem1", markerItem1); // 지도에 마커 추가
+                tMapView.addMarkerItem("marker", markerItem1); // 지도에 마커 추가
                 btnStarting.setVisibility(View.VISIBLE);
                 btnDestination.setVisibility(View.VISIBLE);
                 //btnFinish.setVisibility(View.VISIBLE);
