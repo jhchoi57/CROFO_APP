@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     Button btnDestination;
     Button btnFinish;
     Button btnCurrentLocationToStarting;
+    Button btnSafetyDrive;
     TextToSpeech tts;
     TimerTask gpsCheckTimerTask;
 
@@ -213,6 +214,10 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
                     break;
 
+                case R.id.btnSafetyDrive:
+
+                    // 안전주행 설정해주는 버튼
+                    break;
             }
         }
     };
@@ -301,12 +306,14 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         this.btnDestination = (Button)findViewById(R.id.btnEnd);
         this.btnFinish = (Button)findViewById(R.id.btnFinish);
         this.btnCurrentLocationToStarting = (Button)findViewById(R.id.btnCurrentLocationToStarting);
+        this.btnSafetyDrive = (Button)findViewById(R.id.btnSafetyDrive);
 
         // 버튼 Listener
         this.btnStarting.setOnClickListener(mClickListener);
         this.btnDestination.setOnClickListener(mClickListener);
         this.btnFinish.setOnClickListener(mClickListener);
         this.btnCurrentLocationToStarting.setOnClickListener(mClickListener);
+        this.btnSafetyDrive.setOnClickListener(mClickListener);
     }
 
     public void initTTS(){
