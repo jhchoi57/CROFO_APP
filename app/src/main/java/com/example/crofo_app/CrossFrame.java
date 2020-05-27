@@ -16,6 +16,8 @@ public class CrossFrame {
         this.context = context;
     }
     public Dialog frontdlg = null;
+    public Dialog backdlg = null;
+    public Dialog leftdlg = null;
     public Dialog rightdlg = null;
 
     // 호출할 다이얼로그 함수를 정의한다.
@@ -32,12 +34,12 @@ public class CrossFrame {
 
         // 커스텀 다이얼로그 위치 조정
         LayoutParams params = frontdlg.getWindow().getAttributes();
-        // params.x = 100;
-        // params.y = 500;
+        params.x = 250;
+        params.y = 800 + 300;
         // params.width = 300;
         // params.height = 300;
         frontdlg.getWindow().setAttributes(params);
-        frontdlg.getWindow().setGravity(Gravity.CENTER);
+        frontdlg.getWindow().setGravity(Gravity.TOP | Gravity.LEFT);
 
         // 배경 어두워지는거 없애기
         frontdlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
@@ -46,16 +48,58 @@ public class CrossFrame {
         frontdlg.show();
     }
 
-    public void drawObjFront(int left, int top, int obj){
-        ImageView iv = new ImageView(context);
+    public void callCrossBack() {
 
-        // 오브젝트 받아서 if로 나누면 댐
-        iv.setImageResource(R.drawable.person);
-        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        param.width = 70;
-        param.height = 70;
-        param.setMargins(left,top,0,0);
-        frontdlg.addContentView(iv, param);
+        // 커스텀 다이얼로그를 정의하기위해 Dialog클래스를 생성한다.
+        backdlg = new Dialog(context);
+
+        // 액티비티의 타이틀바를 숨긴다.
+        backdlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        // 커스텀 다이얼로그의 레이아웃을 설정한다.
+        backdlg.setContentView(R.layout.crossframeback);
+
+        // 커스텀 다이얼로그 위치 조정
+        LayoutParams params = backdlg.getWindow().getAttributes();
+        params.x = 250;
+        params.y = 300;
+        // params.width = 300;
+        // params.height = 300;
+        backdlg.getWindow().setAttributes(params);
+        backdlg.getWindow().setGravity(Gravity.TOP | Gravity.LEFT);
+
+        // 배경 어두워지는거 없애기
+        backdlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+        // 커스텀 다이얼로그를 노출한다
+        backdlg.show();
+    }
+
+    public void callCrossLeft() {
+
+        // 커스텀 다이얼로그를 정의하기위해 Dialog클래스를 생성한다.
+        leftdlg = new Dialog(context);
+
+        // 액티비티의 타이틀바를 숨긴다.
+        leftdlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        // 커스텀 다이얼로그의 레이아웃을 설정한다.
+        leftdlg.setContentView(R.layout.crossframeleft);
+
+        // 커스텀 다이얼로그 위치 조정
+        LayoutParams params = leftdlg.getWindow().getAttributes();
+        // params.x = 500;
+        params.y = 300 + 300;
+        // params.width = 300;
+        // params.height = 300;
+        leftdlg.getWindow().setAttributes(params);
+        leftdlg.getWindow().setGravity(Gravity.TOP | Gravity.LEFT);
+
+        // 배경 어두워지는거 없애기
+        leftdlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+        // 커스텀 다이얼로그를 노출한다
+        leftdlg.show();
     }
 
     public void callCrossRight() {
@@ -71,12 +115,12 @@ public class CrossFrame {
 
         // 커스텀 다이얼로그 위치 조정
         LayoutParams params = rightdlg.getWindow().getAttributes();
-        // params.x = 500;
-        // params.y = 100;
+        params.x = 800;
+        params.y = 300 + 300;
         // params.width = 300;
         // params.height = 300;
         rightdlg.getWindow().setAttributes(params);
-        rightdlg.getWindow().setGravity(Gravity.TOP | Gravity.RIGHT);
+        rightdlg.getWindow().setGravity(Gravity.TOP | Gravity.LEFT);
 
         // 배경 어두워지는거 없애기
         rightdlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
@@ -85,5 +129,15 @@ public class CrossFrame {
         rightdlg.show();
     }
 
+    public void drawObjFront(int left, int top, int obj){
+        ImageView iv = new ImageView(context);
 
+        // 오브젝트 받아서 if로 나누면 댐
+        iv.setImageResource(R.drawable.person);
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        param.width = 50;
+        param.height = 50;
+        param.setMargins(left,top,0,0);
+        frontdlg.addContentView(iv, param);
+    }
 }
