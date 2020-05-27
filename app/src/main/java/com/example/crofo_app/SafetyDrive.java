@@ -20,6 +20,8 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
     private TMapPoint currentPoint;
     private TMapView tMapView;      // View
     private TMapMarkerItem markerItemCurrent = new TMapMarkerItem();
+    private ArrayList<CrossInfo> crossInfoList = new ArrayList<CrossInfo>();
+    private boolean isInCross = false;
 
     Context context;
 
@@ -43,7 +45,7 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         //tMapView.setTrackingMode(true);
         initTimerTask();
         Timer gpsCheckTimer = new Timer();
-        gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 500);
+        gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 1000);
 
         // 앱에서 현재위치 기준으로 반경 원 내에 들어오는 교차로 리스트 서버에 요청 및 수신
 
@@ -161,5 +163,13 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
             }
         }
         return roi.get(index);
+    }
+
+    public void clearList(){
+        crossInfoList.clear();
+    }
+
+    public void addList(CrossInfo crossInfo){
+        crossInfoList.add(crossInfo);
     }
 }

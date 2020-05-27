@@ -3,6 +3,7 @@ package com.example.crofo_app;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -19,9 +20,12 @@ import java.net.URL;
 public class FindCrossRequest extends AsyncTask<String, String, String> {
     private double lat;
     private double lon;
-    public FindCrossRequest (double[] location) {
+    private SafetyDrive safetyDrive;
+
+    public FindCrossRequest (double[] location, SafetyDrive SD) {
         lat = location[0];
         lon = location[1];
+        safetyDrive = SD;
     }
     protected String doInBackground(String... urls) {
 
@@ -66,7 +70,7 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
                     buffer.append(line);
                 }
                 String json = buffer.toString();//서버로 부터 받은 값
-                JSONObject resultJson = new JSONObject(json);
+
                 return json;
 
             } catch (MalformedURLException e){
@@ -94,6 +98,35 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
+        try {
+            JSONObject resultJson = new JSONObject(result);
+            boolean res = resultJson.getBoolean("result");
+            if (res) {
+                JSONArray resultArr = resultJson.getJSONArray("arr");
+                int cnt = resultArr.length();
+
+                for (int i = 0; i < cnt; i++) {
+                    JSONObject jsonObj = resultArr.getJSONObject(i);
+                    CrossInfo crossInfo = new CrossInfo();
+                    crossInfo.setCrossid(jsonObj.getInt("id"));
+                    double[] centerLocation = new double[2];
+                    centerLocation[0] = jsonObj.getDouble("cent_x");
+                    centerLocation[1] = jsonObj.getDouble("cent_y");
+                    crossInfo.setCenterLocation(centerLocation);
+                    jsonObj.getDouble("loc_x0");
+                    jsonObj.getDouble("loc_y0");
+                    jsonObj.getDouble("loc_x1");
+                    jsonObj.getDouble("loc_y1");
+                    jsonObj.getDouble("loc_x2");
+                    jsonObj.getDouble("loc_y2");
+                    jsonObj.getDouble("loc_x3");
+                    jsonObj.getDouble("loc_y3");
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         System.out.println(result);
     }
 
