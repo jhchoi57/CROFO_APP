@@ -115,9 +115,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         // 현재 위치 타이머로 5초마다 계속 얻기
         //tMapView.setTrackingMode(true);
-        initTimerTask();
-        Timer gpsCheckTimer = new Timer();
-        gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 1000);
+        //initTimerTask();
+        //Timer gpsCheckTimer = new Timer();
+        //gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 1000);
 
         // 길찾기 시작되면 어디서 우회전 하는지 어느 방향에서 진입 하는지 받아 올 수 있음
         // 예시 > 37.563857889963195  126.98510938364018  341.15804530424913(북쪽0도, 360도기준)

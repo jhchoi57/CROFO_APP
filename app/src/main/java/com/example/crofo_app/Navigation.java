@@ -1,6 +1,9 @@
 package com.example.crofo_app;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.AsyncTask;
@@ -39,6 +42,8 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
     private ArrayList<String> pointIndexList = new ArrayList<String>();
     private TimerTask gpsCheckTimerTask;
     private ArrayList<CrossInfo> serverRequestCrossList = new ArrayList<CrossInfo>();
+    private TMapMarkerItem markerItemCurrent = new TMapMarkerItem();
+    private TMapPoint currentPoint;
 
     public Navigation(TMapPoint sPoint, TMapPoint ePoint, TMapView tView){
         super();
@@ -150,12 +155,11 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
             new CrossRequest(serverRequestCrossList).execute("http://192.168.0.13:8080/app"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
 
 
-            // 현재 위치 타이머로 5초마다 계속 얻기
+            // 현재 위치 타이머로 0.5초마다 계속 얻기, 업데이트
             //tMapView.setTrackingMode(true);
             initTimerTask();
             Timer gpsCheckTimer = new Timer();
-            gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 5000);
-
+            gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 500);
 
         }
         catch( Exception e )
@@ -261,7 +265,11 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
             public void run(){
                 // 타이머로 할 일
                 // 현재 위치 가져오기
+
                 Log.d("현재위치", String.valueOf(tMapView.getLocationPoint()));
+                currentPoint = tMapView.getLocationPoint();
+                tMapView.setCenterPoint(currentPoint.getLongitude(), currentPoint.getLatitude());
+                markerItemCurrent.setTMapPoint(currentPoint);
             }
         };
     }
@@ -296,8 +304,13 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
                 min = diff;
             }
         }
-
         return roi.get(index);
+    }
+
+    public void setCurrentMarkerIcon(Context context){
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.mycar);
+        bitmap = bitmap.createScaledBitmap(bitmap,100,100,true);
+        markerItemCurrent.setIcon(bitmap);
     }
 
 
