@@ -45,11 +45,14 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
     private TMapMarkerItem markerItemCurrent = new TMapMarkerItem();
     private TMapPoint currentPoint;
 
-    public Navigation(TMapPoint sPoint, TMapPoint ePoint, TMapView tView){
+    Context context;
+
+    public Navigation(TMapPoint sPoint, TMapPoint ePoint, TMapView tView, Context ct){
         super();
         this.startPoint = sPoint;
         this.endPoint = ePoint;
         this.tMapView = tView;
+        this.context = ct;
     }
 
     @Override
@@ -83,6 +86,7 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
             endMarker.setName("EndPoint");
 
             // 지도에 마커 추가
+            tMapView.addMarkerItem("current",markerItemCurrent);
             tMapView.addMarkerItem("StartPoint", startMarker);
             tMapView.addMarkerItem("EndPoint", endMarker);
 
@@ -97,6 +101,14 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
 
             // 현재 위치 트래킹인데 과연 사용할지?
             //tMapView.setTrackingMode(true);
+
+            setCurrentMarkerIcon();
+
+            // 현재 위치 타이머로 0.5초마다 계속 얻기, 업데이트
+            //tMapView.setTrackingMode(true);
+            initTimerTask();
+            Timer gpsCheckTimer = new Timer();
+            gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 500);
 
             tMapData.findPathDataAllType(TMapData.TMapPathType.CAR_PATH, startPoint, endPoint, new TMapData.FindPathDataAllListenerCallback() {
                 @Override
@@ -154,12 +166,6 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
 
             new CrossRequest(serverRequestCrossList).execute("http://192.168.0.13:8080/app"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
 
-
-            // 현재 위치 타이머로 0.5초마다 계속 얻기, 업데이트
-            //tMapView.setTrackingMode(true);
-            initTimerTask();
-            Timer gpsCheckTimer = new Timer();
-            gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 500);
 
         }
         catch( Exception e )
@@ -307,7 +313,7 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
         return roi.get(index);
     }
 
-    public void setCurrentMarkerIcon(Context context){
+    public void setCurrentMarkerIcon(){
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.mycar);
         bitmap = bitmap.createScaledBitmap(bitmap,100,100,true);
         markerItemCurrent.setIcon(bitmap);

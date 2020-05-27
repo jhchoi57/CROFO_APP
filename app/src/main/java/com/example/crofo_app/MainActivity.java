@@ -94,8 +94,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         currentPoint.setLatitude(tMapView.getLocationPoint().getLatitude());
         currentPoint.setLongitude(tMapView.getLocationPoint().getLongitude());
-        markerItemCurrent.setTMapPoint(currentPoint);
-        tMapView.addMarkerItem("current",markerItemCurrent);
+        //markerItemCurrent.setTMapPoint(currentPoint);
+        //tMapView.addMarkerItem("current",markerItemCurrent);
 
         // 마커 아이콘 지정, 버튼 설정, tMapView 클릭 이벤트
         setMarkerIcon();
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
                     // 출발지가 0 0 이 아니면 네비게이션 시작
                     if(startPoint.getLongitude() != 0 && startPoint.getLatitude() != 0){
-                        Navigation navigation = new Navigation(startPoint, endPoint, tMapView);
+                        Navigation navigation = new Navigation(startPoint, endPoint, tMapView, MainActivity.this);
                         navigation.execute(startPoint, endPoint);
                         btnFinish.setVisibility(View.VISIBLE);
 
@@ -225,6 +225,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 case R.id.btnSafetyDrive:
 
                     // 안전주행 설정해주는 버튼
+                    SafetyDrive safetyDrive = new SafetyDrive(tMapView, MainActivity.this);
+                    safetyDrive.execute(startPoint, endPoint);
+
                     break;
             }
         }
