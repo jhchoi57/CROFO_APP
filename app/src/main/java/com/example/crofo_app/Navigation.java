@@ -26,6 +26,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.LogManager;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -37,8 +39,10 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
     private TMapView tMapView;      // View
     private ArrayList<String> turnTypeList = new ArrayList<String>();
     private ArrayList<String> descriptionList = new ArrayList<String>();
-    private ArrayList<Double[]> coordinatesList = new ArrayList<Double[]>();
+    private ArrayList<double[]> coordinatesList = new ArrayList<double[]>();
     private ArrayList<String> pointIndexList = new ArrayList<String>();
+    private TimerTask gpsCheckTimerTask;
+    private ArrayList<CrossInfo> serverRequestCrossList = new ArrayList<CrossInfo>();
 
     public Navigation(TMapPoint sPoint, TMapPoint ePoint, TMapView tView){
         super();
@@ -124,7 +128,7 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
 
                                 String [] splitXY = xy.split(",");
                                 TMapPoint point = new TMapPoint(Double.parseDouble(splitXY[1]), Double.parseDouble(splitXY[0]));
-                                Double[] pointDouble = {Double.parseDouble(splitXY[1]), Double.parseDouble(splitXY[0])};
+                                double[] pointDouble = {Double.parseDouble(splitXY[1]), Double.parseDouble(splitXY[0])};
                                 coordinatesList.add(pointDouble);
                                 TMapMarkerItem Marker = new TMapMarkerItem();
                                 Marker.setTMapPoint(point);
@@ -140,11 +144,21 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
                         if(i==0) continue;
                         trueBearing = getTrueBearing(coordinatesList.get(i), coordinatesList.get(i-1));
                         System.out.println("교차로 진입 방향 : " + "  " + trueBearing);
+
+                        serverRequestCrossList.add(new CrossInfo(coordinatesList.get(i), trueBearing));
                     }
 
                 }
             });
 
+            new CrossRequest(serverRequestCrossList).execute("http://192.168.0.13:8080/app"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
+
+
+            // 현재 위치 타이머로 5초마다 계속 얻기
+            //tMapView.setTrackingMode(true);
+            initTimerTask();
+            Timer gpsCheckTimer = new Timer();
+            gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 5000);
 
 
         }
@@ -164,11 +178,11 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
         return this.endPoint;
     }
 
-    public double getTrueBearing(Double[] point1, Double[] point2){
+    public double getTrueBearing(double[] point1, double[] point2){
         // point[0] = lat , point[1] = lon
 
-        Double[] point1_radian = new Double[2];
-        Double[] point2_radian = new Double[2];
+        double[] point1_radian = new double[2];
+        double[] point2_radian = new double[2];
 
         // 현재 위치 : 위도나 경도는 지구 중심을 기반으로 하는 각도이기 때문에 라디안 각도로 변환한다.
         point1_radian[0] = point1[0] * (3.141592 / 180);        //lat
@@ -214,5 +228,48 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
         return true_bearing;
 
     }
+
+    public double getdistance(double[] point1, double[] point2){
+        double distance = 0;
+        double theta = 0;
+        double lat1 = point1[0];
+        double lon1 = point1[1];
+        double lat2 = point2[0];
+        double lon2 = point2[1];
+
+        theta = lon1 - lon2;
+        distance = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        distance = Math.acos(distance);
+        distance = rad2deg(distance);
+
+        distance = distance * 60 * 1.1515;
+        distance = distance * 1.609344;    // 단위 mile 에서 km 변환.
+        distance = distance * 1000.0;      // 단위  km 에서 m 로 변환
+
+        return distance;
+    }
+
+    // 주어진 도(degree) 값을 라디언으로 변환
+    private double deg2rad(double deg){
+        return (double)(deg * Math.PI / (double)180d);
+    }
+
+    // 주어진 라디언(radian) 값을 도(degree) 값으로 변환
+    private double rad2deg(double rad){
+        return (double)(rad * (double)180d / Math.PI);
+    }
+
+    public void initTimerTask(){
+        gpsCheckTimerTask = new TimerTask(){
+            @Override
+            public void run(){
+                // 타이머로 할 일
+                // 현재 위치 가져오기
+                Log.d("현재위치", String.valueOf(tMapView.getLocationPoint()));
+            }
+        };
+    }
+
+
 
 }

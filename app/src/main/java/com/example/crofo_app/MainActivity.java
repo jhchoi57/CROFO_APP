@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         serverTestList.add(crossInfoTest2);
         serverTestList.add(crossInfoTest3);
 
-        new CrossRequest(serverTestList).execute("http://192.168.0.13:8080/app"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
+        //new CrossRequest(serverTestList).execute("http://192.168.0.13:8080/app"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
     }
 
     // onCreate 끝
@@ -289,6 +289,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             @Override
             public void run(){
                 // 타이머로 할 일
+                // 현재 위치 가져오기
                 Log.d("현재위치", String.valueOf(tMapView.getLocationPoint()));
             }
         };
