@@ -46,14 +46,19 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     TMapView tMapView;
     TMapData tMapData;
     TMapMarkerItem markerItem1 = new TMapMarkerItem();
+    TMapMarkerItem markerItemStart = new TMapMarkerItem();
+    TMapMarkerItem markerItemEnd = new TMapMarkerItem();
+    TMapMarkerItem markerItemCurrent = new TMapMarkerItem();
     TMapPoint tMapMarkerPoint = new TMapPoint(37.570841, 126.985302); // 임의로 찍어둠 : SKT타워
     TMapPoint startPoint = new TMapPoint(0,0);
     TMapPoint endPoint = new TMapPoint(0,0);
+    TMapPoint currentPoint = new TMapPoint(0,0);
     TMapGpsManager gps = null;
     Button btnStarting;
     Button btnDestination;
     Button btnFinish;
     Button btnCurrentLocationToStarting;
+    Button btnSafetyDrive;
     TextToSpeech tts;
     TimerTask gpsCheckTimerTask;
 
@@ -87,8 +92,16 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         Toast.makeText(getApplicationContext(), "현재 위치 : " + tMapView.getLocationPoint(), Toast.LENGTH_LONG).show();
         tMapView.setCenterPoint(tMapView.getLocationPoint().getLongitude(), tMapView.getLocationPoint().getLatitude());
 
+        currentPoint.setLatitude(tMapView.getLocationPoint().getLatitude());
+        currentPoint.setLongitude(tMapView.getLocationPoint().getLongitude());
+        //markerItemCurrent.setTMapPoint(currentPoint);
+        //tMapView.addMarkerItem("current",markerItemCurrent);
+
         // 마커 아이콘 지정, 버튼 설정, tMapView 클릭 이벤트
         setMarkerIcon();
+        setStartMarkerIcon();
+        setEndMarkerIcon();
+        setCurrentMarkerIcon();
         setButton();
         tMapViewClickEvent();
         tMapViewLongClickEvent();
@@ -96,13 +109,15 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         // 커스텀 다이얼로그를 호출한다.
         CrossFrame crossFrame = new CrossFrame(MainActivity.this);
         crossFrame.callCrossFront();
+        crossFrame.callCrossBack();
+        crossFrame.callCrossLeft();
         crossFrame.callCrossRight();
 
         // 현재 위치 타이머로 5초마다 계속 얻기
         //tMapView.setTrackingMode(true);
-        initTimerTask();
-        Timer gpsCheckTimer = new Timer();
-        gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 5000);
+        //initTimerTask();
+        //Timer gpsCheckTimer = new Timer();
+        //gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 1000);
 
         // 길찾기 시작되면 어디서 우회전 하는지 어느 방향에서 진입 하는지 받아 올 수 있음
         // 예시 > 37.563857889963195  126.98510938364018  341.15804530424913(북쪽0도, 360도기준)
@@ -133,17 +148,23 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 // 출발지 설정 버튼
                 case R.id.btnStart :
                     startPoint = tMapMarkerPoint;
+                    markerItemStart.setTMapPoint( startPoint ); // 마커의 좌표 지정
+                    tMapView.addMarkerItem("start",markerItemStart);
+                    tMapView.removeMarkerItem("marker");
                     Toast.makeText(getApplicationContext(), "위도 : " + startPoint.getLatitude() + "\n경도 : " + startPoint.getLongitude(), Toast.LENGTH_LONG).show();
                     break;
 
                 // 도착지 설정 버튼
                 case R.id.btnEnd :
                     endPoint = tMapMarkerPoint;
+                    markerItemEnd.setTMapPoint( endPoint ); // 마커의 좌표 지정
+                    tMapView.addMarkerItem("end",markerItemEnd);
+                    tMapView.removeMarkerItem("marker");
                     Toast.makeText(getApplicationContext(), "위도 : " + endPoint.getLatitude() + "\n경도 : " + endPoint.getLongitude(), Toast.LENGTH_LONG).show();
 
                     // 출발지가 0 0 이 아니면 네비게이션 시작
                     if(startPoint.getLongitude() != 0 && startPoint.getLatitude() != 0){
-                        Navigation navigation = new Navigation(startPoint, endPoint, tMapView);
+                        Navigation navigation = new Navigation(startPoint, endPoint, tMapView, MainActivity.this);
                         navigation.execute(startPoint, endPoint);
                         btnFinish.setVisibility(View.VISIBLE);
 
@@ -193,11 +214,21 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                     // 출발지를 현재 위치로
                     startPoint = tMapView.getLocationPoint();
                     //startPoint = gps.getLocation();
+                    markerItemStart.setTMapPoint( startPoint ); // 마커의 좌표 지정
+                    tMapView.addMarkerItem("start",markerItemStart);
+                    tMapView.removeMarkerItem("marker");
                     tMapView.setCenterPoint(startPoint.getLongitude(), startPoint.getLatitude());
                     Toast.makeText(getApplicationContext(), "위도 : " + startPoint.getLatitude() + "\n경도 : " + startPoint.getLongitude(), Toast.LENGTH_LONG).show();
 
                     break;
 
+                case R.id.btnSafetyDrive:
+
+                    // 안전주행 설정해주는 버튼
+                    SafetyDrive safetyDrive = new SafetyDrive(tMapView, MainActivity.this);
+                    safetyDrive.execute(startPoint, endPoint);
+
+                    break;
             }
         }
     };
@@ -206,6 +237,25 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         Context context = this;
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.poi_dot);
         markerItem1.setIcon(bitmap);
+    }
+
+    public void setStartMarkerIcon(){
+        Context context = this;
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.start);
+        markerItemStart.setIcon(bitmap);
+    }
+
+    public void setEndMarkerIcon(){
+        Context context = this;
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.end);
+        markerItemEnd.setIcon(bitmap);
+    }
+
+    public void setCurrentMarkerIcon(){
+        Context context = this;
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.mycar);
+        bitmap = bitmap.createScaledBitmap(bitmap,100,100,true);
+        markerItemCurrent.setIcon(bitmap);
     }
 
     public void tMapViewClickEvent(){
@@ -228,8 +278,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             public void onLongPressEvent(ArrayList arrayList, ArrayList arrayList1, TMapPoint tMapPoint) {
                 tMapMarkerPoint = tMapPoint;
                 markerItem1.setTMapPoint( tMapMarkerPoint ); // 마커의 좌표 지정
-                markerItem1.setName(""); // 마커의 타이틀 지정
-                tMapView.addMarkerItem("markerItem1", markerItem1); // 지도에 마커 추가
+                tMapView.addMarkerItem("marker", markerItem1); // 지도에 마커 추가
                 btnStarting.setVisibility(View.VISIBLE);
                 btnDestination.setVisibility(View.VISIBLE);
                 //btnFinish.setVisibility(View.VISIBLE);
@@ -263,7 +312,11 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             @Override
             public void run(){
                 // 타이머로 할 일
+                // 현재 위치 가져오기
                 Log.d("현재위치", String.valueOf(tMapView.getLocationPoint()));
+                currentPoint = tMapView.getLocationPoint();
+                tMapView.setCenterPoint(currentPoint.getLongitude(), currentPoint.getLatitude());
+                markerItemCurrent.setTMapPoint(currentPoint);
             }
         };
     }
@@ -274,12 +327,14 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         this.btnDestination = (Button)findViewById(R.id.btnEnd);
         this.btnFinish = (Button)findViewById(R.id.btnFinish);
         this.btnCurrentLocationToStarting = (Button)findViewById(R.id.btnCurrentLocationToStarting);
+        this.btnSafetyDrive = (Button)findViewById(R.id.btnSafetyDrive);
 
         // 버튼 Listener
         this.btnStarting.setOnClickListener(mClickListener);
         this.btnDestination.setOnClickListener(mClickListener);
         this.btnFinish.setOnClickListener(mClickListener);
         this.btnCurrentLocationToStarting.setOnClickListener(mClickListener);
+        this.btnSafetyDrive.setOnClickListener(mClickListener);
     }
 
     public void initTTS(){

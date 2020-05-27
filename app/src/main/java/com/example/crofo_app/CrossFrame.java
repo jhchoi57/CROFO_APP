@@ -2,70 +2,142 @@ package com.example.crofo_app;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 public class CrossFrame {
     private Context context;
-
     public CrossFrame(Context context) {
         this.context = context;
     }
+    public Dialog frontdlg = null;
+    public Dialog backdlg = null;
+    public Dialog leftdlg = null;
+    public Dialog rightdlg = null;
 
     // 호출할 다이얼로그 함수를 정의한다.
     public void callCrossFront() {
 
         // 커스텀 다이얼로그를 정의하기위해 Dialog클래스를 생성한다.
-        final Dialog dlg = new Dialog(context);
+        frontdlg = new Dialog(context);
 
         // 액티비티의 타이틀바를 숨긴다.
-        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        frontdlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         // 커스텀 다이얼로그의 레이아웃을 설정한다.
-        dlg.setContentView(R.layout.crossframefront);
+        frontdlg.setContentView(R.layout.crossframefront);
 
         // 커스텀 다이얼로그 위치 조정
-        LayoutParams params = dlg.getWindow().getAttributes();
-        // params.x = 100;
-        // params.y = 500;
+        LayoutParams params = frontdlg.getWindow().getAttributes();
+        params.x = 250;
+        params.y = 800 + 300;
         // params.width = 300;
         // params.height = 300;
-        dlg.getWindow().setAttributes(params);
-        dlg.getWindow().setGravity(Gravity.CENTER);
+        frontdlg.getWindow().setAttributes(params);
+        frontdlg.getWindow().setGravity(Gravity.TOP | Gravity.LEFT);
 
         // 배경 어두워지는거 없애기
-        dlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        frontdlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
         // 커스텀 다이얼로그를 노출한다
-        dlg.show();
+        frontdlg.show();
+    }
+
+    public void callCrossBack() {
+
+        // 커스텀 다이얼로그를 정의하기위해 Dialog클래스를 생성한다.
+        backdlg = new Dialog(context);
+
+        // 액티비티의 타이틀바를 숨긴다.
+        backdlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        // 커스텀 다이얼로그의 레이아웃을 설정한다.
+        backdlg.setContentView(R.layout.crossframeback);
+
+        // 커스텀 다이얼로그 위치 조정
+        LayoutParams params = backdlg.getWindow().getAttributes();
+        params.x = 250;
+        params.y = 300;
+        // params.width = 300;
+        // params.height = 300;
+        backdlg.getWindow().setAttributes(params);
+        backdlg.getWindow().setGravity(Gravity.TOP | Gravity.LEFT);
+
+        // 배경 어두워지는거 없애기
+        backdlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+        // 커스텀 다이얼로그를 노출한다
+        backdlg.show();
+    }
+
+    public void callCrossLeft() {
+
+        // 커스텀 다이얼로그를 정의하기위해 Dialog클래스를 생성한다.
+        leftdlg = new Dialog(context);
+
+        // 액티비티의 타이틀바를 숨긴다.
+        leftdlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        // 커스텀 다이얼로그의 레이아웃을 설정한다.
+        leftdlg.setContentView(R.layout.crossframeleft);
+
+        // 커스텀 다이얼로그 위치 조정
+        LayoutParams params = leftdlg.getWindow().getAttributes();
+        // params.x = 500;
+        params.y = 300 + 300;
+        // params.width = 300;
+        // params.height = 300;
+        leftdlg.getWindow().setAttributes(params);
+        leftdlg.getWindow().setGravity(Gravity.TOP | Gravity.LEFT);
+
+        // 배경 어두워지는거 없애기
+        leftdlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+        // 커스텀 다이얼로그를 노출한다
+        leftdlg.show();
     }
 
     public void callCrossRight() {
 
         // 커스텀 다이얼로그를 정의하기위해 Dialog클래스를 생성한다.
-        final Dialog dlg = new Dialog(context);
+        rightdlg = new Dialog(context);
 
         // 액티비티의 타이틀바를 숨긴다.
-        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        rightdlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         // 커스텀 다이얼로그의 레이아웃을 설정한다.
-        dlg.setContentView(R.layout.crossframeright);
+        rightdlg.setContentView(R.layout.crossframeright);
 
         // 커스텀 다이얼로그 위치 조정
-        LayoutParams params = dlg.getWindow().getAttributes();
-        // params.x = 500;
-        // params.y = 100;
+        LayoutParams params = rightdlg.getWindow().getAttributes();
+        params.x = 800;
+        params.y = 300 + 300;
         // params.width = 300;
         // params.height = 300;
-        dlg.getWindow().setAttributes(params);
-        dlg.getWindow().setGravity(Gravity.TOP | Gravity.RIGHT);
+        rightdlg.getWindow().setAttributes(params);
+        rightdlg.getWindow().setGravity(Gravity.TOP | Gravity.LEFT);
 
         // 배경 어두워지는거 없애기
-        dlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        rightdlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
         // 커스텀 다이얼로그를 노출한다
-        dlg.show();
+        rightdlg.show();
+    }
+
+    public void drawObjFront(int left, int top, int obj){
+        ImageView iv = new ImageView(context);
+
+        // 오브젝트 받아서 if로 나누면 댐
+        iv.setImageResource(R.drawable.person);
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        param.width = 50;
+        param.height = 50;
+        param.setMargins(left,top,0,0);
+        frontdlg.addContentView(iv, param);
     }
 }

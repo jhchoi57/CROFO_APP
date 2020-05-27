@@ -14,7 +14,7 @@
         <ImageView
             android:layout_width="300px"
             android:layout_height="500px"
-            android:src="@drawable/crosswalk_right"></ImageView>
+            android:src="@drawable/crosswalk_left"></ImageView>
 
     </FrameLayout>
     <!-- //end 타이틀바 -->
