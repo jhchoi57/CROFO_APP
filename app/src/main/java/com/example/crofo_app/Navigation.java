@@ -2,15 +2,12 @@ package com.example.crofo_app;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
-import android.media.Image;
+import android.graphics.PointF;
 import android.os.AsyncTask;
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapMarkerItem;
-import com.skt.Tmap.TMapPOIItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapView;
@@ -29,7 +26,6 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.LogManager;
-
 import javax.xml.parsers.ParserConfigurationException;
 
 public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
@@ -270,6 +266,39 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
         };
     }
 
+    // ROI 안에 들어왔는지
+    public boolean isInPolygon(ArrayList<double[]> roi, double[] point){
+        //crosses는 점q와 오른쪽 반직선과 다각형과의 교점의 개수
+        int crosses = 0;
+
+        for(int i = 0 ; i < 4 ; i++){
+            int j = (i+1)%4;
+            //점 B가 선분 (p[i], p[j])의 y좌표 사이에 있음
+            if((roi.get(i)[1] > point[1]) != (roi.get(j)[1] > point[1]) ){
+                //atX는 점 B를 지나는 수평선과 선분 (p[i], p[j])의 교점
+                double atX = (roi.get(j)[0] - roi.get(i)[0]) * (point[1] - roi.get(i)[1]) / (roi.get(j)[1] - roi.get(i)[1]) + roi.get(i)[0];
+                //atX가 오른쪽 반직선과의 교점이 맞으면 교점의 개수를 증가시킨다.
+                if(point[0] < atX)
+                    crosses++;
+            }
+        }
+        return crosses % 2 > 0;
+    }
+
+    // 2개 이상이면 현재 차량 기준으로 필터링
+    public double[] ifHaveManyROI(double trueBearing, ArrayList<double[]> roi, double[] curLocation){
+        int index = 0;
+        double min = 360;
+        for(int i = 0;i<roi.size();i++){
+            double diff = Math.abs(getTrueBearing(curLocation, roi.get(i)) - trueBearing);
+            if(min > diff){
+                index = i;
+                min = diff;
+            }
+        }
+
+        return roi.get(index);
+    }
 
 
 }
