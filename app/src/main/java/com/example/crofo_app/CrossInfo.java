@@ -3,55 +3,127 @@ package com.example.crofo_app;
 import com.skt.Tmap.TMapPoint;
 
 public class CrossInfo {
-    private Crosswalk frontCrosswalk;       // 전방 횡단보도
-    private Crosswalk rightCrosswalk;       // 우측 횡단보도
-    private double[] crossLocation;         // 교차로 위치 lat lon 순서
+    private int crossid;                    // 교차로 ID
+    private Crosswalk frontCrosswalk;       // 저 앞 횡단보도
+    private Crosswalk rightCrosswalk;       // 오른쪽 횡단보도
+    private Crosswalk leftCrosswalk;        // 왼쪽 횡단보도
+    private Crosswalk backCrosswalk;        // 앞 횡단보도
+    private double[] centerLocation;         // 교차로 위치 lat lon 순서
+    private double[] crossLocation0;         // 교차로 위치 lat lon 순서
+    private double[] crossLocation1;         // 1 0
+    private double[] crossLocation2;         // 2 3
+    private double[] crossLocation3;         //
+
     private double trueBearing;             // 방향 북쪽 0도, 360도 기준
 
-    public CrossInfo(Crosswalk fC, Crosswalk rC, double[] cL, double tB){
+    public CrossInfo(Crosswalk fC, Crosswalk rC, Crosswalk lC, Crosswalk bC, double[] cenL, double[] cL0, double[] cL1, double[] cL2, double[] cL3, double tB){
         frontCrosswalk = fC;
         rightCrosswalk = rC;
-        crossLocation = cL;
+        leftCrosswalk = lC;
+        backCrosswalk = bC;
+        centerLocation = cenL;
+        crossLocation0 = cL0;
+        crossLocation1 = cL1;
+        crossLocation2 = cL2;
+        crossLocation3 = cL3;
         trueBearing = tB;
     }
 
-    public CrossInfo(double[] cL, double tB){
-        frontCrosswalk = null;
-        rightCrosswalk = null;
-        crossLocation = cL;
-        trueBearing = tB;
+    public CrossInfo(int cid, double[] cenL, double[] cL0, double[] cL1, double[] cL2, double[] cL3){
+        crossid = cid;
+        centerLocation = cenL;
+        crossLocation0 = cL0;
+        crossLocation1 = cL1;
+        crossLocation2 = cL2;
+        crossLocation3 = cL3;
     }
 
-    public Crosswalk getFrontCrosswalk(){
+    public int getCrossid() {
+        return crossid;
+    }
+
+    public Crosswalk getFrontCrosswalk() {
         return frontCrosswalk;
     }
 
-    public Crosswalk getRightCrosswalk(){
+    public Crosswalk getRightCrosswalk() {
         return rightCrosswalk;
     }
 
-    public double[] getCrossLocation(){
-        return crossLocation;
+    public Crosswalk getLeftCrosswalk() {
+        return leftCrosswalk;
     }
 
-    public void setFrontCrosswalk(Crosswalk fC){
-        frontCrosswalk = fC;
+    public Crosswalk getBackCrosswalk() {
+        return backCrosswalk;
     }
 
-    public void setRightCrosswalk(Crosswalk rC){
-        rightCrosswalk = rC;
+    public double[] getCenterLocation() {
+        return centerLocation;
     }
 
-    public void setCrossLocation(double[] cL){
-        crossLocation = cL;
+    public double[] getCrossLocation0() {
+        return crossLocation0;
     }
 
-    public double getTrueBearing(){
+    public double[] getCrossLocation1() {
+        return crossLocation1;
+    }
+
+    public double[] getCrossLocation2() {
+        return crossLocation2;
+    }
+
+    public double[] getCrossLocation3() {
+        return crossLocation3;
+    }
+
+    public double getTrueBearing() {
         return trueBearing;
     }
 
-    public void setTrueBearing(double tB){
-        trueBearing = tB;
+    public void setCrossid(int crossid) {
+        this.crossid = crossid;
+    }
+
+    public void setFrontCrosswalk(Crosswalk frontCrosswalk) {
+        this.frontCrosswalk = frontCrosswalk;
+    }
+
+    public void setRightCrosswalk(Crosswalk rightCrosswalk) {
+        this.rightCrosswalk = rightCrosswalk;
+    }
+
+    public void setLeftCrosswalk(Crosswalk leftCrosswalk) {
+        this.leftCrosswalk = leftCrosswalk;
+    }
+
+    public void setBackCrosswalk(Crosswalk backCrosswalk) {
+        this.backCrosswalk = backCrosswalk;
+    }
+
+    public void setCenterLocation(double[] centerLocation) {
+        this.centerLocation = centerLocation;
+    }
+
+    public void setCrossLocation0(double[] crossLocation0) {
+        this.crossLocation0 = crossLocation0;
+    }
+
+    public void setCrossLocation1(double[] crossLocation1) {
+        this.crossLocation1 = crossLocation1;
+    }
+
+    public void setCrossLocation2(double[] crossLocation2) {
+        this.crossLocation2 = crossLocation2;
+    }
+
+    public void setCrossLocation3(double[] crossLocation3) {
+        this.crossLocation3 = crossLocation3;
+    }
+
+    public void setTrueBearing(double trueBearing) {
+        this.trueBearing = trueBearing;
     }
 
 }

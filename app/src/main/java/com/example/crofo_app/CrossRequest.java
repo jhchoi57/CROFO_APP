@@ -33,13 +33,13 @@ public class CrossRequest extends AsyncTask<String, String, String> {
 
 
             for (CrossInfo item : crossList) {
-                JSONObject tempJson = new JSONObject();
-                double[] location = item.getCrossLocation();
-                double angle = item.getTrueBearing();
-                tempJson.accumulate("lat", doubleToString(location[0]));
-                tempJson.accumulate("lon", doubleToString(location[1]));
-                tempJson.accumulate("angle", doubleToString(angle));
-                jsonArr.put(tempJson);
+//                JSONObject tempJson = new JSONObject();
+//                double[] location = item.getCrossLocation();
+//                double angle = item.getTrueBearing();
+//                tempJson.accumulate("lat", doubleToString(location[0]));
+//                tempJson.accumulate("lon", doubleToString(location[1]));
+//                tempJson.accumulate("angle", doubleToString(angle));
+//                jsonArr.put(tempJson);
             }
 
             jsonObj.accumulate("crossList", jsonArr);

@@ -127,14 +127,17 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         double[] coordinate1 = {37.564091213912015, 126.98609817581536};
         double[] coordinate2 = {37.564677282550214, 126.9875285844233};
         double[] coordinate3 = {37.570137763308296, 126.9877839620249};
-        CrossInfo crossInfoTest1 = new CrossInfo(coordinate1, 338.1527729935401);
-        CrossInfo crossInfoTest2 = new CrossInfo(coordinate2, 242.66650609871442);
-        CrossInfo crossInfoTest3 = new CrossInfo(coordinate3, 182.1230581504779);
-        serverTestList.add(crossInfoTest1);
-        serverTestList.add(crossInfoTest2);
-        serverTestList.add(crossInfoTest3);
+        double[] test = {37.681552191332905, 126.81314396874748};
+//        CrossInfo crossInfoTest1 = new CrossInfo(coordinate1, 338.1527729935401);
+//        CrossInfo crossInfoTest2 = new CrossInfo(coordinate2, 242.66650609871442);
+//        CrossInfo crossInfoTest3 = new CrossInfo(coordinate3, 182.1230581504779);
+//        serverTestList.add(crossInfoTest1);
+//        serverTestList.add(crossInfoTest2);
+//        serverTestList.add(crossInfoTest3);
 
-        new CrossRequest(serverTestList).execute("http://bic4907.diskstation.me:4446/app/cross/list"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
+        //new CrossRequest(serverTestList).execute("http://bic4907.diskstation.me:4446/app/cross/list"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
+        new FindCrossRequest(test).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
+        System.out.println("보냇어용");
     }
 
     // onCreate 끝

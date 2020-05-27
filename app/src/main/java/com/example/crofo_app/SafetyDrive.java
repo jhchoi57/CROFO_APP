@@ -45,6 +45,16 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         Timer gpsCheckTimer = new Timer();
         gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 500);
 
+        // 앱에서 현재위치 기준으로 반경 원 내에 들어오는 교차로 리스트 서버에 요청 및 수신
+
+        // ROI 안에 들어왔는지
+
+            // 2개 이상이면 현재 차량 방향 기준으로 필터링
+
+            // 교차로 정보 요청
+
+
+
 
         return null;
     }
@@ -152,7 +162,4 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         }
         return roi.get(index);
     }
-
-    
-
 }

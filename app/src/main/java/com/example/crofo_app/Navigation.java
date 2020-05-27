@@ -158,7 +158,7 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
                         trueBearing = getTrueBearing(coordinatesList.get(i), coordinatesList.get(i-1));
                         System.out.println("교차로 진입 방향 : " + "  " + trueBearing);
 
-                        serverRequestCrossList.add(new CrossInfo(coordinatesList.get(i), trueBearing));
+                        //serverRequestCrossList.add(new CrossInfo(coordinatesList.get(i), trueBearing));
                     }
 
                 }
