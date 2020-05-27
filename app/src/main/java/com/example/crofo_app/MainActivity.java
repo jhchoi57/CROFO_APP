@@ -48,9 +48,11 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     TMapMarkerItem markerItem1 = new TMapMarkerItem();
     TMapMarkerItem markerItemStart = new TMapMarkerItem();
     TMapMarkerItem markerItemEnd = new TMapMarkerItem();
+    TMapMarkerItem markerItemCurrent = new TMapMarkerItem();
     TMapPoint tMapMarkerPoint = new TMapPoint(37.570841, 126.985302); // 임의로 찍어둠 : SKT타워
     TMapPoint startPoint = new TMapPoint(0,0);
     TMapPoint endPoint = new TMapPoint(0,0);
+    TMapPoint currentPoint = new TMapPoint(0,0);
     TMapGpsManager gps = null;
     Button btnStarting;
     Button btnDestination;
@@ -90,10 +92,16 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         Toast.makeText(getApplicationContext(), "현재 위치 : " + tMapView.getLocationPoint(), Toast.LENGTH_LONG).show();
         tMapView.setCenterPoint(tMapView.getLocationPoint().getLongitude(), tMapView.getLocationPoint().getLatitude());
 
+        currentPoint.setLatitude(tMapView.getLocationPoint().getLatitude());
+        currentPoint.setLongitude(tMapView.getLocationPoint().getLongitude());
+        markerItemCurrent.setTMapPoint(currentPoint);
+        tMapView.addMarkerItem("current",markerItemCurrent);
+
         // 마커 아이콘 지정, 버튼 설정, tMapView 클릭 이벤트
         setMarkerIcon();
         setStartMarkerIcon();
         setEndMarkerIcon();
+        setCurrentMarkerIcon();
         setButton();
         tMapViewClickEvent();
         tMapViewLongClickEvent();
@@ -109,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         //tMapView.setTrackingMode(true);
         initTimerTask();
         Timer gpsCheckTimer = new Timer();
-        gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 5000);
+        gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 1000);
 
         // 길찾기 시작되면 어디서 우회전 하는지 어느 방향에서 진입 하는지 받아 올 수 있음
         // 예시 > 37.563857889963195  126.98510938364018  341.15804530424913(북쪽0도, 360도기준)
@@ -240,6 +248,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         markerItemEnd.setIcon(bitmap);
     }
 
+    public void setCurrentMarkerIcon(){
+        Context context = this;
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.mycar);
+        bitmap = bitmap.createScaledBitmap(bitmap,100,100,true);
+        markerItemCurrent.setIcon(bitmap);
+    }
+
     public void tMapViewClickEvent(){
         tMapView.setOnClickListenerCallBack(new TMapView.OnClickListenerCallback(){
             @Override
@@ -296,6 +311,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 // 타이머로 할 일
                 // 현재 위치 가져오기
                 Log.d("현재위치", String.valueOf(tMapView.getLocationPoint()));
+                currentPoint = tMapView.getLocationPoint();
+                tMapView.setCenterPoint(currentPoint.getLongitude(), currentPoint.getLatitude());
+                markerItemCurrent.setTMapPoint(currentPoint);
             }
         };
     }
