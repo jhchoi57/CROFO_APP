@@ -97,7 +97,7 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
             tMapView.setZoomLevel(19);
 
             // 나침반 모드로 변경
-            tMapView.setCompassMode(true);
+            //tMapView.setCompassMode(true);
 
             // 현재 위치 트래킹인데 과연 사용할지?
             //tMapView.setTrackingMode(true);
@@ -106,9 +106,12 @@ public class Navigation extends AsyncTask<TMapPoint, Void, Double> {
 
             // 현재 위치 타이머로 0.5초마다 계속 얻기, 업데이트
             //tMapView.setTrackingMode(true);
-            initTimerTask();
-            Timer gpsCheckTimer = new Timer();
-            gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 500);
+            //initTimerTask();
+            //Timer gpsCheckTimer = new Timer();
+            //gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 500);
+
+            //SafetyDrive safetyDrive = new SafetyDrive(tMapView, context);
+            //safetyDrive.execute(startPoint, endPoint);
 
             tMapData.findPathDataAllType(TMapData.TMapPathType.CAR_PATH, startPoint, endPoint, new TMapData.FindPathDataAllListenerCallback() {
                 @Override

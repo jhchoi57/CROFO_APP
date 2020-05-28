@@ -8,14 +8,21 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
+import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapPolygon;
 import com.skt.Tmap.TMapView;
 
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
     private TimerTask gpsCheckTimerTask;
@@ -27,7 +34,8 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
     private boolean isInCross = false;
     private double currentBearing;
     private CrossFrame crossFrame;
-
+    private TMapPoint startPoint;   // 출발지 좌표
+    private TMapPoint endPoint;     // 목적지 좌표
 
     private double[] recentLocation;
 
@@ -40,6 +48,47 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         crossFrame = new CrossFrame(context);
     }
 
+    public SafetyDrive(TMapPoint sPoint, TMapPoint ePoint, TMapView tView, Context ct) throws ParserConfigurationException, SAXException, IOException {
+        this.startPoint = sPoint;
+        this.endPoint = ePoint;
+        this.tMapView = tView;
+        this.context = ct;
+
+        TMapData tMapData = new TMapData();
+        TMapPolyLine tMapPolyLine = null;
+
+        TMapMarkerItem startMarker = new TMapMarkerItem();
+        TMapMarkerItem endMarker = new TMapMarkerItem();
+
+        tMapPolyLine = tMapData.findPathData(startPoint, endPoint);             //길찾기
+        tMapPolyLine.setLineColor(Color.BLUE);                                  //선 색
+        tMapPolyLine.setLineWidth(2);                                           //선 굵기
+
+        tMapView.addTMapPolyLine("Line123", tMapPolyLine);                  //맵에 추가
+
+        // 마커의 좌표 지정
+        startMarker.setTMapPoint( startPoint );
+        endMarker.setTMapPoint( endPoint );
+
+        // 마커의 타이틀 지정
+        startMarker.setName("StartPoint");
+        endMarker.setName("EndPoint");
+
+        // 지도에 마커 추가
+        tMapView.addMarkerItem("current",markerItemCurrent);
+        tMapView.addMarkerItem("StartPoint", startMarker);
+        tMapView.addMarkerItem("EndPoint", endMarker);
+
+        // 화면 중심 시작 지점으로 설정
+        tMapView.setCenterPoint(startPoint.getLongitude(), startPoint.getLatitude());
+
+        // 화면 최대 확대
+        tMapView.setZoomLevel(18);
+
+        // 나침반 모드로 변경
+        //tMapView.setCompassMode(true);
+    }
+
     protected void onPostExecute() {
         super.onPreExecute();
     }
@@ -48,7 +97,7 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
     @Override
     protected Void doInBackground(TMapPoint... tMapPoints){                       //실행부분
         tMapView.addMarkerItem("current",markerItemCurrent);
-        setCurrentMarkerIcon(context);
+        setCurrentMarkerIcon();
 
         currentPoint = tMapView.getLocationPoint();
         currentLocation[0] = currentPoint.getLatitude();
@@ -94,7 +143,7 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         };
     }
 
-    public void setCurrentMarkerIcon(Context context){
+    public void setCurrentMarkerIcon(){
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.mycar);
         bitmap = bitmap.createScaledBitmap(bitmap,100,100,true);
         markerItemCurrent.setIcon(bitmap);
