@@ -136,8 +136,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 //        serverTestList.add(crossInfoTest3);
 
         //new CrossRequest(serverTestList).execute("http://bic4907.diskstation.me:4446/app/cross/list"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
-        new FindCrossRequest(test).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
-        System.out.println("보냇어용");
+        //new FindCrossRequest(test).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
+        //System.out.println("보냇어용");
     }
 
     // onCreate 끝

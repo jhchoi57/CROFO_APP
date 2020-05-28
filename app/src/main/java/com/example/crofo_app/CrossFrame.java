@@ -3,6 +3,7 @@ package com.example.crofo_app;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -12,13 +13,15 @@ import android.widget.LinearLayout;
 
 public class CrossFrame {
     private Context context;
-    public CrossFrame(Context context) {
-        this.context = context;
-    }
     public Dialog frontdlg = null;
     public Dialog backdlg = null;
     public Dialog leftdlg = null;
     public Dialog rightdlg = null;
+
+    public CrossFrame(Context context) {
+        this.context = context;
+        initAllCrossFrame();
+    }
 
     // 호출할 다이얼로그 함수를 정의한다.
     public void callCrossFront() {
@@ -45,7 +48,7 @@ public class CrossFrame {
         frontdlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
         // 커스텀 다이얼로그를 노출한다
-        frontdlg.show();
+        //frontdlg.show();
     }
 
     public void callCrossBack() {
@@ -72,7 +75,7 @@ public class CrossFrame {
         backdlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
         // 커스텀 다이얼로그를 노출한다
-        backdlg.show();
+        //backdlg.show();
     }
 
     public void callCrossLeft() {
@@ -99,7 +102,7 @@ public class CrossFrame {
         leftdlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
         // 커스텀 다이얼로그를 노출한다
-        leftdlg.show();
+        //leftdlg.show();
     }
 
     public void callCrossRight() {
@@ -126,7 +129,7 @@ public class CrossFrame {
         rightdlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
         // 커스텀 다이얼로그를 노출한다
-        rightdlg.show();
+        //rightdlg.show();
     }
 
     public void drawObjFront(int left, int top, int obj){
@@ -140,4 +143,30 @@ public class CrossFrame {
         param.setMargins(left,top,0,0);
         frontdlg.addContentView(iv, param);
     }
+
+    public void initAllCrossFrame(){
+        callCrossBack();
+        callCrossFront();
+        callCrossLeft();
+        callCrossRight();
+    }
+
+    public void showAllCrossFrame(){
+        frontdlg.show();
+        backdlg.show();
+        rightdlg.show();
+        leftdlg.show();
+    }
+
+    public void deleteAllCrossFrame(){
+        try {
+            frontdlg.dismiss();
+            backdlg.dismiss();
+            rightdlg.dismiss();
+            leftdlg.dismiss();
+        } catch (Exception e){
+            Log.e("dismiss error", String.valueOf(e));
+        }
+    }
+
 }

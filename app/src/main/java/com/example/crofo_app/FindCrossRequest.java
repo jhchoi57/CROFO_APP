@@ -16,6 +16,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class FindCrossRequest extends AsyncTask<String, String, String> {
     private double lat;
@@ -104,23 +105,52 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
             if (res) {
                 JSONArray resultArr = resultJson.getJSONArray("arr");
                 int cnt = resultArr.length();
-
+                // =================CrossInfo 리스트 초기화=========================== //
+                safetyDrive.clearList();
                 for (int i = 0; i < cnt; i++) {
                     JSONObject jsonObj = resultArr.getJSONObject(i);
+
+                    // =================CrossInfo 리스트 생성=========================== //
                     CrossInfo crossInfo = new CrossInfo();
-                    crossInfo.setCrossid(jsonObj.getInt("id"));
+                    crossInfo.setCrossID(jsonObj.getInt("id"));
                     double[] centerLocation = new double[2];
                     centerLocation[0] = jsonObj.getDouble("cent_x");
                     centerLocation[1] = jsonObj.getDouble("cent_y");
+                    double[] CrossLocation0 = new double[2];
+                    double[] CrossLocation1 = new double[2];
+                    double[] CrossLocation2 = new double[2];
+                    double[] CrossLocation3 = new double[2];
+                    CrossLocation0[0] = jsonObj.getDouble("loc_x0");
+                    CrossLocation0[1] = jsonObj.getDouble("loc_y0");
+                    CrossLocation1[0] = jsonObj.getDouble("loc_x1");
+                    CrossLocation1[1] = jsonObj.getDouble("loc_y1");
+                    CrossLocation2[0] = jsonObj.getDouble("loc_x2");
+                    CrossLocation2[1] = jsonObj.getDouble("loc_y2");
+                    CrossLocation3[0] = jsonObj.getDouble("loc_x3");
+                    CrossLocation3[1] = jsonObj.getDouble("loc_y3");
                     crossInfo.setCenterLocation(centerLocation);
-                    jsonObj.getDouble("loc_x0");
-                    jsonObj.getDouble("loc_y0");
-                    jsonObj.getDouble("loc_x1");
-                    jsonObj.getDouble("loc_y1");
-                    jsonObj.getDouble("loc_x2");
-                    jsonObj.getDouble("loc_y2");
-                    jsonObj.getDouble("loc_x3");
-                    jsonObj.getDouble("loc_y3");
+                    crossInfo.setCrossLocation0(CrossLocation0);
+                    crossInfo.setCrossLocation1(CrossLocation1);
+                    crossInfo.setCrossLocation2(CrossLocation2);
+                    crossInfo.setCrossLocation3(CrossLocation3);
+
+                    safetyDrive.addList(crossInfo);
+                }
+                // =================ROI 체크=========================== //
+                ArrayList<CrossInfo> roiList = safetyDrive.crossListInROI(lat, lon);
+                // =================ROI 하나 고르기=========================== //
+                if(roiList.size() > 0) {
+                    CrossInfo roi = safetyDrive.ifHaveManyROI(safetyDrive.getCurrentBearing(), roiList, safetyDrive.getCurrentLocation());
+                    // =================횡단보도 정보 요청=========================== //
+                    System.out.println(" 횡단보도 정보를 요청합니다 ");
+                    // 보낼 정보 : 해당 교차로 (CrossInfo roi)
+                    // 받을 정보 : 해당 교차로 내의 횡단보도 정보들(roi 안에 잇는 crossID 이용)
+                    // =================횡단보도 띄우기=========================== //
+                    safetyDrive.showCrosswalk();
+                }
+                else  {
+                    safetyDrive.deleteCrosswalk();
+                    System.out.println(" 교차로 정보 요청 안해요 ");
                 }
             }
 

@@ -3,7 +3,7 @@ package com.example.crofo_app;
 import com.skt.Tmap.TMapPoint;
 
 public class CrossInfo {
-    private int crossid;                    // 교차로 ID
+    private int crossID;                    // 교차로 ID
     private Crosswalk frontCrosswalk;       // 저 앞 횡단보도
     private Crosswalk rightCrosswalk;       // 오른쪽 횡단보도
     private Crosswalk leftCrosswalk;        // 왼쪽 횡단보도
@@ -43,7 +43,7 @@ public class CrossInfo {
     }
 
     public CrossInfo(int cid, double[] cenL, double[] cL0, double[] cL1, double[] cL2, double[] cL3){
-        crossid = cid;
+        crossID = cid;
         centerLocation = cenL;
         crossLocation0 = cL0;
         crossLocation1 = cL1;
@@ -52,7 +52,7 @@ public class CrossInfo {
     }
 
     public int getCrossid() {
-        return crossid;
+        return crossID;
     }
 
     public Crosswalk getFrontCrosswalk() {
@@ -95,8 +95,8 @@ public class CrossInfo {
         return trueBearing;
     }
 
-    public void setCrossid(int crossid) {
-        this.crossid = crossid;
+    public void setCrossID(int cid) {
+        this.crossID = cid;
     }
 
     public void setFrontCrosswalk(Crosswalk frontCrosswalk) {
