@@ -13,13 +13,19 @@ import io.socket.emitter.Emitter;
 public class CrossSocket extends Thread {
     private Socket socket;
     private String url;
-    private String event;
+    private String key;
     private boolean isConnected;
+    private boolean stop;
 
-    public CrossSocket(String url, String key) {
+    public CrossSocket(String url, int key) {
         this.url = url;
-        this.event = key;
+        this.key = "" + key;
+        stop = false;
         isConnected = connect();
+    }
+
+    private void threadStop() {
+        stop = true;
     }
 
     public void run() {
@@ -27,7 +33,10 @@ public class CrossSocket extends Thread {
             System.out.println("Socket is not connected");
             return;
         }
-        socket.on(event, onMessageReceive);
+        socket.on(key, onMessageReceive);
+        if (stop) {
+            System.out.println(key + "thread is terminated");
+        }
     }
 
     private boolean connect() {
@@ -35,7 +44,9 @@ public class CrossSocket extends Thread {
             socket = IO.socket(url);
             socket.connect();
             socket.on(Socket.EVENT_CONNECT, onConnect);
-
+            socket.on(Socket.EVENT_DISCONNECT, onDisconnect);
+            socket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+            socket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
             return true;
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -47,7 +58,7 @@ public class CrossSocket extends Thread {
 
         @Override
         public void call(Object... args) {
-
+            System.out.println("Android-Node socket is connected");
         }
     };
 
@@ -65,4 +76,32 @@ public class CrossSocket extends Thread {
             }
         }
     };
+
+    private Emitter.Listener onDisconnect = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            System.out.println("Android-Node socket is disconnected");
+        }
+    };
+
+    private Emitter.Listener onConnectError = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            System.out.println("Android-Node socket has Connection-Error");
+        }
+    };
+
+    private Emitter.Listener onConnectTimeoutError = new Emitter.Listener() {
+        public void call(Object... args) {
+            System.out.println("Android-Node socket has Connection-Timeout-Error");
+        }
+    };
+
+    private void disconnect() {
+        socket.disconnect();
+        socket.off(Socket.EVENT_CONNECT, onConnect);
+        socket.off(Socket.EVENT_DISCONNECT, onDisconnect);
+        socket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        socket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectTimeoutError);
+    }
 }
