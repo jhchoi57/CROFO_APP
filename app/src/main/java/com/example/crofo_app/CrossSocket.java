@@ -1,6 +1,5 @@
 package com.example.crofo_app;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,36 +9,34 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class CrossSocket extends Thread {
+public class CrossSocket {
     private Socket socket;
     private String url;
     private String key;
     private boolean isConnected;
-    private boolean stop;
 
-    public CrossSocket(String url, int key) {
+    public CrossSocket(String url, String key) {
         this.url = url;
-        this.key = "" + key;
-        stop = false;
-        isConnected = connect();
-    }
-
-    private void threadStop() {
-        stop = true;
+        this.key = key;
     }
 
     public void run() {
-        if (!isConnected) {
-            System.out.println("Socket is not connected");
-            return;
-        }
-        socket.on(key, onMessageReceive);
-        if (stop) {
-            System.out.println(key + "thread is terminated");
+        if(!isConnected) {
+            System.out.println("Android-Node socket is not connected");
+        } else {
+            socket.on(key, onMessageReceive);
         }
     }
 
-    private boolean connect() {
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public boolean isConnected() {
+        return isConnected;
+    }
+
+    public void connect() {
         try {
             socket = IO.socket(url);
             socket.connect();
@@ -47,11 +44,9 @@ public class CrossSocket extends Thread {
             socket.on(Socket.EVENT_DISCONNECT, onDisconnect);
             socket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
             socket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-            return true;
+            isConnected = true;
         } catch (URISyntaxException e) {
             e.printStackTrace();
-
-            return false;
         }
     }
     private Emitter.Listener onConnect = new Emitter.Listener() {
@@ -67,10 +62,9 @@ public class CrossSocket extends Thread {
         public void call(Object... args) {
             try {
                 JSONObject jsonObj = (JSONObject)args[0];
-                JSONArray jsonArr = jsonObj.getJSONArray("arr");
-
+                String result = jsonObj.getString("result");
                 System.out.println(jsonObj);
-                System.out.println(jsonArr);
+                System.out.println(result);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -97,11 +91,13 @@ public class CrossSocket extends Thread {
         }
     };
 
-    private void disconnect() {
+    public void disconnect() {
         socket.disconnect();
         socket.off(Socket.EVENT_CONNECT, onConnect);
         socket.off(Socket.EVENT_DISCONNECT, onDisconnect);
         socket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
         socket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectTimeoutError);
+        isConnected = false;
+        System.out.println("Android-Node socket is disconnected");
     }
 }
