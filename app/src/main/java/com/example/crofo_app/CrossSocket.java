@@ -15,9 +15,9 @@ public class CrossSocket {
     private String key;
     private boolean isConnected;
 
-    public CrossSocket(String url, String key) {
+    public CrossSocket(String url, int intersection_id, int crosswalk_id) {
         this.url = url;
-        this.key = key;
+        this.key = intersection_id + "_" + crosswalk_id;
     }
 
     public void run() {
@@ -28,8 +28,8 @@ public class CrossSocket {
         }
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setKey(int intersection_id, int crosswalk_id) {
+        this.key = intersection_id + "_" + crosswalk_id;
     }
 
     public boolean isConnected() {
