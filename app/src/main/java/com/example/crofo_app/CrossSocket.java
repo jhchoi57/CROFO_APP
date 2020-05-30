@@ -14,18 +14,21 @@ public class CrossSocket {
     private String url;
     private String key;
     private boolean isConnected;
+    private CrossInfo roi;
 
-    public CrossSocket(String url, int intersection_id, int crosswalk_id) {
+    public CrossSocket(String url, int intersection_id, int crosswalk_id, CrossInfo roi) {
         this.url = url;
         this.key = intersection_id + "_" + crosswalk_id;
+        this.roi = roi;
     }
 
-    public void run() {
+    public CrossInfo run() {
         if(!isConnected) {
             System.out.println("Android-Node socket is not connected");
         } else {
             socket.on(key, onMessageReceive);
         }
+        return this.roi;
     }
 
     public void setKey(int intersection_id, int crosswalk_id) {

@@ -142,15 +142,15 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
                 if(roiList.size() > 0) {
                     CrossInfo roi = safetyDrive.ifHaveManyROI(safetyDrive.getCurrentBearing(), roiList, safetyDrive.getCurrentLocation());
                     // =================횡단보도 정보 요청=========================== //
-                    System.out.println(" 횡단보도 정보를 요청합니다 ");
+                    System.out.println(" 교차로 내 횡단보도 정보를 요청합니다 ");
                     // 보낼 정보 : 해당 교차로 (CrossInfo roi)
                     // 받을 정보 : 해당 교차로 내의 횡단보도 정보들(roi 안에 잇는 crossID 이용)
                     // =================횡단보도 띄우기=========================== //
-                    safetyDrive.showCrosswalk();
+                    safetyDrive.showCrosswalk(roi);
                 }
                 else  {
                     safetyDrive.deleteCrosswalk();
-                    System.out.println(" 교차로 정보 요청 안해요 ");
+                    System.out.println(" 교차로 내 횡단보도 정보 요청 안해요 ");
                 }
             }
 

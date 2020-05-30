@@ -158,6 +158,19 @@ public class CrossFrame {
         leftdlg.show();
     }
 
+    public void showTwoCrossFrame(){
+        rightdlg.show();
+        backdlg.show();
+    }
+
+    public CrossInfo getROIInfo(CrossSocket sock){
+        CrossInfo roi;
+        sock.connect(); // 노드 서버 소켓과 연결
+        roi = sock.run(); // 메시지 수신
+        sock.disconnect();  // 소켓 해제
+        return roi;
+    }
+
     public void deleteAllCrossFrame(){
         try {
             frontdlg.dismiss();

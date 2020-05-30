@@ -287,7 +287,24 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         crossInfoList.add(crossInfo);
     }
 
-    public void showCrosswalk(){
+    public void showCrosswalk(CrossInfo roi){
+        //=====================횡단보도 정보 받기===========================//
+//        CrossSocket sock = new CrossSocket("http://192.168.0.13:8080", roi.getCrossid(), 0, roi); // 소켓 생성
+//        roi = getROIInfo(sock);
+//        sock.setKey(roi.getCrossID(), 1); // key 바꾸기
+//        roi = getROIInfo(sock);
+//        sock.setKey(roi.getCrossID(), 2); // key 바꾸기
+//        roi = getROIInfo(sock);
+//        sock.setKey(roi.getCrossID(), 3); // key 바꾸기
+//        roi = getROIInfo(sock);
+
+
+        // 정보 반영해서 방향 결정하고 show
+
+        // 방향 결정
+        int derection = decideDirection(roi, currentLocation);
+
+        // 방향이랑 횡단보도 정보 넘겨줘서 출력 할까? 음..
         crossFrame.showAllCrossFrame();
     }
 
@@ -319,4 +336,68 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         tMapPolygon.addPolygonPoint( new TMapPoint(ext3[0], ext3[1]));
         tMapView.addTMapPolygon("Line1", tMapPolygon);
     }
+
+    public int decideDirection(CrossInfo crossInfo, double[] currentLocation){
+        //   0
+        // 3   1
+        //   2
+        // Front:0 // Right:1 // Back:2 // Left:3
+        double min;
+        int minIndex;
+        double distance;
+
+        min = getDistance(crossInfo.getFrontCrosswalk().getCrosswalkLocation(), currentLocation);
+        minIndex = 0;
+
+        distance = getDistance(crossInfo.getRightCrosswalk().getCrosswalkLocation(), currentLocation);
+        if(min > distance){
+            min = distance;
+            minIndex = 1;
+        }
+
+        distance = getDistance(crossInfo.getBackCrosswalk().getCrosswalkLocation(), currentLocation);
+        if(min > distance){
+            min = distance;
+            minIndex = 2;
+        }
+
+        distance = getDistance(crossInfo.getLeftCrosswalk().getCrosswalkLocation(), currentLocation);
+        if(min > distance){
+            min = distance;
+            minIndex = 3;
+        }
+
+        return minIndex;
+    }
+
+    public double getDistance(double[] point1, double[] point2){
+        double distance = 0;
+        double theta = 0;
+        double lat1 = point1[0];
+        double lon1 = point1[1];
+        double lat2 = point2[0];
+        double lon2 = point2[1];
+
+        theta = lon1 - lon2;
+        distance = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        distance = Math.acos(distance);
+        distance = rad2deg(distance);
+
+        distance = distance * 60 * 1.1515;
+        distance = distance * 1.609344;    // 단위 mile 에서 km 변환.
+        distance = distance * 1000.0;      // 단위  km 에서 m 로 변환
+
+        return distance;
+    }
+
+    // 주어진 도(degree) 값을 라디언으로 변환
+    private double deg2rad(double deg){
+        return (double)(deg * Math.PI / (double)180d);
+    }
+
+    // 주어진 라디언(radian) 값을 도(degree) 값으로 변환
+    private double rad2deg(double rad){
+        return (double)(rad * (double)180d / Math.PI);
+    }
+
 }
