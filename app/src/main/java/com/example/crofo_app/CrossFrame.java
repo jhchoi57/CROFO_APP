@@ -2,12 +2,12 @@ package com.example.crofo_app;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -132,18 +132,6 @@ public class CrossFrame {
         //rightdlg.show();
     }
 
-    public void drawObjFront(int left, int top, int obj){
-        ImageView iv = new ImageView(context);
-
-        // 오브젝트 받아서 if로 나누면 댐
-        iv.setImageResource(R.drawable.person);
-        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        param.width = 50;
-        param.height = 50;
-        param.setMargins(left,top,0,0);
-        frontdlg.addContentView(iv, param);
-    }
-
     public void initAllCrossFrame(){
         callCrossBack();
         callCrossFront();
@@ -163,14 +151,6 @@ public class CrossFrame {
         backdlg.show();
     }
 
-    public CrossInfo getROIInfo(CrossSocket sock){
-        CrossInfo roi;
-        sock.connect(); // 노드 서버 소켓과 연결
-        roi = sock.run(); // 메시지 수신
-        sock.disconnect();  // 소켓 해제
-        return roi;
-    }
-
     public void deleteAllCrossFrame(){
         try {
             frontdlg.dismiss();
@@ -182,4 +162,23 @@ public class CrossFrame {
         }
     }
 
+    public CrossInfo getROIInfo(CrossSocket sock){
+        CrossInfo roi;
+        sock.connect(); // 노드 서버 소켓과 연결
+        roi = sock.run(); // 메시지 수신
+        sock.disconnect();  // 소켓 해제
+        return roi;
+    }
+
+    public void addObjFront(int left, int top, int obj){
+        ImageView iv = new ImageView(context);
+
+        // 오브젝트 받아서 if로 나누면 댐
+        iv.setImageResource(R.drawable.person);
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        param.width = 50;
+        param.height = 50;
+        param.setMargins(left,top,0,0);
+        frontdlg.addContentView(iv, param);
+    }
 }
