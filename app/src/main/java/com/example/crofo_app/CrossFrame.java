@@ -24,7 +24,10 @@ public class CrossFrame {
     public Dialog leftdlg = null;
     public Dialog rightdlg = null;
     private CrossInfo roi;
-    private ArrayList<ImageView> viewList;
+    private ArrayList<ImageView> viewFrontList;
+    private ArrayList<ImageView> viewRightList;
+    private ArrayList<ImageView> viewBackList;
+    private ArrayList<ImageView> viewLeftList;
     private boolean stop = false;
     private CrossSocket[] sock;
 
@@ -41,7 +44,10 @@ public class CrossFrame {
     public CrossFrame(Context context) {
         this.context = context;
         roi = null;
-        viewList = new ArrayList<ImageView>();
+        viewFrontList = new ArrayList<ImageView>();
+        viewRightList = new ArrayList<ImageView>();
+        viewBackList = new ArrayList<ImageView>();
+        viewLeftList = new ArrayList<ImageView>();
         stop = false;
         isInROI = false;
     }
@@ -198,6 +204,28 @@ public class CrossFrame {
     }
 
     public void showAllCrossFrame(){
+//        for(int i = 0;i<viewList.size();i++){
+//            ((ViewManager)viewList.get(i).getParent()).removeView(viewList.get(i));
+//        }
+//        //((ViewManager)iv.getParent()).removeView(iv);
+//        viewList.clear();
+//
+//        if(roi == null) return;
+//
+//        ArrayList<Pedestrian> pedestrianList;
+//        ArrayList<Car> carList;
+//        pedestrianList = roi.getFrontCrosswalk().getPedestrianList();
+//        carList = roi.getFrontCrosswalk().getCarList();
+//        System.out.println(" 보행자 차량 리스트 ");
+//        for(int i=0;i<pedestrianList.size();i++){
+//            System.out.println(" 보행자 리스트 " + pedestrianList.get(i).getPedestrianLocation()[0] + pedestrianList.get(i).getPedestrianLocation()[1]);
+//            addObjFront(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
+//                    pedestrianList.get(i).getPedestrianDirection());
+//        }
+//        for(int i=0;i<carList.size();i++){
+//            System.out.println("차량 리스트" + carList.get(i).getCarLocation()[0] + carList.get(i).getCarLocation()[1]);
+//            addObjFront(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
+//        }
         frontdlg.show();
         backdlg.show();
         rightdlg.show();
@@ -205,13 +233,14 @@ public class CrossFrame {
     }
 
     public void refreshFrontFrame(Crosswalk roi){
-        for(int i = 0;i<viewList.size();i++){
-            ((ViewManager)viewList.get(i).getParent()).removeView(viewList.get(i));
+        if(roi == null) return;
+        for(int i = 0;i<viewFrontList.size();i++){
+            ((ViewManager)viewFrontList.get(i).getParent()).removeView(viewFrontList.get(i));
         }
         //((ViewManager)iv.getParent()).removeView(iv);
-        viewList.clear();
+        viewFrontList.clear();
 
-        if(roi == null) return;
+
 
         ArrayList<Pedestrian> pedestrianList;
         ArrayList<Car> carList;
@@ -224,17 +253,18 @@ public class CrossFrame {
         for(int i=0;i<carList.size();i++){
             addObjFront(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
         }
-        //frontdlg.show();
+        frontdlg.show();
     }
 
     public void refreshRightFrame(Crosswalk roi){
-        for(int i = 0;i<viewList.size();i++){
-            ((ViewManager)viewList.get(i).getParent()).removeView(viewList.get(i));
+        if(roi == null) return;
+        for(int i = 0;i<viewRightList.size();i++){
+            ((ViewManager)viewRightList.get(i).getParent()).removeView(viewRightList.get(i));
         }
         //((ViewManager)iv.getParent()).removeView(iv);
-        viewList.clear();
+        viewRightList.clear();
 
-        if(roi == null) return;
+
 
         ArrayList<Pedestrian> pedestrianList;
         ArrayList<Car> carList;
@@ -247,17 +277,18 @@ public class CrossFrame {
         for(int i=0;i<carList.size();i++){
             addObjRight(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
         }
-        //rightdlg.show();
+        rightdlg.show();
     }
 
     public void refreshBackFrame(Crosswalk roi){
-        for(int i = 0;i<viewList.size();i++){
-            ((ViewManager)viewList.get(i).getParent()).removeView(viewList.get(i));
+        if(roi == null) return;
+        for(int i = 0;i<viewBackList.size();i++){
+            ((ViewManager)viewBackList.get(i).getParent()).removeView(viewBackList.get(i));
         }
         //((ViewManager)iv.getParent()).removeView(iv);
-        viewList.clear();
+        viewBackList.clear();
 
-        if(roi == null) return;
+
 
         ArrayList<Pedestrian> pedestrianList;
         ArrayList<Car> carList;
@@ -270,17 +301,18 @@ public class CrossFrame {
         for(int i=0;i<carList.size();i++){
             addObjBack(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
         }
-        //backdlg.show();
+        backdlg.show();
     }
 
     public void refreshLeftFrame(Crosswalk roi){
-        for(int i = 0;i<viewList.size();i++){
-            ((ViewManager)viewList.get(i).getParent()).removeView(viewList.get(i));
+        if(roi == null) return;
+        for(int i = 0;i<viewLeftList.size();i++){
+            ((ViewManager)viewLeftList.get(i).getParent()).removeView(viewLeftList.get(i));
         }
         //((ViewManager)iv.getParent()).removeView(iv);
-        viewList.clear();
+        viewLeftList.clear();
 
-        if(roi == null) return;
+
 
         ArrayList<Pedestrian> pedestrianList;
         ArrayList<Car> carList;
@@ -293,7 +325,7 @@ public class CrossFrame {
         for(int i=0;i<carList.size();i++){
             addObjLeft(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
         }
-        //leftdlg.show();
+        leftdlg.show();
     }
 
     public void showTwoCrossFrame(){
@@ -331,7 +363,7 @@ public class CrossFrame {
         param.height = 50;
         param.setMargins(left,top,0,0);
         frontdlg.addContentView(iv, param);
-        viewList.add(iv);
+        viewFrontList.add(iv);
     }
 
     public void addObjRight(int left, int top, int obj, int direction){
@@ -344,7 +376,7 @@ public class CrossFrame {
         param.height = 50;
         param.setMargins(left,top,0,0);
         rightdlg.addContentView(iv, param);
-        viewList.add(iv);
+        viewRightList.add(iv);
     }
 
     public void addObjBack(int left, int top, int obj, int direction){
@@ -357,7 +389,7 @@ public class CrossFrame {
         param.height = 50;
         param.setMargins(left,top,0,0);
         backdlg.addContentView(iv, param);
-        viewList.add(iv);
+        viewBackList.add(iv);
     }
 
     public void addObjLeft(int left, int top, int obj, int direction){
@@ -370,7 +402,7 @@ public class CrossFrame {
         param.height = 50;
         param.setMargins(left,top,0,0);
         leftdlg.addContentView(iv, param);
-        viewList.add(iv);
+        viewLeftList.add(iv);
     }
 
     public boolean getIsInROI() {

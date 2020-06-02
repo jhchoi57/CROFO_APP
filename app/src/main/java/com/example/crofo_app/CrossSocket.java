@@ -190,10 +190,6 @@ public class CrossSocket {
                         @Override
                         public void run() {
                             System.out.println("교차로 최신화" + roi.getFrontCrosswalk().getCrosswalkLocation()[0]);
-//                            crossFrame.refreshFrontFrame(roi.getFrontCrosswalk());
-//                            crossFrame.refreshRightFrame(roi.getRightCrosswalk());
-//                            crossFrame.refreshBackFrame(roi.getBackCrosswalk());
-//                            crossFrame.refreshLeftFrame(roi.getLeftCrosswalk());
 
                             switch (crosswalk){
                                 case 0:
@@ -205,9 +201,6 @@ public class CrossSocket {
                                 case 3:
                                     crossFrame.refreshLeftFrame(roi.getLeftCrosswalk()); break;
                             }
-
-                            crossFrame.showAllCrossFrame();
-
                         }
                     }, 0);
 
