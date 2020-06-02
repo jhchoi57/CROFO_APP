@@ -52,36 +52,6 @@ public class CrossFrame {
         isInROI = false;
     }
 
-    public void run(CrossSocket[] socket){
-//        sock = socket;
-//        new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    while(isInROI){
-//                        try {
-//                            sock[0].setCrossFrameROI(CrossFrame.this);
-//                            System.out.println("교차로 그리기" + getRoi().getFrontCrosswalk().getCrosswalkLocation()[0]);
-//                            Handler mHandler = new Handler(Looper.getMainLooper());
-//                            mHandler.postDelayed(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    deleteAllCrossFrame();
-//                                    System.out.println("교차로 지우기");
-//                                    initAllCrossFrame();
-//                                    System.out.println("교차로 초기화");
-//                                    showAllCrossFrame();
-//                                    System.out.println("교차로 그리기" + getRoi().getFrontCrosswalk().getCrosswalkLocation()[0]);
-//                                }
-//                            }, 0);
-//                            Thread.sleep(500);
-//                        } catch (InterruptedException e){
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//            }).start();
-    }
-
     public void stop(){
         isInROI = false;
     }

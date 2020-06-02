@@ -154,16 +154,16 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
                     // 받을 정보 : 해당 교차로 내의 횡단보도 정보들(roi 안에 잇는 crossID 이용)
                     // =================횡단보도 띄우기=========================== //
                     System.out.println(" isinroi 초기값" + safetyDrive.getCrossFrame().getIsInROI());
+                    int direction = decideDirection(roi, safetyDrive.getCurrentLocation());
                     if(!safetyDrive.getCrossFrame().getIsInROI()){
                         safetyDrive.getCrossFrame().setInROI(true);
                         safetyDrive.getCrossFrame().initAllCrossFrame();
                         safetyDrive.getCrossFrame().showAllCrossFrame();
                         for(int i = 0;i<4;i++) {
-
                             if (sock[i].isConnected()) {
                                 sock[i].disconnect();
                             }
-                            sock[i].setSocket(roi.getCrossID(), i, roi, safetyDrive.getCrossFrame());
+                            sock[i].setSocket(roi.getCrossID(), i, roi, safetyDrive.getCrossFrame(), direction);
                             sock[i].connect();
                             sock[i].run();
                         }
@@ -191,5 +191,60 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
 
     private String doubleToString(double dou) {
         return "" + dou;
+    }
+
+    public int decideDirection(CrossInfo crossInfo, double[] currentLocation){
+        //  1 0
+        //  2 3
+        //
+        // Front:0 // Right:1 // Back:2 // Left:3
+        crossInfo.getCrossLocation0();
+        crossInfo.getCrossLocation1();
+        crossInfo.getCrossLocation2();
+        crossInfo.getCrossLocation3();
+
+        int direction = 0;
+        double minDistance = getDistance(crossInfo.getCrossLocation0(),crossInfo.getCrossLocation1());
+        if(minDistance > getDistance(crossInfo.getCrossLocation0(),crossInfo.getCrossLocation3())){
+            direction = 1;
+        }
+        else if(minDistance > getDistance(crossInfo.getCrossLocation3(),crossInfo.getCrossLocation2())){
+            direction = 2;
+        }
+        else if(minDistance > getDistance(crossInfo.getCrossLocation2(),crossInfo.getCrossLocation1())){
+            direction = 3;
+        }
+
+        return direction;
+    }
+
+    public double getDistance(double[] point1, double[] point2){
+        double distance = 0;
+        double theta = 0;
+        double lat1 = point1[0];
+        double lon1 = point1[1];
+        double lat2 = point2[0];
+        double lon2 = point2[1];
+
+        theta = lon1 - lon2;
+        distance = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        distance = Math.acos(distance);
+        distance = rad2deg(distance);
+
+        distance = distance * 60 * 1.1515;
+        distance = distance * 1.609344;    // 단위 mile 에서 km 변환.
+        distance = distance * 1000.0;      // 단위  km 에서 m 로 변환
+
+        return distance;
+    }
+
+    // 주어진 도(degree) 값을 라디언으로 변환
+    private double deg2rad(double deg){
+        return (double)(deg * Math.PI / (double)180d);
+    }
+
+    // 주어진 라디언(radian) 값을 도(degree) 값으로 변환
+    private double rad2deg(double rad){
+        return (double)(rad * (double)180d / Math.PI);
     }
 }

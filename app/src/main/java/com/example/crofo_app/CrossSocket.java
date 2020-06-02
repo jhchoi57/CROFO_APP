@@ -23,6 +23,7 @@ public class CrossSocket {
     private boolean stop;
     private CrossInfo roi;
     public CrossFrame crossFrame;
+    public int direction;
 
     public CrossSocket(String url) {
         this.url = url;
@@ -30,13 +31,14 @@ public class CrossSocket {
         stop = true;
     }
 
-    public void setSocket(int intersection_id, int crosswalk_id, CrossInfo roi, CrossFrame cF) {
+    public void setSocket(int intersection_id, int crosswalk_id, CrossInfo roi, CrossFrame cF, int d) {
         this.intersection = intersection_id;
         this.crosswalk = crosswalk_id;
         isConnected = false;
         stop = true;
         this.roi = roi;
         crossFrame = cF;
+        direction = d;
     }
 
     public void run() {
@@ -143,6 +145,9 @@ public class CrossSocket {
                     typeLocation[0] = json.getInt("x");
                     typeLocation[1] = json.getInt("y");
 
+                    // 방향 결정
+                    //int direction = decideDirection(roi, currentLocation);
+
                     // 사람일 때
                     if(type == 0 || type == 2){
                         switch (crosswalk){
@@ -173,8 +178,7 @@ public class CrossSocket {
 
                     // 정보 반영해서 방향 결정하고 show
 
-                    // 방향 결정
-                    //int direction = decideDirection(roi, currentLocation);
+
                     int direction = 0;
                     // 방향이랑 횡단보도 정보 넘겨줘서 출력 할까? 음..
 
@@ -252,4 +256,7 @@ public class CrossSocket {
     public void setCrossFrameROI(CrossFrame crossFrame){
         crossFrame.setRoi(roi);
     }
+
+
+
 }
