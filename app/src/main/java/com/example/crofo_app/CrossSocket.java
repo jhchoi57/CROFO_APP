@@ -31,14 +31,14 @@ public class CrossSocket {
         stop = true;
     }
 
-    public void setSocket(int intersection_id, int crosswalk_id, CrossInfo roi, CrossFrame cF, int d) {
+    public void setSocket(int intersection_id, int crosswalk_id, CrossInfo roi, CrossFrame cF, int direction) {
         this.intersection = intersection_id;
         this.crosswalk = crosswalk_id;
         isConnected = false;
         stop = true;
         this.roi = roi;
         crossFrame = cF;
-        direction = d;
+        this.direction = direction;
     }
 
     public void run() {
@@ -98,6 +98,7 @@ public class CrossSocket {
                 JSONObject jsonObj = new JSONObject();
                 jsonObj.accumulate("in", intersection);
                 jsonObj.accumulate("cr", crosswalk);
+                jsonObj.accumulate("di", direction);
                 socket.emit("where", jsonObj);
             } catch (JSONException e) {
                 e.printStackTrace();
