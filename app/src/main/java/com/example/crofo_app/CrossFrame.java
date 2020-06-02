@@ -4,12 +4,15 @@ import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import java.util.ArrayList;
 
 public class CrossFrame {
     private Context context;
@@ -20,7 +23,6 @@ public class CrossFrame {
 
     public CrossFrame(Context context) {
         this.context = context;
-        initAllCrossFrame();
     }
 
     // 호출할 다이얼로그 함수를 정의한다.
@@ -132,8 +134,22 @@ public class CrossFrame {
         //rightdlg.show();
     }
 
-    public void initAllCrossFrame(){
+    public void initAllCrossFrame(CrossInfo roi, int derection){
+//        ArrayList<Pedestrian> pedestrianList;
+//        ArrayList<Car> carList;
+
         callCrossBack();
+//        pedestrianList = roi.getBackCrosswalk().getPedestrianList();
+//        carList = roi.getBackCrosswalk().getCarList();
+//        for(int i=0;i<pedestrianList.size();i++){
+//            //addObjBack(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
+//            //        pedestrianList.get(i).getPedestrianDirection());
+//        }
+//        for(int i=0;i<carList.size();i++){
+//            //addObjBack(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
+//        }
+
+
         callCrossFront();
         callCrossLeft();
         callCrossRight();
@@ -170,7 +186,7 @@ public class CrossFrame {
         return roi;
     }
 
-    public void addObjFront(int left, int top, int obj){
+    public void addObjFront(int left, int top, int obj, int derection){
         ImageView iv = new ImageView(context);
 
         // 오브젝트 받아서 if로 나누면 댐
