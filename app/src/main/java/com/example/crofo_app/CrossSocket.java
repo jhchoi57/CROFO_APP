@@ -141,12 +141,7 @@ public class CrossSocket {
                     JSONObject json = jsonArr.getJSONObject(i);
                     //0 사람 1 차 2 bike 3 버스 4 트럭
                     int type = json.getInt("type");
-                    int typeLocation[] = new int[2];
-                    typeLocation[0] = json.getInt("x");
-                    typeLocation[1] = json.getInt("y");
-
-                    // 방향 결정
-                    //int direction = decideDirection(roi, currentLocation);
+                    int typeLocation[] = convertByDirection(json.getInt("x"), json.getInt("y"), direction);
 
                     // 사람일 때
                     if(type == 0 || type == 2){
@@ -257,6 +252,10 @@ public class CrossSocket {
         crossFrame.setRoi(roi);
     }
 
+    public int[] convertByDirection(int x, int y, int direction){
+       int coordinates[] = null;
 
+       return coordinates;
+    }
 
 }
