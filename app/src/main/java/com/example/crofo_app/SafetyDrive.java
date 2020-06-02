@@ -128,7 +128,7 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
                 markerItemCurrent.setTMapPoint(currentPoint);
                 currentBearing = getTrueBearing(recentLocation, currentLocation);
 
-                new FindCrossRequest(currentLocation, SafetyDrive.this).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
+                new FindCrossRequest(currentLocation, SafetyDrive.this, context).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
                 System.out.println("보냇어용");
 
                 // 앱에서 현재위치 기준으로 반경 원 내에 들어오는 교차로 리스트 서버에 요청 및 수신
@@ -287,10 +287,12 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         crossInfoList.add(crossInfo);
     }
 
-    public void showCrosswalk(CrossInfo roi){
+    public void showCrosswalk(CrossInfo roi, Context context){
         //=====================횡단보도 정보 받기===========================//
-        CrossSocket sock = new CrossSocket("http://bic4907.diskstation.me:4446", roi.getCrossID(), 1, roi); // 소켓 생성
-        roi = crossFrame.getROIInfo(sock);
+//        CrossSocket sock = new CrossSocket("http://192.168.0.247:8080", roi.getCrossID(), 0, roi, context); // 소켓 생성
+//        sock.connect();
+//        sock.run();
+        //System.out.println(" 보행자 리스트 " + roi.getFrontCrosswalk().getCrosswalkLocation()[0]);
 //        sock.setKey(roi.getCrossID(), 1); // key 바꾸기
 //        roi = getROIInfo(sock);
 //        sock.setKey(roi.getCrossID(), 2); // key 바꾸기
@@ -298,24 +300,6 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
 //        sock.setKey(roi.getCrossID(), 3); // key 바꾸기
 //        roi = getROIInfo(sock);
 
-
-        // 정보 반영해서 방향 결정하고 show
-
-        // 방향 결정
-        //int direction = decideDirection(roi, currentLocation);
-        int direction = 0;
-        // 방향이랑 횡단보도 정보 넘겨줘서 출력 할까? 음..
-        crossFrame.deleteAllCrossFrame();
-        crossFrame.initAllCrossFrame();
-        //obj 추가
-        //front 추가
-        //back 추가
-        //right 추가
-        //left 추가
-
-        crossFrame.showAllCrossFrame(roi, direction);
-
-        sock.disconnect();
     }
 
     public void deleteCrosswalk(){

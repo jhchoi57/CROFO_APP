@@ -1,5 +1,6 @@
 package com.example.crofo_app;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
@@ -22,11 +23,15 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
     private double lat;
     private double lon;
     private SafetyDrive safetyDrive;
+    private Context context;
+    public CrossFrame crossframe;
 
-    public FindCrossRequest (double[] location, SafetyDrive SD) {
+    public FindCrossRequest (double[] location, SafetyDrive SD, Context ct) {
         lat = location[0];
         lon = location[1];
         safetyDrive = SD;
+        context = ct;
+        crossframe = new CrossFrame(context);
     }
     protected String doInBackground(String... urls) {
 
@@ -146,7 +151,18 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
                     // 보낼 정보 : 해당 교차로 (CrossInfo roi)
                     // 받을 정보 : 해당 교차로 내의 횡단보도 정보들(roi 안에 잇는 crossID 이용)
                     // =================횡단보도 띄우기=========================== //
-                    safetyDrive.showCrosswalk(roi);
+
+                    CrossSocket sock = new CrossSocket("http://192.168.0.247:8080", roi.getCrossID(), 0, roi, crossframe); // 소켓 생성
+                    sock.connect();
+                    sock.run();
+                    sock.setCrossFrameROI(crossframe);
+
+                    crossframe.deleteAllCrossFrame();
+                    System.out.println("교차로 지우기");
+                    crossframe.initAllCrossFrame();
+                    System.out.println("교차로 초기화");
+                    crossframe.showAllCrossFrame();
+                    System.out.println("교차로 그리기" + crossframe.getRoi().getCrossID());
                 }
                 else  {
                     safetyDrive.deleteCrosswalk();

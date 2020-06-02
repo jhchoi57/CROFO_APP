@@ -44,4 +44,12 @@ public class Crosswalk {
         crosswalkLocation = cwL;
     }
 
+    public void addPedestrianList(Pedestrian p){
+        pedestrianList.add(p);
+    }
+
+    public void addCarList(Car c){
+        carList.add(c);
+    }
+
 }

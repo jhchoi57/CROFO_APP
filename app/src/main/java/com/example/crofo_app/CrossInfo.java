@@ -102,6 +102,10 @@ public class CrossInfo {
         this.frontCrosswalk = frontCrosswalk;
     }
 
+    public void setFrontCrosswalkLocation(double[] location){
+        this.frontCrosswalk.setCrosswalkLocation(location);
+    }
+
     public void setRightCrosswalk(Crosswalk rightCrosswalk) {
         this.rightCrosswalk = rightCrosswalk;
     }

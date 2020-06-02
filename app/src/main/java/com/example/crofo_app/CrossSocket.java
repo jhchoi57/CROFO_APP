@@ -1,5 +1,7 @@
 package com.example.crofo_app;
 
+import android.content.Context;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,17 +20,19 @@ public class CrossSocket {
     private boolean isConnected;
     private boolean stop;
     private CrossInfo roi;
+    public CrossFrame crossFrame;
 
-    public CrossSocket(String url, int intersection_id, int crosswalk_id, CrossInfo roi) {
+    public CrossSocket(String url, int intersection_id, int crosswalk_id, CrossInfo roi, CrossFrame cF) {
         this.url = url;
         this.intersection = intersection_id;
         this.crosswalk = crosswalk_id;
         isConnected = false;
         stop = true;
         this.roi = roi;
+        crossFrame = cF;
     }
 
-    public CrossInfo run() {
+    public void run() {
         if(!isConnected) {
             System.out.println("Android-Node socket is not connected");
         } else {
@@ -53,7 +57,6 @@ public class CrossSocket {
             }).start();
             socket.on("object", onMessageReceive);
         }
-        return this.roi;
     }
 
     public void stop() {
@@ -109,27 +112,73 @@ public class CrossSocket {
             try {
                 JSONArray jsonArr = jsonObj.getJSONArray("arr");
                 int cnt = jsonArr.length();
+                double loc[] = new double[2];
+                loc[0] = jsonObj.getDouble("loc_x");
+                loc[1] = jsonObj.getDouble("loc_y");
+                switch (crosswalk){
+                    case 0:
+                        roi.getFrontCrosswalk().setCrosswalkLocation(loc); break;
+                    case 1:
+                        roi.getRightCrosswalk().setCrosswalkLocation(loc); break;
+                    case 2:
+                        roi.getBackCrosswalk().setCrosswalkLocation(loc); break;
+                    case 3:
+                        roi.getLeftCrosswalk().setCrosswalkLocation(loc); break;
+                }
+                System.out.println(" 위치 " + roi.getFrontCrosswalk().getCrosswalkLocation()[0]);
 
-                jsonObj.getDouble("loc_x");
-                jsonObj.getDouble("loc_y");
 
                 for (int i = 0; i < cnt; i++) {
                     JSONObject json = jsonArr.getJSONObject(i);
                     //0 사람 1 차 2 bike 3 버스 4 트럭
                     int type = json.getInt("type");
-                    int x = json.getInt("x");
-                    int y = json.getInt("y");
-//                    if(type == 0 || type == 2){
-//                        switch (crosswalk){
-//                            case 0:
-//                            case 1:
-//                            case 2:
-//                            case 3:
-//                        }
-//                    }
-//                    else{
-//
-//                    }
+                    int typeLocation[] = new int[2];
+                    typeLocation[0] = json.getInt("x");
+                    typeLocation[1] = json.getInt("y");
+
+                    // 사람일 때
+                    if(type == 0 || type == 2){
+                        switch (crosswalk){
+                            case 0:
+                                roi.getFrontCrosswalk().addPedestrianList(new Pedestrian(typeLocation, 0)); break;
+                            case 1:
+                                roi.getRightCrosswalk().addPedestrianList(new Pedestrian(typeLocation, 0)); break;
+                            case 2:
+                                roi.getBackCrosswalk().addPedestrianList(new Pedestrian(typeLocation, 0)); break;
+                            case 3:
+                                roi.getLeftCrosswalk().addPedestrianList(new Pedestrian(typeLocation, 0)); break;
+                        }
+                    }
+
+                    // 차일 때
+                    else{
+                        switch (crosswalk){
+                            case 0:
+                                roi.getFrontCrosswalk().addCarList(new Car(typeLocation)); break;
+                            case 1:
+                                roi.getRightCrosswalk().addCarList(new Car(typeLocation)); break;
+                            case 2:
+                                roi.getBackCrosswalk().addCarList(new Car(typeLocation)); break;
+                            case 3:
+                                roi.getLeftCrosswalk().addCarList(new Car(typeLocation)); break;
+                        }
+                    }
+
+                    // 정보 반영해서 방향 결정하고 show
+
+                    // 방향 결정
+                    //int direction = decideDirection(roi, currentLocation);
+                    int direction = 0;
+                    // 방향이랑 횡단보도 정보 넘겨줘서 출력 할까? 음..
+
+                    //obj 추가
+                    //front 추가
+                    //back 추가
+                    //right 추가
+                    //left 추가
+
+
+                    //sock.disconnect();
 
 
                 }
@@ -171,5 +220,9 @@ public class CrossSocket {
         socket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectTimeoutError);
         isConnected = false;
         System.out.println("Android-Node socket is disconnected");
+    }
+
+    public void setCrossFrameROI(CrossFrame crossFrame){
+        crossFrame.setRoi(roi);
     }
 }

@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         //new CrossRequest(serverTestList).execute("http://bic4907.diskstation.me:4446/app/cross/list"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
         //new FindCrossRequest(test).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
         //System.out.println("보냇어용");
-//        CrossSocket sock = new CrossSocket("http://bic4907.diskstation.me:4446", 1, 1 ,null); // 소켓 생성
+//        CrossSocket sock = new CrossSocket("http://192.168.0.247:8080", 1, 1 ,null); // 소켓 생성
 //        sock.connect(); // 노드 서버 소켓과 연결
 //        sock.run(); // 메시지 수신
         //sock.disconnect();  // 소켓 해제

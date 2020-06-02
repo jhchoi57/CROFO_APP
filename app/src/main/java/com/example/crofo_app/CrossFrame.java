@@ -20,9 +20,19 @@ public class CrossFrame {
     public Dialog backdlg = null;
     public Dialog leftdlg = null;
     public Dialog rightdlg = null;
+    private CrossInfo roi;
+
+    public CrossInfo getRoi() {
+        return roi;
+    }
+
+    public void setRoi(CrossInfo roi) {
+        this.roi = roi;
+    }
 
     public CrossFrame(Context context) {
         this.context = context;
+        roi = null;
     }
 
     // 호출할 다이얼로그 함수를 정의한다.
@@ -141,19 +151,23 @@ public class CrossFrame {
         callCrossRight();
     }
 
-    public void showAllCrossFrame(CrossInfo roi, int derection){
+    public void showAllCrossFrame(){
+        if(roi == null) return;
 
-//        ArrayList<Pedestrian> pedestrianList;
-//        ArrayList<Car> carList;
-//        pedestrianList = roi.getBackCrosswalk().getPedestrianList();
-//        carList = roi.getBackCrosswalk().getCarList();
-//        for(int i=0;i<pedestrianList.size();i++){
-//            //addObjBack(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
-//            //        pedestrianList.get(i).getPedestrianDirection());
-//        }
-//        for(int i=0;i<carList.size();i++){
-//            //addObjBack(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
-//        }
+        ArrayList<Pedestrian> pedestrianList;
+        ArrayList<Car> carList;
+        pedestrianList = roi.getFrontCrosswalk().getPedestrianList();
+        carList = roi.getFrontCrosswalk().getCarList();
+        System.out.println(" 보행자 차량 리스트 ");
+        for(int i=0;i<pedestrianList.size();i++){
+            System.out.println(" 보행자 리스트 " + pedestrianList.get(i).getPedestrianLocation()[0] + pedestrianList.get(i).getPedestrianLocation()[1]);
+            //addObjBack(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
+            //        pedestrianList.get(i).getPedestrianDirection());
+        }
+        for(int i=0;i<carList.size();i++){
+            System.out.println("차량 리스트" + carList.get(i).getCarLocation()[0] + carList.get(i).getCarLocation()[1]);
+            //addObjBack(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
+        }
         frontdlg.show();
         backdlg.show();
         rightdlg.show();
@@ -177,9 +191,9 @@ public class CrossFrame {
     }
 
     public CrossInfo getROIInfo(CrossSocket sock){
-        CrossInfo roi;
+        CrossInfo roi = null;
         sock.connect(); // 노드 서버 소켓과 연결
-        roi = sock.run(); // 메시지 수신
+        sock.run(); // 메시지 수신
         //sock.disconnect();  // 소켓 해제
         return roi;
     }
