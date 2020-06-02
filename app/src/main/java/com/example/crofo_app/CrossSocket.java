@@ -36,6 +36,8 @@ public class CrossSocket {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    int cnt = 0;
+                    System.out.println("android- Fuck" + stop);
                     while (!stop) {
                         try {
                             System.out.println("Thread is run now");
@@ -44,7 +46,9 @@ public class CrossSocket {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                        System.out.println("android- run exit" + cnt++);
                     }
+                    System.out.println("android- run exit ");
                 }
             }).start();
             socket.on("object", onMessageReceive);
@@ -108,10 +112,23 @@ public class CrossSocket {
 
                 for (int i = 0; i < cnt; i++) {
                     JSONObject json = jsonArr.getJSONObject(i);
+                    //0 사람 1 차 2 bike 3 버스 4 트럭
+                    int type = json.getInt("type");
+                    int x = json.getInt("x");
+                    int y = json.getInt("y");
+//                    if(type == 0 || type == 2){
+//                        switch (crosswalk){
+//                            case 0:
+//                            case 1:
+//                            case 2:
+//                            case 3:
+//                        }
+//                    }
+//                    else{
+//
+//                    }
 
-                    json.getInt("type");
-                    json.getInt("x");
-                    json.getInt("y");
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

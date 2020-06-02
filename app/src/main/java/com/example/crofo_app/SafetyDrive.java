@@ -289,7 +289,7 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
 
     public void showCrosswalk(CrossInfo roi){
         //=====================횡단보도 정보 받기===========================//
-        CrossSocket sock = new CrossSocket("http://192.168.0.7:8080", roi.getCrossID(), 0, roi); // 소켓 생성
+        CrossSocket sock = new CrossSocket("http://bic4907.diskstation.me:4446", roi.getCrossID(), 1, roi); // 소켓 생성
         roi = crossFrame.getROIInfo(sock);
 //        sock.setKey(roi.getCrossID(), 1); // key 바꾸기
 //        roi = getROIInfo(sock);
@@ -302,18 +302,20 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         // 정보 반영해서 방향 결정하고 show
 
         // 방향 결정
-        //int derection = decideDirection(roi, currentLocation);
-        int derection = 0;
+        //int direction = decideDirection(roi, currentLocation);
+        int direction = 0;
         // 방향이랑 횡단보도 정보 넘겨줘서 출력 할까? 음..
-        //crossFrame.deleteAllCrossFrame();
-        crossFrame.initAllCrossFrame(roi, derection);
+        crossFrame.deleteAllCrossFrame();
+        crossFrame.initAllCrossFrame();
         //obj 추가
         //front 추가
         //back 추가
         //right 추가
         //left 추가
 
-        crossFrame.showAllCrossFrame();
+        crossFrame.showAllCrossFrame(roi, direction);
+
+        sock.disconnect();
     }
 
     public void deleteCrosswalk(){

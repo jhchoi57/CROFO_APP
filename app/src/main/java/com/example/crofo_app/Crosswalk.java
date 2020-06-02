@@ -9,6 +9,11 @@ public class Crosswalk {
     private ArrayList<Car> carList;                     // 차량 리스트
     private double[] crosswalkLocation;                // 횡단보도 위치 ( 필요하려나? ) lat lon 순서
 
+    public Crosswalk(){
+        pedestrianList = new ArrayList<Pedestrian>();
+        carList = new ArrayList<Car>();
+    }
+
     public Crosswalk(ArrayList<Pedestrian> pL, ArrayList<Car> cL, double[] cwL){
         pedestrianList = pL;
         carList = cL;

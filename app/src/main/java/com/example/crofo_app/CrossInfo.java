@@ -16,10 +16,10 @@ public class CrossInfo {
     private double trueBearing;             // 방향 북쪽 0도, 360도 기준
 
     public CrossInfo(){
-        frontCrosswalk = null;
-        rightCrosswalk = null;
-        leftCrosswalk = null;
-        backCrosswalk = null;
+        frontCrosswalk = new Crosswalk();
+        rightCrosswalk = new Crosswalk();
+        leftCrosswalk = new Crosswalk();
+        backCrosswalk = new Crosswalk();
         centerLocation = null;
         crossLocation0 = null;
         crossLocation1 = null;

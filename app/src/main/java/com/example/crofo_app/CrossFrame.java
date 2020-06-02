@@ -134,11 +134,17 @@ public class CrossFrame {
         //rightdlg.show();
     }
 
-    public void initAllCrossFrame(CrossInfo roi, int derection){
+    public void initAllCrossFrame(){
+        callCrossBack();
+        callCrossFront();
+        callCrossLeft();
+        callCrossRight();
+    }
+
+    public void showAllCrossFrame(CrossInfo roi, int derection){
+
 //        ArrayList<Pedestrian> pedestrianList;
 //        ArrayList<Car> carList;
-
-        callCrossBack();
 //        pedestrianList = roi.getBackCrosswalk().getPedestrianList();
 //        carList = roi.getBackCrosswalk().getCarList();
 //        for(int i=0;i<pedestrianList.size();i++){
@@ -148,14 +154,6 @@ public class CrossFrame {
 //        for(int i=0;i<carList.size();i++){
 //            //addObjBack(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
 //        }
-
-
-        callCrossFront();
-        callCrossLeft();
-        callCrossRight();
-    }
-
-    public void showAllCrossFrame(){
         frontdlg.show();
         backdlg.show();
         rightdlg.show();
@@ -182,7 +180,7 @@ public class CrossFrame {
         CrossInfo roi;
         sock.connect(); // 노드 서버 소켓과 연결
         roi = sock.run(); // 메시지 수신
-        sock.disconnect();  // 소켓 해제
+        //sock.disconnect();  // 소켓 해제
         return roi;
     }
 
