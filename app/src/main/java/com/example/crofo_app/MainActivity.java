@@ -108,10 +108,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         // 커스텀 다이얼로그를 호출한다.
         CrossFrame crossFrame = new CrossFrame(MainActivity.this);
+        crossFrame.showAllCrossFrame();
+        crossFrame.addObjFront(50,50,0);
+        crossFrame.addObjFront(100,100,0);
+        crossFrame.addObjFront(150,150,0);
+        crossFrame.deleteAllCrossFrame();
         crossFrame.callCrossFront();
-        crossFrame.callCrossBack();
-        crossFrame.callCrossLeft();
-        crossFrame.callCrossRight();
+        crossFrame.showAllCrossFrame();
 
         // 현재 위치 타이머로 5초마다 계속 얻기
         //tMapView.setTrackingMode(true);
@@ -138,15 +141,14 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         //new CrossRequest(serverTestList).execute("http://bic4907.diskstation.me:4446/app/cross/list"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
         //new FindCrossRequest(test).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
         //System.out.println("보냇어용");
-
-        CrossSocket sock = new CrossSocket("http://bic4907.diskstation.me:4446", 1, 0); // 소켓 생성
-        sock.connect(); // 노드 서버 소켓과 연결
-        sock.run(); // 메시지 수신
-        sock.disconnect();  // 소켓 해제
-        sock.setKey(1, 2); // key 바꾸기
-        sock.connect(); // 노드 서버 소켓과 연결
-        sock.run(); // 메시지 수신
-        sock.disconnect(); // 소켓 해제
+//        CrossSocket sock = new CrossSocket("http://192.168.0.13:8080", 123, 0); // 소켓 생성
+//        sock.connect(); // 노드 서버 소켓과 연결
+//        sock.run(); // 메시지 수신
+//        sock.disconnect();  // 소켓 해제
+//        sock.setKey(123, 1); // key 바꾸기
+//        sock.connect(); // 노드 서버 소켓과 연결
+//        sock.run(); // 메시지 수신
+//        sock.disconnect(); // 소켓 해제
     }
 
     // onCreate 끝

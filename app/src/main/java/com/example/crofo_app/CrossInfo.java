@@ -13,7 +13,6 @@ public class CrossInfo {
     private double[] crossLocation1;         // 1 0
     private double[] crossLocation2;         // 2 3
     private double[] crossLocation3;         //
-    private String key;
     private double trueBearing;             // 방향 북쪽 0도, 360도 기준
 
     public CrossInfo(){
@@ -51,7 +50,7 @@ public class CrossInfo {
         crossLocation3 = cL3;
     }
 
-    public int getCrossid() {
+    public int getCrossID() {
         return crossID;
     }
 

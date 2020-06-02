@@ -17,16 +17,18 @@ public class CrossSocket {
     private int intersection;
     private boolean isConnected;
     private boolean stop;
+    private CrossInfo roi;
 
-    public CrossSocket(String url, int intersection_id, int crosswalk_id) {
+    public CrossSocket(String url, int intersection_id, int crosswalk_id, CrossInfo roi) {
         this.url = url;
         this.intersection = intersection_id;
         this.crosswalk = crosswalk_id;
         isConnected = false;
         stop = true;
+        this.roi = roi;
     }
 
-    public void run() {
+    public CrossInfo run() {
         if(!isConnected) {
             System.out.println("Android-Node socket is not connected");
         } else {
@@ -47,6 +49,7 @@ public class CrossSocket {
             }).start();
             socket.on("object", onMessageReceive);
         }
+        return this.roi;
     }
 
     public void stop() {
