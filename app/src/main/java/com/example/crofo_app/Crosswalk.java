@@ -12,6 +12,7 @@ public class Crosswalk {
     public Crosswalk(){
         pedestrianList = new ArrayList<Pedestrian>();
         carList = new ArrayList<Car>();
+        crosswalkLocation = new double[2];
     }
 
     public Crosswalk(ArrayList<Pedestrian> pL, ArrayList<Car> cL, double[] cwL){

@@ -22,8 +22,13 @@ public class CrossSocket {
     private CrossInfo roi;
     public CrossFrame crossFrame;
 
-    public CrossSocket(String url, int intersection_id, int crosswalk_id, CrossInfo roi, CrossFrame cF) {
+    public CrossSocket(String url) {
         this.url = url;
+        isConnected = false;
+        stop = true;
+    }
+
+    public void setSocket(int intersection_id, int crosswalk_id, CrossInfo roi, CrossFrame cF){
         this.intersection = intersection_id;
         this.crosswalk = crosswalk_id;
         isConnected = false;

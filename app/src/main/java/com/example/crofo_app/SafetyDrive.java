@@ -40,12 +40,20 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
     private double[] recentLocation;
 
     Context context;
+    CrossSocket sock[] = new CrossSocket[4];
+
+
 
     public SafetyDrive(TMapView tView, Context ct){
         super();
         tMapView = tView;
         context = ct;
         crossFrame = new CrossFrame(context);
+//        crossFrame.initAllCrossFrame();
+//        sock[0] = new CrossSocket("http://192.168.0.8:8080");
+        for(int i = 0;i<4;i++){
+            sock[i] = new CrossSocket("http://192.168.0.8:8080"); // 소켓 생성
+        }
     }
 
     public SafetyDrive(TMapPoint sPoint, TMapPoint ePoint, TMapView tView, Context ct) throws ParserConfigurationException, SAXException, IOException {
@@ -128,7 +136,7 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
                 markerItemCurrent.setTMapPoint(currentPoint);
                 currentBearing = getTrueBearing(recentLocation, currentLocation);
 
-                new FindCrossRequest(currentLocation, SafetyDrive.this, context).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
+                new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
                 System.out.println("보냇어용");
 
                 // 앱에서 현재위치 기준으로 반경 원 내에 들어오는 교차로 리스트 서버에 요청 및 수신
@@ -394,4 +402,5 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         return (double)(rad * (double)180d / Math.PI);
     }
 
+    public CrossFrame getCrossFrame(){ return crossFrame; }
 }

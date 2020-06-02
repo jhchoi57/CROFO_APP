@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -21,6 +22,7 @@ public class CrossFrame {
     public Dialog leftdlg = null;
     public Dialog rightdlg = null;
     private CrossInfo roi;
+    private ArrayList<ImageView> viewList;
 
     public CrossInfo getRoi() {
         return roi;
@@ -33,6 +35,7 @@ public class CrossFrame {
     public CrossFrame(Context context) {
         this.context = context;
         roi = null;
+        viewList = new ArrayList<ImageView>();
     }
 
     // 호출할 다이얼로그 함수를 정의한다.
@@ -152,6 +155,12 @@ public class CrossFrame {
     }
 
     public void showAllCrossFrame(){
+        for(int i = 0;i<viewList.size();i++){
+            ((ViewManager)viewList.get(i).getParent()).removeView(viewList.get(i));
+        }
+        //((ViewManager)iv.getParent()).removeView(iv);
+        viewList.clear();
+
         if(roi == null) return;
 
         ArrayList<Pedestrian> pedestrianList;
@@ -161,12 +170,12 @@ public class CrossFrame {
         System.out.println(" 보행자 차량 리스트 ");
         for(int i=0;i<pedestrianList.size();i++){
             System.out.println(" 보행자 리스트 " + pedestrianList.get(i).getPedestrianLocation()[0] + pedestrianList.get(i).getPedestrianLocation()[1]);
-            //addObjBack(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
-            //        pedestrianList.get(i).getPedestrianDirection());
+            addObjFront(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
+                    pedestrianList.get(i).getPedestrianDirection());
         }
         for(int i=0;i<carList.size();i++){
             System.out.println("차량 리스트" + carList.get(i).getCarLocation()[0] + carList.get(i).getCarLocation()[1]);
-            //addObjBack(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
+            addObjFront(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
         }
         frontdlg.show();
         backdlg.show();
@@ -188,6 +197,7 @@ public class CrossFrame {
         } catch (Exception e){
             Log.e("dismiss error", String.valueOf(e));
         }
+
     }
 
     public CrossInfo getROIInfo(CrossSocket sock){
@@ -198,7 +208,7 @@ public class CrossFrame {
         return roi;
     }
 
-    public void addObjFront(int left, int top, int obj, int derection){
+    public void addObjFront(int left, int top, int obj, int direction){
         ImageView iv = new ImageView(context);
 
         // 오브젝트 받아서 if로 나누면 댐
@@ -208,5 +218,46 @@ public class CrossFrame {
         param.height = 50;
         param.setMargins(left,top,0,0);
         frontdlg.addContentView(iv, param);
+        viewList.add(iv);
     }
+
+    public void addObjRight(int left, int top, int obj, int direction){
+        ImageView iv = new ImageView(context);
+
+        // 오브젝트 받아서 if로 나누면 댐
+        iv.setImageResource(R.drawable.person);
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        param.width = 50;
+        param.height = 50;
+        param.setMargins(left,top,0,0);
+        rightdlg.addContentView(iv, param);
+        viewList.add(iv);
+    }
+
+    public void addObjBack(int left, int top, int obj, int direction){
+        ImageView iv = new ImageView(context);
+
+        // 오브젝트 받아서 if로 나누면 댐
+        iv.setImageResource(R.drawable.person);
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        param.width = 50;
+        param.height = 50;
+        param.setMargins(left,top,0,0);
+        backdlg.addContentView(iv, param);
+        viewList.add(iv);
+    }
+
+    public void addObjLeft(int left, int top, int obj, int direction){
+        ImageView iv = new ImageView(context);
+
+        // 오브젝트 받아서 if로 나누면 댐
+        iv.setImageResource(R.drawable.person);
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        param.width = 50;
+        param.height = 50;
+        param.setMargins(left,top,0,0);
+        leftdlg.addContentView(iv, param);
+        viewList.add(iv);
+    }
+
 }
