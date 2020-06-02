@@ -1,6 +1,8 @@
 package com.example.crofo_app;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +30,7 @@ public class CrossSocket {
         stop = true;
     }
 
-    public void setSocket(int intersection_id, int crosswalk_id, CrossInfo roi, CrossFrame cF){
+    public void setSocket(int intersection_id, int crosswalk_id, CrossInfo roi, CrossFrame cF) {
         this.intersection = intersection_id;
         this.crosswalk = crosswalk_id;
         isConnected = false;
@@ -51,7 +53,7 @@ public class CrossSocket {
                         try {
                             System.out.println("Thread is run now");
                             socket.emit("request", "hi");
-                            Thread.sleep(500);
+                            Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -181,6 +183,33 @@ public class CrossSocket {
                     //back 추가
                     //right 추가
                     //left 추가
+
+//                    System.out.println("교차로 그리기1" + roi.getFrontCrosswalk().getCrosswalkLocation()[0]);
+                    Handler mHandler = new Handler(Looper.getMainLooper());
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("교차로 최신화" + roi.getFrontCrosswalk().getCrosswalkLocation()[0]);
+//                            crossFrame.refreshFrontFrame(roi.getFrontCrosswalk());
+//                            crossFrame.refreshRightFrame(roi.getRightCrosswalk());
+//                            crossFrame.refreshBackFrame(roi.getBackCrosswalk());
+//                            crossFrame.refreshLeftFrame(roi.getLeftCrosswalk());
+
+                            switch (crosswalk){
+                                case 0:
+                                    crossFrame.refreshFrontFrame(roi.getFrontCrosswalk()); break;
+                                case 1:
+                                    crossFrame.refreshRightFrame(roi.getRightCrosswalk()); break;
+                                case 2:
+                                    crossFrame.refreshBackFrame(roi.getBackCrosswalk()); break;
+                                case 3:
+                                    crossFrame.refreshLeftFrame(roi.getLeftCrosswalk()); break;
+                            }
+
+                            crossFrame.showAllCrossFrame();
+
+                        }
+                    }, 0);
 
 
                     //sock.disconnect();

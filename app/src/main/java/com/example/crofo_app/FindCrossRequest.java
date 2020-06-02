@@ -153,23 +153,32 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
                     // 보낼 정보 : 해당 교차로 (CrossInfo roi)
                     // 받을 정보 : 해당 교차로 내의 횡단보도 정보들(roi 안에 잇는 crossID 이용)
                     // =================횡단보도 띄우기=========================== //
+                    System.out.println(" isinroi 초기값" + safetyDrive.getCrossFrame().getIsInROI());
+                    if(!safetyDrive.getCrossFrame().getIsInROI()){
+                        safetyDrive.getCrossFrame().setInROI(true);
+                        safetyDrive.getCrossFrame().initAllCrossFrame();
+                        safetyDrive.getCrossFrame().showAllCrossFrame();
+                        for(int i = 0;i<4;i++) {
 
-                    sock[0].setSocket(roi.getCrossID(), 0, roi, safetyDrive.getCrossFrame());
-                    sock[0].connect();
-                    sock[0].run();
-                    sock[0].setCrossFrameROI(safetyDrive.getCrossFrame());
+                            if (sock[i].isConnected()) {
+                                sock[i].disconnect();
+                            }
+                            sock[i].setSocket(roi.getCrossID(), i, roi, safetyDrive.getCrossFrame());
+                            sock[i].connect();
+                            sock[i].run();
+                        }
+                    }
 
-                    safetyDrive.getCrossFrame().deleteAllCrossFrame();
-                    System.out.println("교차로 지우기");
-                    safetyDrive.getCrossFrame().initAllCrossFrame();
-                    System.out.println("교차로 초기화");
-                    safetyDrive.getCrossFrame().showAllCrossFrame();
-                    System.out.println("교차로 그리기" + safetyDrive.getCrossFrame().getRoi().getFrontCrosswalk().getCrosswalkLocation()[0]);
-
-                    sock[0].disconnect();
                 }
                 else  {
-                    safetyDrive.deleteCrosswalk();
+                    if (safetyDrive.getCrossFrame().getIsInROI()) {
+                        safetyDrive.getCrossFrame().stop();
+                        for(int i = 0;i<4;i++){
+                            sock[i].disconnect();
+                        }
+                        safetyDrive.deleteCrosswalk();
+                    }
+
                     System.out.println(" 교차로 내 횡단보도 정보 요청 안해요 ");
                 }
             }

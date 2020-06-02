@@ -50,9 +50,10 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         context = ct;
         crossFrame = new CrossFrame(context);
 //        crossFrame.initAllCrossFrame();
+//        sock[0] = new CrossSocket("http://bic4907.diskstation.me:4446");
 //        sock[0] = new CrossSocket("http://192.168.0.8:8080");
         for(int i = 0;i<4;i++){
-            sock[i] = new CrossSocket("http://192.168.0.8:8080"); // 소켓 생성
+            sock[i] = new CrossSocket("http://bic4907.diskstation.me:4446"); // 소켓 생성
         }
     }
 
