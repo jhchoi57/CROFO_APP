@@ -110,6 +110,9 @@ public class CrossSocket {
                 JSONArray jsonArr = jsonObj.getJSONArray("arr");
                 int cnt = jsonArr.length();
 
+                jsonObj.getDouble("loc_x");
+                jsonObj.getDouble("loc_y");
+
                 for (int i = 0; i < cnt; i++) {
                     JSONObject json = jsonArr.getJSONObject(i);
                     //0 사람 1 차 2 bike 3 버스 4 트럭
