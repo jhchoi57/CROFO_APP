@@ -127,22 +127,24 @@ public class CrossSocket {
                 loc[1] = jsonObj.getDouble("loc_y");
                 switch (crosswalk){
                     case 0:
-                        roi.getFrontCrosswalk().setCrosswalkLocation(loc); break;
+                        roi.getFrontCrosswalk().setCrosswalkLocation(loc); roi.getFrontCrosswalk().clearLists(); break;
                     case 1:
-                        roi.getRightCrosswalk().setCrosswalkLocation(loc); break;
+                        roi.getRightCrosswalk().setCrosswalkLocation(loc); roi.getRightCrosswalk().clearLists(); break;
                     case 2:
-                        roi.getBackCrosswalk().setCrosswalkLocation(loc); break;
+                        roi.getBackCrosswalk().setCrosswalkLocation(loc);  roi.getBackCrosswalk().clearLists(); break;
                     case 3:
-                        roi.getLeftCrosswalk().setCrosswalkLocation(loc); break;
+                        roi.getLeftCrosswalk().setCrosswalkLocation(loc);  roi.getLeftCrosswalk().clearLists(); break;
                 }
                 System.out.println(" 위치 " + roi.getFrontCrosswalk().getCrosswalkLocation()[0]);
+
 
 
                 for (int i = 0; i < cnt; i++) {
                     JSONObject json = jsonArr.getJSONObject(i);
                     //0 사람 1 차 2 bike 3 버스 4 트럭
                     int type = json.getInt("type");
-                    int typeLocation[] = convertByDirection(json.getInt("x"), json.getInt("y"), direction);
+                    int typeLocation[] = convertByDirection(json.getInt("x"), json.getInt("y"), crosswalk);
+                    System.out.println(" direction은 무엇인가 ? " + direction);
 
                     // 사람일 때
                     if(type == 0 || type == 2){
@@ -174,8 +176,6 @@ public class CrossSocket {
 
                     // 정보 반영해서 방향 결정하고 show
 
-
-                    int direction = 0;
                     // 방향이랑 횡단보도 정보 넘겨줘서 출력 할까? 음..
 
                     //obj 추가
@@ -253,9 +253,29 @@ public class CrossSocket {
         crossFrame.setRoi(roi);
     }
 
-    public int[] convertByDirection(int x, int y, int direction){
-       int coordinates[] = null;
-
+    public int[] convertByDirection(int x, int y, int crosswalk_id){
+       int[] coordinates = new int[2];
+       int convertX = 0, convertY = 0;
+       switch (crosswalk_id){
+           case 0:
+               convertX = 500 - x;
+               convertY = 300 - y;
+               break;
+           case 1:
+               convertX = y;
+               convertY = 500 - x;
+               break;
+           case 2:
+               convertX = x;
+               convertY = y;
+               break;
+           case 3:
+               convertX = 300 - y;
+               convertY = x;
+               break;
+       }
+       coordinates[0] = convertX;
+       coordinates[1] = convertY;
        return coordinates;
     }
 
