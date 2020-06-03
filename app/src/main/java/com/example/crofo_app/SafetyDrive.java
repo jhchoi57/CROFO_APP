@@ -36,6 +36,7 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
     private CrossFrame crossFrame;
     private TMapPoint startPoint;   // 출발지 좌표
     private TMapPoint endPoint;     // 목적지 좌표
+    private  boolean isNavi = false;
 
     private double[] recentLocation;
 
@@ -57,45 +58,48 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         }
     }
 
-    public SafetyDrive(TMapPoint sPoint, TMapPoint ePoint, TMapView tView, Context ct) throws ParserConfigurationException, SAXException, IOException {
+    public SafetyDrive(TMapPoint sPoint, TMapPoint ePoint, TMapView tView, Context ct) {
         this.startPoint = sPoint;
         this.endPoint = ePoint;
         this.tMapView = tView;
         this.context = ct;
+        this.isNavi = true;
 
         TMapData tMapData = new TMapData();
         TMapPolyLine tMapPolyLine = null;
+        try {
+            TMapMarkerItem startMarker = new TMapMarkerItem();
+            TMapMarkerItem endMarker = new TMapMarkerItem();
 
-        TMapMarkerItem startMarker = new TMapMarkerItem();
-        TMapMarkerItem endMarker = new TMapMarkerItem();
+            tMapPolyLine = tMapData.findPathData(startPoint, endPoint);             //길찾기
+            tMapPolyLine.setLineColor(Color.GREEN);                                  //선 색
+            tMapPolyLine.setLineWidth(2);                                           //선 굵기
 
-        tMapPolyLine = tMapData.findPathData(startPoint, endPoint);             //길찾기
-        tMapPolyLine.setLineColor(Color.BLUE);                                  //선 색
-        tMapPolyLine.setLineWidth(2);                                           //선 굵기
+            tMapView.addTMapPolyLine("Line123", tMapPolyLine);                  //맵에 추가
 
-        tMapView.addTMapPolyLine("Line123", tMapPolyLine);                  //맵에 추가
+            // 마커의 좌표 지정
+            startMarker.setTMapPoint(startPoint);
+            endMarker.setTMapPoint(endPoint);
 
-        // 마커의 좌표 지정
-        startMarker.setTMapPoint( startPoint );
-        endMarker.setTMapPoint( endPoint );
+            // 마커의 타이틀 지정
+            startMarker.setName("StartPoint");
+            endMarker.setName("EndPoint");
 
-        // 마커의 타이틀 지정
-        startMarker.setName("StartPoint");
-        endMarker.setName("EndPoint");
+            // 지도에 마커 추가
+            tMapView.addMarkerItem("current", markerItemCurrent);
+            tMapView.addMarkerItem("StartPoint", startMarker);
+            tMapView.addMarkerItem("EndPoint", endMarker);
 
-        // 지도에 마커 추가
-        tMapView.addMarkerItem("current", markerItemCurrent);
-        tMapView.addMarkerItem("StartPoint", startMarker);
-        tMapView.addMarkerItem("EndPoint", endMarker);
+            // 화면 중심 시작 지점으로 설정
+            tMapView.setCenterPoint(startPoint.getLongitude(), startPoint.getLatitude());
 
-        // 화면 중심 시작 지점으로 설정
-        tMapView.setCenterPoint(startPoint.getLongitude(), startPoint.getLatitude());
+            // 화면 최대 확대
+            tMapView.setZoomLevel(18);
 
-        // 화면 최대 확대
-        tMapView.setZoomLevel(18);
-
-        // 나침반 모드로 변경
-        //tMapView.setCompassMode(true);
+            // 나침반 모드로 변경
+            //tMapView.setCompassMode(true);
+        }
+        catch (Exception e){e.printStackTrace();}
     }
 
     protected void onPostExecute() {
@@ -137,10 +141,13 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
                 markerItemCurrent.setTMapPoint(currentPoint);
                 currentBearing = getTrueBearing(recentLocation, currentLocation);
 
-                new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
+                if(isNavi){
+
+                }
+                else {
+                    new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
+                }
                 System.out.println("보냇어용");
-
-
 
             }
         };

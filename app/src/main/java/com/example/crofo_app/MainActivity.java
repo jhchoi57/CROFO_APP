@@ -180,16 +180,14 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
                     // 출발지가 0 0 이 아니면 네비게이션 시작
                     if(startPoint.getLongitude() != 0 && startPoint.getLatitude() != 0){
-                        Navigation navigation = new Navigation(startPoint, endPoint, tMapView, MainActivity.this);
-                        navigation.execute(startPoint, endPoint);
+//                        Navigation navigation = new Navigation(startPoint, endPoint, tMapView, MainActivity.this);
+//                        navigation.execute(startPoint, endPoint);
+
+                        SafetyDrive safetyDrive = new SafetyDrive(startPoint, endPoint, tMapView, MainActivity.this);
+                        safetyDrive.execute(startPoint, endPoint);
+
                         btnFinish.setVisibility(View.VISIBLE);
 
-                        //tts
-//                        CrossAlert crossAlert = new CrossAlert(MainActivity.this);
-
-                        //crossAlert.alertSoundFront();
-//                        crossAlert.alertSoundRight();
-                        //tts.speak(crossAlert.getAlertSoundFront(),TextToSpeech.QUEUE_FLUSH, null);
 
 
                     }

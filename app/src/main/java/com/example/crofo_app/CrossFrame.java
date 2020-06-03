@@ -32,6 +32,8 @@ public class CrossFrame {
     private CrossSocket[] sock;
 
     private boolean isInROI = false;
+    private boolean isShowingWaningFront = false, isShowingWaningBack = false, isShowingWaningLeft = false, isShowingWaningRight = false;
+    private ImageView warningFrontImg, warningBackImg, warningRightImg, warningLeftImg;
 
     public CrossInfo getRoi() {
         return roi;
@@ -50,6 +52,15 @@ public class CrossFrame {
         viewLeftList = new ArrayList<ImageView>();
         stop = false;
         isInROI = false;
+        warningFrontImg = new ImageView(context);
+        warningBackImg = new ImageView(context);
+        warningLeftImg = new ImageView(context);
+        warningRightImg = new ImageView(context);
+
+        warningFrontImg.setImageResource(R.drawable.crosswalk_front_alert);
+        warningBackImg.setImageResource(R.drawable.crosswalk_back_alert);
+        warningLeftImg.setImageResource(R.drawable.crosswalk_left_alert);
+        warningRightImg.setImageResource(R.drawable.crosswalk_right_alert);
     }
 
     public void stop(){
@@ -182,109 +193,150 @@ public class CrossFrame {
     }
 
     public void refreshFrontFrame(Crosswalk roi){
-        if(roi == null) return;
         for(int i = 0;i<viewFrontList.size();i++){
             ((ViewManager)viewFrontList.get(i).getParent()).removeView(viewFrontList.get(i));
         }
         //((ViewManager)iv.getParent()).removeView(iv);
         viewFrontList.clear();
+        if(isShowingWaningFront){
+            ((ViewManager)warningFrontImg.getParent()).removeView(warningFrontImg);
+        }
+
+        if(roi == null) {
+            frontdlg.show();
+            return;
+        }
+
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        param.width = 500;
+        param.height = 300;
+        frontdlg.addContentView(warningFrontImg, param);
+        isShowingWaningFront = true;
 
         ArrayList<Pedestrian> pedestrianList;
         ArrayList<Car> carList;
         pedestrianList = roi.getPedestrianList();
         carList = roi.getCarList();
-//        for(int i=0;i<pedestrianList.size();i++){
-//            System.out.println(" front 에 찍히는 거 " + pedestrianList.get(i).getPedestrianLocation()[0]+ "  " + pedestrianList.get(i).getPedestrianLocation()[1]);
-//            addObjFront(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
-//                    pedestrianList.get(i).getPedestrianDirection());
-//        }
-//        for(int i=0;i<carList.size();i++){
-//            System.out.println(" front 에 찍히는 거 " + pedestrianList.get(i).getPedestrianLocation()[0]+ "  " + pedestrianList.get(i).getPedestrianLocation()[1]);
-//            addObjFront(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
-//        }
-
-        addObjFront(0, 0, 0, 0);
-        addObjFront(500, 300, 0, 1);
+        for(int i=0;i<pedestrianList.size();i++){
+            System.out.println(" front 에 찍히는 거 " + pedestrianList.get(i).getPedestrianLocation()[0]+ "  " + pedestrianList.get(i).getPedestrianLocation()[1]);
+            addObjFront(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
+                    pedestrianList.get(i).getPedestrianDirection());
+        }
+        for(int i=0;i<carList.size();i++){
+            System.out.println(" front 에 찍히는 거 " + pedestrianList.get(i).getPedestrianLocation()[0]+ "  " + pedestrianList.get(i).getPedestrianLocation()[1]);
+            addObjFront(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
+        }
         frontdlg.show();
     }
 
     public void refreshRightFrame(Crosswalk roi){
-        if(roi == null) return;
+
         for(int i = 0;i<viewRightList.size();i++){
             ((ViewManager)viewRightList.get(i).getParent()).removeView(viewRightList.get(i));
         }
         //((ViewManager)iv.getParent()).removeView(iv);
         viewRightList.clear();
+        if(isShowingWaningRight){
+            ((ViewManager)warningRightImg.getParent()).removeView(warningRightImg);
+        }
 
+        if(roi == null) {
+            rightdlg.show();
+            return;
+        }
 
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        param.width = 300;
+        param.height = 500;
+        rightdlg.addContentView(warningRightImg, param);
+        isShowingWaningRight = true;
 
         ArrayList<Pedestrian> pedestrianList;
         ArrayList<Car> carList;
         pedestrianList = roi.getPedestrianList();
         carList = roi.getCarList();
-//        for(int i=0;i<pedestrianList.size();i++){
-//            addObjRight(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
-//                    pedestrianList.get(i).getPedestrianDirection());
-//        }
-//        for(int i=0;i<carList.size();i++){
-//            addObjRight(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
-//        }
-        addObjRight(0, 0, 0, 0);
-        addObjRight(300, 500, 0, 1);
+        for(int i=0;i<pedestrianList.size();i++){
+            addObjRight(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
+                    pedestrianList.get(i).getPedestrianDirection());
+        }
+        for(int i=0;i<carList.size();i++){
+            addObjRight(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
+        }
         rightdlg.show();
     }
 
     public void refreshBackFrame(Crosswalk roi){
-        if(roi == null) return;
+
         for(int i = 0;i<viewBackList.size();i++){
             ((ViewManager)viewBackList.get(i).getParent()).removeView(viewBackList.get(i));
         }
         //((ViewManager)iv.getParent()).removeView(iv);
         viewBackList.clear();
+        if(isShowingWaningBack){
+            ((ViewManager)warningBackImg.getParent()).removeView(warningBackImg);
+        }
 
+        if(roi == null) {
+            backdlg.show();
+            return;
+        }
 
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        param.width = 500;
+        param.height = 300;
+        backdlg.addContentView(warningBackImg, param);
+        isShowingWaningBack = true;
 
         ArrayList<Pedestrian> pedestrianList;
         ArrayList<Car> carList;
         pedestrianList = roi.getPedestrianList();
         carList = roi.getCarList();
-//        for(int i=0;i<pedestrianList.size();i++){
-//            System.out.println(" back 에 찍히는 거 " + pedestrianList.get(i).getPedestrianLocation()[0]+ "  " + pedestrianList.get(i).getPedestrianLocation()[1]);
-//            addObjBack(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
-//                    pedestrianList.get(i).getPedestrianDirection());
-//        }
-//        for(int i=0;i<carList.size();i++){
-//            addObjBack(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
-//        }
-        addObjBack(0, 0, 0, 0);
-        addObjBack(500, 300, 0, 1);
+        for(int i=0;i<pedestrianList.size();i++){
+            System.out.println(" back 에 찍히는 거 " + pedestrianList.get(i).getPedestrianLocation()[0]+ "  " + pedestrianList.get(i).getPedestrianLocation()[1]);
+            addObjBack(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
+                    pedestrianList.get(i).getPedestrianDirection());
+        }
+        for(int i=0;i<carList.size();i++){
+            addObjBack(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
+        }
         backdlg.show();
     }
 
     public void refreshLeftFrame(Crosswalk roi){
-        if(roi == null) return;
+
         System.out.println(" 리프레쉬에 객체 있나 봅시다 " + "  " + viewLeftList.size());
         for(int i = 0;i<viewLeftList.size();i++){
             ((ViewManager)viewLeftList.get(i).getParent()).removeView(viewLeftList.get(i));
         }
         //((ViewManager)iv.getParent()).removeView(iv);
         viewLeftList.clear();
+        if(isShowingWaningLeft){
+            ((ViewManager)warningLeftImg.getParent()).removeView(warningLeftImg);
+        }
         System.out.println(" 리프레쉬 초기화 됐나 봅시다 " + "  " + viewLeftList.size());
 
+        if(roi == null) {
+            leftdlg.show();
+            return;
+        }
+
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        param.width = 300;
+        param.height = 500;
+        leftdlg.addContentView(warningLeftImg, param);
+        isShowingWaningLeft = true;
 
         ArrayList<Pedestrian> pedestrianList;
         ArrayList<Car> carList;
         pedestrianList = roi.getPedestrianList();
         carList = roi.getCarList();
-//        for(int i=0;i<pedestrianList.size();i++){
-//            addObjLeft(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
-//                    pedestrianList.get(i).getPedestrianDirection());
-//        }
-//        for(int i=0;i<carList.size();i++){
-//            addObjLeft(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
-//        }
-        addObjLeft(0, 0, 0, 0);
-        addObjLeft(300, 500, 0, 1);
+        for(int i=0;i<pedestrianList.size();i++){
+            addObjLeft(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
+                    pedestrianList.get(i).getPedestrianDirection());
+        }
+        for(int i=0;i<carList.size();i++){
+            addObjLeft(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
+        }
         leftdlg.show();
     }
 

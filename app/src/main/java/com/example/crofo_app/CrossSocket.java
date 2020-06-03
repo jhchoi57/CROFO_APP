@@ -147,7 +147,9 @@ public class CrossSocket {
                     JSONObject json = jsonArr.getJSONObject(i);
                     //0 사람 1 차 2 bike 3 버스 4 트럭
                     int type = json.getInt("type");
+                    System.out.println("컨벌트전 " + json.getInt("x") + json.getInt("y"));
                     int typeLocation[] = convertByDirection(json.getInt("x"), json.getInt("y"), crosswalk);
+                    System.out.println("컨벌트후 " + typeLocation[0] + "/" + typeLocation[1]);
 
                     int typeDirection = json.getInt("direction");
                     crossAlert.alertSound();
