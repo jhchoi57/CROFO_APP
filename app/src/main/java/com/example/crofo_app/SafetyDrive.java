@@ -84,7 +84,7 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         endMarker.setName("EndPoint");
 
         // 지도에 마커 추가
-        tMapView.addMarkerItem("current",markerItemCurrent);
+        tMapView.addMarkerItem("current", markerItemCurrent);
         tMapView.addMarkerItem("StartPoint", startMarker);
         tMapView.addMarkerItem("EndPoint", endMarker);
 
@@ -140,13 +140,7 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
                 new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
                 System.out.println("보냇어용");
 
-                // 앱에서 현재위치 기준으로 반경 원 내에 들어오는 교차로 리스트 서버에 요청 및 수신
 
-                // ROI 안에 들어왔는지
-
-                // 2개 이상이면 현재 차량 방향 기준으로 필터링
-
-                // 교차로 정보 요청
 
             }
         };

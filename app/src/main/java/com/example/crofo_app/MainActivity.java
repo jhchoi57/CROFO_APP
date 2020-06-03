@@ -141,11 +141,11 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         //new CrossRequest(serverTestList).execute("http://bic4907.diskstation.me:4446/app/cross/list"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
         //new FindCrossRequest(test).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
         //System.out.println("보냇어용");
-//        CrossSocket sock = new CrossSocket("http://bic4907.diskstation.me:4446"); // 소켓 생성
-//        sock.setSocket(1, 0, null, null, 2);
-//        sock.connect(); // 노드 서버 소켓과 연결
-//        sock.run(); // 메시지 수신
-        //sock.disconnect();  // 소켓 해제
+//        CrossSock
+        //sock.disconnect();  // 소켓 해제et sock = new CrossSocket("http://bic4907.diskstation.me:4446"); // 소켓 생성
+        ////        sock.setSocket(1, 0, null, null, 2, null);
+        ////        sock.connect(); // 노드 서버 소켓과 연결
+        ////        sock.run(); // 메시지 수신
         //sock.setKey(123, 1); // key 바꾸기
         //sock.connect(); // 노드 서버 소켓과 연결
         //sock.run(); // 메시지 수신
@@ -321,6 +321,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         gps.setMinTime(1000);
         gps.setMinDistance(2);
         // 현재 위치 인터넷으로 받기 gps 면 GPS_PROVIDER
+        // GPS_PROVIDER NETWORK_PROVIDER
+        //gps.setProvider(gps.NETWORK_PROVIDER);
         gps.setProvider(gps.GPS_PROVIDER);
         gps.OpenGps();
     }
@@ -401,6 +403,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
+
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,1,mLocationListener);
     }
 

@@ -3,6 +3,7 @@ package com.example.crofo_app;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -119,6 +120,7 @@ public class CrossSocket {
     private Emitter.Listener onMessageReceive = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
+            Log.d("소켓 받았어영", String.valueOf(System.currentTimeMillis()));
             JSONObject jsonObj = (JSONObject)args[0];
             System.out.println(jsonObj);
             try {

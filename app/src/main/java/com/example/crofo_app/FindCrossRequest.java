@@ -177,7 +177,9 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
                 else  {
                     safetyDrive.getCrossFrame().stop();
                     for(int i = 0;i<4;i++){
-                       sock[i].disconnect();
+                        if (sock[i].isConnected()) {
+                            sock[i].disconnect();
+                        }
                     }
                     safetyDrive.deleteCrosswalk();
                     crossAlert.setIsAlertFalse();
