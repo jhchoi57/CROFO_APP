@@ -53,4 +53,8 @@ public class Crosswalk {
         carList.add(c);
     }
 
+    public void clearLists(){
+        pedestrianList.clear();
+        carList.clear();
+    }
 }

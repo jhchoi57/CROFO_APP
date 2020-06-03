@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         receiveLocation();
 
         //tts 한국어로 초기화, Tmap 띄우기
-        initTTS();
+        //initTTS();
         setTMAP();
 
         // 시작 중심 좌표, 시작 현위치로
@@ -141,7 +141,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         //new CrossRequest(serverTestList).execute("http://bic4907.diskstation.me:4446/app/cross/list"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
         //new FindCrossRequest(test).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
         //System.out.println("보냇어용");
-//        CrossSocket sock = new CrossSocket("http://192.168.0.247:8080", 1, 1 ,null); // 소켓 생성
+//        CrossSocket sock = new CrossSocket("http://bic4907.diskstation.me:4446"); // 소켓 생성
+//        sock.setSocket(1, 0, null, null, 2);
 //        sock.connect(); // 노드 서버 소켓과 연결
 //        sock.run(); // 메시지 수신
         //sock.disconnect();  // 소켓 해제
@@ -184,8 +185,11 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                         btnFinish.setVisibility(View.VISIBLE);
 
                         //tts
-                        CrossAlert crossAlert = new CrossAlert(null);
-                        tts.speak(crossAlert.getAlertSoundFront(),TextToSpeech.QUEUE_FLUSH, null);
+//                        CrossAlert crossAlert = new CrossAlert(MainActivity.this);
+
+                        //crossAlert.alertSoundFront();
+//                        crossAlert.alertSoundRight();
+                        //tts.speak(crossAlert.getAlertSoundFront(),TextToSpeech.QUEUE_FLUSH, null);
 
 
                     }

@@ -24,6 +24,7 @@ public class CrossSocket {
     private CrossInfo roi;
     public CrossFrame crossFrame;
     public int direction;
+    private CrossAlert crossAlert;
 
     public CrossSocket(String url) {
         this.url = url;
@@ -31,7 +32,7 @@ public class CrossSocket {
         stop = true;
     }
 
-    public void setSocket(int intersection_id, int crosswalk_id, CrossInfo roi, CrossFrame cF, int direction) {
+    public void setSocket(int intersection_id, int crosswalk_id, CrossInfo roi, CrossFrame cF, int direction, CrossAlert cA) {
         this.intersection = intersection_id;
         this.crosswalk = crosswalk_id;
         isConnected = false;
@@ -39,6 +40,7 @@ public class CrossSocket {
         this.roi = roi;
         crossFrame = cF;
         this.direction = direction;
+        crossAlert = cA;
     }
 
     public void run() {
@@ -144,8 +146,10 @@ public class CrossSocket {
                     //0 사람 1 차 2 bike 3 버스 4 트럭
                     int type = json.getInt("type");
                     int typeLocation[] = convertByDirection(json.getInt("x"), json.getInt("y"), crosswalk);
-                    System.out.println(" direction은 무엇인가 ? " + direction);
 
+                    //json.getInt("direction");
+                    crossAlert.alertSound();
+                    crossAlert.setIsAlertTrue();
                     // 사람일 때
                     if(type == 0 || type == 2){
                         switch (crosswalk){
