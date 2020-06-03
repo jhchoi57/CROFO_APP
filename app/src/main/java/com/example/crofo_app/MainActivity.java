@@ -402,7 +402,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
 
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,1,mLocationListener);
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,500,1,mLocationListener);
     }
 
 }

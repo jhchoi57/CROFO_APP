@@ -15,6 +15,9 @@ import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapPolygon;
 import com.skt.Tmap.TMapView;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -37,6 +40,10 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
     private TMapPoint startPoint;   // 출발지 좌표
     private TMapPoint endPoint;     // 목적지 좌표
     private  boolean isNavi = false;
+    private ArrayList<double[]> coordinatesList = new ArrayList<double[]>();
+    private ArrayList<CrossInfo> serverRequestCrossList = new ArrayList<CrossInfo>();
+    private ArrayList<String> turnTypeList = new ArrayList<String>();
+    private ArrayList<String> descriptionList = new ArrayList<String>();
 
     private double[] recentLocation;
 
@@ -64,42 +71,10 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         this.tMapView = tView;
         this.context = ct;
         this.isNavi = true;
-
-        TMapData tMapData = new TMapData();
-        TMapPolyLine tMapPolyLine = null;
-        try {
-            TMapMarkerItem startMarker = new TMapMarkerItem();
-            TMapMarkerItem endMarker = new TMapMarkerItem();
-
-            tMapPolyLine = tMapData.findPathData(startPoint, endPoint);             //길찾기
-            tMapPolyLine.setLineColor(Color.GREEN);                                  //선 색
-            tMapPolyLine.setLineWidth(2);                                           //선 굵기
-
-            tMapView.addTMapPolyLine("Line123", tMapPolyLine);                  //맵에 추가
-
-            // 마커의 좌표 지정
-            startMarker.setTMapPoint(startPoint);
-            endMarker.setTMapPoint(endPoint);
-
-            // 마커의 타이틀 지정
-            startMarker.setName("StartPoint");
-            endMarker.setName("EndPoint");
-
-            // 지도에 마커 추가
-            tMapView.addMarkerItem("current", markerItemCurrent);
-            tMapView.addMarkerItem("StartPoint", startMarker);
-            tMapView.addMarkerItem("EndPoint", endMarker);
-
-            // 화면 중심 시작 지점으로 설정
-            tMapView.setCenterPoint(startPoint.getLongitude(), startPoint.getLatitude());
-
-            // 화면 최대 확대
-            tMapView.setZoomLevel(18);
-
-            // 나침반 모드로 변경
-            //tMapView.setCompassMode(true);
+        crossFrame = new CrossFrame(context);
+        for(int i = 0;i<2;i++){
+            sock[i] = new CrossSocket("http://bic4907.diskstation.me:4446"); // 소켓 생성
         }
-        catch (Exception e){e.printStackTrace();}
     }
 
     protected void onPostExecute() {
@@ -110,17 +85,111 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
     @Override
     protected Void doInBackground(TMapPoint... tMapPoints){                       //실행부분
         tMapView.addMarkerItem("current",markerItemCurrent);
-        setCurrentMarkerIcon();
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.mycar);
+        bitmap = bitmap.createScaledBitmap(bitmap,100,100,true);
+        markerItemCurrent.setIcon(bitmap);
 
         currentPoint = tMapView.getLocationPoint();
         currentLocation[0] = currentPoint.getLatitude();
         currentLocation[1] = currentPoint.getLongitude();
 
+        if(isNavi){
+            TMapData tMapData = new TMapData();
+            TMapPolyLine tMapPolyLine = null;
+            try {
+                TMapMarkerItem startMarker = new TMapMarkerItem();
+                TMapMarkerItem endMarker = new TMapMarkerItem();
+
+                tMapPolyLine = tMapData.findPathData(startPoint, endPoint);             //길찾기
+                tMapPolyLine.setLineColor(Color.GREEN);                                  //선 색
+                tMapPolyLine.setLineWidth(2);                                           //선 굵기
+
+                tMapView.addTMapPolyLine("Line123", tMapPolyLine);                  //맵에 추가
+
+                // 마커의 좌표 지정
+                startMarker.setTMapPoint(startPoint);
+                endMarker.setTMapPoint(endPoint);
+
+                // 마커의 타이틀 지정
+                startMarker.setName("StartPoint");
+                endMarker.setName("EndPoint");
+
+                // 지도에 마커 추가
+                tMapView.addMarkerItem("current", markerItemCurrent);
+                tMapView.addMarkerItem("StartPoint", startMarker);
+                tMapView.addMarkerItem("EndPoint", endMarker);
+
+                // 화면 중심 시작 지점으로 설정
+                tMapView.setCenterPoint(startPoint.getLongitude(), startPoint.getLatitude());
+
+                // 화면 최대 확대
+                tMapView.setZoomLevel(18);
+
+                // 나침반 모드로 변경
+                //tMapView.setCompassMode(true);
+
+                tMapData.findPathDataAllType(TMapData.TMapPathType.CAR_PATH, startPoint, endPoint, new TMapData.FindPathDataAllListenerCallback() {
+                    @Override
+                    public void onFindPathDataAll(Document document) {
+                        Element root = document.getDocumentElement();
+                        NodeList nodeListPlacemark = root.getElementsByTagName("Placemark");
+                        for( int i=0; i<nodeListPlacemark.getLength(); i++ ) {
+                            NodeList nodeListPlacemarkItem = nodeListPlacemark.item(i).getChildNodes();
+                            for( int j=0; j<nodeListPlacemarkItem.getLength(); j++ ) {
+                                if( nodeListPlacemarkItem.item(j).getNodeName().equals("tmap:turnType") ) {
+                                    turnTypeList.add(nodeListPlacemarkItem.item(j).getTextContent().trim());
+                                    Log.d("debug", nodeListPlacemarkItem.item(j).getTextContent().trim() );
+                                }
+                                if( nodeListPlacemarkItem.item(j).getNodeName().equals("description") ) {
+                                    descriptionList.add(nodeListPlacemarkItem.item(j).getTextContent().trim());
+                                    Log.d("debug", nodeListPlacemarkItem.item(j).getTextContent().trim() );
+                                }
+                            }
+                        }
+
+                        NodeList nodeListPoint = root.getElementsByTagName("Point");
+                        for( int i=0; i<nodeListPoint.getLength(); i++ ) {
+                            NodeList nodeListPointItem = nodeListPoint.item(i).getChildNodes();
+                            for( int j=0; j<nodeListPointItem.getLength(); j++ ) {
+                                if( nodeListPointItem.item(j).getNodeName().equals("coordinates") ) {
+
+                                    Log.d("debug", nodeListPointItem.item(j).getTextContent().trim() );
+
+                                    String xy  = nodeListPointItem.item(j).getTextContent().trim();
+
+                                    String [] splitXY = xy.split(",");
+                                    TMapPoint point = new TMapPoint(Double.parseDouble(splitXY[1]), Double.parseDouble(splitXY[0]));
+                                    double[] pointDouble = {Double.parseDouble(splitXY[1]), Double.parseDouble(splitXY[0])};
+                                    coordinatesList.add(pointDouble);
+                                    TMapMarkerItem Marker = new TMapMarkerItem();
+                                    Marker.setTMapPoint(point);
+                                    tMapView.addMarkerItem("asd" + point, Marker);
+                                }
+                            }
+                        }
+
+                        for(int i = 0; i < coordinatesList.size(); i++){
+                            double trueBearing = 0;
+                            System.out.println("좌표 : " + coordinatesList.get(i)[0] + "    " + coordinatesList.get(i)[1]);
+                            System.out.println("TurnType : " + turnTypeList.get(i));
+                            if(i==0) continue;
+                            trueBearing = getTrueBearing(coordinatesList.get(i), coordinatesList.get(i-1));
+                            System.out.println("교차로 진입 방향 : " + "  " + trueBearing);
+
+                            //serverRequestCrossList.add(new CrossInfo(coordinatesList.get(i), trueBearing));
+                        }
+
+                    }
+                });
+            }
+            catch (Exception e){e.printStackTrace();}
+        }
+
         // 현재 위치 타이머로 0.5초마다 계속 얻기, 업데이트
         //tMapView.setTrackingMode(true);
         initTimerTask();
         Timer gpsCheckTimer = new Timer();
-        gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 1000);
+        gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 500);
 
         return null;
     }
@@ -142,7 +211,7 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
                 currentBearing = getTrueBearing(recentLocation, currentLocation);
 
                 if(isNavi){
-
+                    new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock, true).execute("http://bic4907.diskstation.me:4446/app/cross/find");
                 }
                 else {
                     new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
@@ -230,7 +299,7 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         ext3[0] = crossInfo.getCrossLocation3()[0];// + 0.0009;
         ext3[1] = crossInfo.getCrossLocation3()[1]; //- 0.001126;
         List.add(ext3);
-        drawPolygon(ext0, ext1, ext2, ext3);
+        //drawPolygon(ext0, ext1, ext2, ext3);
         return List;
     }
 
@@ -314,6 +383,10 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
 
     public void deleteCrosswalk(){
         crossFrame.deleteAllCrossFrame();
+    }
+
+    public void deleteNaviCrosswalk(){
+        crossFrame.deleteNaviCrossFrame();
     }
 
     public double getCurrentBearing() {

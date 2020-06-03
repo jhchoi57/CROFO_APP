@@ -340,12 +340,24 @@ public class CrossFrame {
         leftdlg.show();
     }
 
-    public void showTwoCrossFrame(){
+    public void showNaviCrossFrame(){
         rightdlg.show();
         backdlg.show();
     }
 
     public void deleteAllCrossFrame(){
+        try {
+            frontdlg.dismiss();
+            backdlg.dismiss();
+            rightdlg.dismiss();
+            leftdlg.dismiss();
+        } catch (Exception e){
+            Log.e("dismiss error", String.valueOf(e));
+        }
+
+    }
+
+    public void deleteNaviCrossFrame(){
         try {
             frontdlg.dismiss();
             backdlg.dismiss();
