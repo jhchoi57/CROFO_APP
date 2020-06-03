@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     Button btnSafetyDrive;
     TextToSpeech tts;
     TimerTask gpsCheckTimerTask;
+    SafetyDrive safetyDrive = null;
 
     @Override
     public void onLocationChange(Location location){
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 //                        Navigation navigation = new Navigation(startPoint, endPoint, tMapView, MainActivity.this);
 //                        navigation.execute(startPoint, endPoint);
 
-                        SafetyDrive safetyDrive = new SafetyDrive(startPoint, endPoint, tMapView, MainActivity.this);
+                        safetyDrive = new SafetyDrive(startPoint, endPoint, tMapView, MainActivity.this);
                         safetyDrive.execute(startPoint, endPoint);
 
                         btnFinish.setVisibility(View.VISIBLE);
@@ -203,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                     btnDestination.setVisibility(View.INVISIBLE);
                     btnFinish.setVisibility(View.INVISIBLE);
 
+                    safetyDrive.cancel(true);
                     // 모든 마커 삭제
                     tMapView.removeAllMarkerItem();
 
@@ -242,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 case R.id.btnSafetyDrive:
 
                     // 안전주행 설정해주는 버튼
-                    SafetyDrive safetyDrive = new SafetyDrive(tMapView, MainActivity.this);
+                    safetyDrive = new SafetyDrive(tMapView, MainActivity.this);
                     safetyDrive.execute(startPoint, endPoint);
 
                     break;

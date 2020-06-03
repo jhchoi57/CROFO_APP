@@ -194,6 +194,11 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         return null;
     }
 
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+    }
+
     public void initTimerTask(){
         gpsCheckTimerTask = new TimerTask(){
             @Override
@@ -366,21 +371,6 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         crossInfoList.add(crossInfo);
     }
 
-    public void showCrosswalk(CrossInfo roi, Context context){
-        //=====================횡단보도 정보 받기===========================//
-//        CrossSocket sock = new CrossSocket("http://192.168.0.247:8080", roi.getCrossID(), 0, roi, context); // 소켓 생성
-//        sock.connect();
-//        sock.run();
-        //System.out.println(" 보행자 리스트 " + roi.getFrontCrosswalk().getCrosswalkLocation()[0]);
-//        sock.setKey(roi.getCrossID(), 1); // key 바꾸기
-//        roi = getROIInfo(sock);
-//        sock.setKey(roi.getCrossID(), 2); // key 바꾸기
-//        roi = getROIInfo(sock);
-//        sock.setKey(roi.getCrossID(), 3); // key 바꾸기
-//        roi = getROIInfo(sock);
-
-    }
-
     public void deleteCrosswalk(){
         crossFrame.deleteAllCrossFrame();
     }
@@ -478,4 +468,26 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
     }
 
     public CrossFrame getCrossFrame(){ return crossFrame; }
+
+    public boolean isTurnRight(CrossInfo roi){
+        ArrayList<double[]> points = new ArrayList<>();
+        points.add(roi.getCrossLocation0());
+        points.add(roi.getCrossLocation1());
+        points.add(roi.getCrossLocation2());
+        points.add(roi.getCrossLocation3());
+
+        for(int i = 0; i < coordinatesList.size(); i++){
+            // - 13: 우회전
+            // - 18: 2시 방향 우회전
+            // - 19: 4시 방향 우회전
+            if(turnTypeList.get(i).equals("13") || turnTypeList.get(i).equals("18") || turnTypeList.get(i).equals("19")){
+                if(isInPolygon(points, coordinatesList.get(i))){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
 }

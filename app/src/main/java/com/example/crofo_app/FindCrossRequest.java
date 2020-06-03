@@ -176,15 +176,17 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
                         safetyDrive.getCrossFrame().initAllCrossFrame();
 
                         if(isNavi){
-                            safetyDrive.getCrossFrame().showNaviCrossFrame();
-                            for (int i = 0; i < 2; i++) {
-                                if (sock[i].isConnected()) {
-                                    sock[i].disconnect();
+                            if(safetyDrive.isTurnRight(roi)) {
+                                safetyDrive.getCrossFrame().showNaviCrossFrame();
+                                for (int i = 0; i < 2; i++) {
+                                    if (sock[i].isConnected()) {
+                                        sock[i].disconnect();
+                                    }
+                                    System.out.println(" 인터섹션 아이디 " + roi.getCrossID());
+                                    sock[i].setSocket(roi.getCrossID(), i + 1, roi, safetyDrive.getCrossFrame(), direction, crossAlert);
+                                    sock[i].connect();
+                                    sock[i].run();
                                 }
-                                System.out.println(" 인터섹션 아이디 " + roi.getCrossID());
-                                sock[i].setSocket(roi.getCrossID(), i + 1, roi, safetyDrive.getCrossFrame(), direction, crossAlert);
-                                sock[i].connect();
-                                sock[i].run();
                             }
                         }
                         else {
