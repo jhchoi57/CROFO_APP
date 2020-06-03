@@ -149,20 +149,20 @@ public class CrossSocket {
                     int type = json.getInt("type");
                     int typeLocation[] = convertByDirection(json.getInt("x"), json.getInt("y"), crosswalk);
 
-                    //json.getInt("direction");
+                    int typeDirection = json.getInt("direction");
                     crossAlert.alertSound();
                     crossAlert.setIsAlertTrue();
                     // 사람일 때
                     if(type == 0 || type == 2){
                         switch (crosswalk){
                             case 0:
-                                roi.getFrontCrosswalk().addPedestrianList(new Pedestrian(typeLocation, 0)); break;
+                                roi.getFrontCrosswalk().addPedestrianList(new Pedestrian(typeLocation, typeDirection)); break;
                             case 1:
-                                roi.getRightCrosswalk().addPedestrianList(new Pedestrian(typeLocation, 0)); break;
+                                roi.getRightCrosswalk().addPedestrianList(new Pedestrian(typeLocation, typeDirection)); break;
                             case 2:
-                                roi.getBackCrosswalk().addPedestrianList(new Pedestrian(typeLocation, 0)); break;
+                                roi.getBackCrosswalk().addPedestrianList(new Pedestrian(typeLocation, typeDirection)); break;
                             case 3:
-                                roi.getLeftCrosswalk().addPedestrianList(new Pedestrian(typeLocation, 0)); break;
+                                roi.getLeftCrosswalk().addPedestrianList(new Pedestrian(typeLocation, typeDirection)); break;
                         }
                     }
 

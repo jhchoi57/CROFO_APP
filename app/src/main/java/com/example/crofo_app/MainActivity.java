@@ -384,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             if (location != null) {
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
-                System.out.println("TmapTest" +  Double.toString(longitude));
+                System.out.println("T map Test" +  Double.toString(longitude));
             }
         }
 

@@ -71,8 +71,8 @@ public class CrossFrame {
 
         // 커스텀 다이얼로그 위치 조정
         LayoutParams params = frontdlg.getWindow().getAttributes();
-        params.x = 250;
-        params.y = 300;
+        params.x = 225;
+        params.y = 350;
         // params.width = 300;
         // params.height = 300;
         frontdlg.getWindow().setAttributes(params);
@@ -98,8 +98,8 @@ public class CrossFrame {
 
         // 커스텀 다이얼로그 위치 조정
         LayoutParams params = backdlg.getWindow().getAttributes();
-        params.x = 250;
-        params.y = 800 + 300;
+        params.x = 225;
+        params.y = 900 + 350;
         // params.width = 300;
         // params.height = 300;
         backdlg.getWindow().setAttributes(params);
@@ -126,7 +126,7 @@ public class CrossFrame {
         // 커스텀 다이얼로그 위치 조정
         LayoutParams params = leftdlg.getWindow().getAttributes();
         // params.x = 500;
-        params.y = 300 + 300;
+        params.y = 350 + 350;
         // params.width = 300;
         // params.height = 300;
         leftdlg.getWindow().setAttributes(params);
@@ -152,8 +152,8 @@ public class CrossFrame {
 
         // 커스텀 다이얼로그 위치 조정
         LayoutParams params = rightdlg.getWindow().getAttributes();
-        params.x = 800;
-        params.y = 300 + 300;
+        params.x = 900;
+        params.y = 350 + 350;
         // params.width = 300;
         // params.height = 300;
         rightdlg.getWindow().setAttributes(params);
@@ -189,20 +189,22 @@ public class CrossFrame {
         //((ViewManager)iv.getParent()).removeView(iv);
         viewFrontList.clear();
 
-
-
         ArrayList<Pedestrian> pedestrianList;
         ArrayList<Car> carList;
         pedestrianList = roi.getPedestrianList();
         carList = roi.getCarList();
-        for(int i=0;i<pedestrianList.size();i++){
+//        for(int i=0;i<pedestrianList.size();i++){
+//            System.out.println(" front 에 찍히는 거 " + pedestrianList.get(i).getPedestrianLocation()[0]+ "  " + pedestrianList.get(i).getPedestrianLocation()[1]);
+//            addObjFront(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
+//                    pedestrianList.get(i).getPedestrianDirection());
+//        }
+//        for(int i=0;i<carList.size();i++){
+//            System.out.println(" front 에 찍히는 거 " + pedestrianList.get(i).getPedestrianLocation()[0]+ "  " + pedestrianList.get(i).getPedestrianLocation()[1]);
+//            addObjFront(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
+//        }
 
-            addObjFront(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
-                    pedestrianList.get(i).getPedestrianDirection());
-        }
-        for(int i=0;i<carList.size();i++){
-            addObjFront(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
-        }
+        addObjFront(0, 0, 0, 0);
+        addObjFront(500, 300, 0, 1);
         frontdlg.show();
     }
 
@@ -220,13 +222,15 @@ public class CrossFrame {
         ArrayList<Car> carList;
         pedestrianList = roi.getPedestrianList();
         carList = roi.getCarList();
-        for(int i=0;i<pedestrianList.size();i++){
-            addObjRight(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
-                    pedestrianList.get(i).getPedestrianDirection());
-        }
-        for(int i=0;i<carList.size();i++){
-            addObjRight(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
-        }
+//        for(int i=0;i<pedestrianList.size();i++){
+//            addObjRight(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
+//                    pedestrianList.get(i).getPedestrianDirection());
+//        }
+//        for(int i=0;i<carList.size();i++){
+//            addObjRight(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
+//        }
+        addObjRight(0, 0, 0, 0);
+        addObjRight(300, 500, 0, 1);
         rightdlg.show();
     }
 
@@ -244,14 +248,16 @@ public class CrossFrame {
         ArrayList<Car> carList;
         pedestrianList = roi.getPedestrianList();
         carList = roi.getCarList();
-        for(int i=0;i<pedestrianList.size();i++){
-            System.out.println(" back 에 찍히는 거 " + pedestrianList.get(i).getPedestrianLocation()[0]+ "  " + pedestrianList.get(i).getPedestrianLocation()[1]);
-            addObjBack(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
-                    pedestrianList.get(i).getPedestrianDirection());
-        }
-        for(int i=0;i<carList.size();i++){
-            addObjBack(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
-        }
+//        for(int i=0;i<pedestrianList.size();i++){
+//            System.out.println(" back 에 찍히는 거 " + pedestrianList.get(i).getPedestrianLocation()[0]+ "  " + pedestrianList.get(i).getPedestrianLocation()[1]);
+//            addObjBack(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
+//                    pedestrianList.get(i).getPedestrianDirection());
+//        }
+//        for(int i=0;i<carList.size();i++){
+//            addObjBack(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
+//        }
+        addObjBack(0, 0, 0, 0);
+        addObjBack(500, 300, 0, 1);
         backdlg.show();
     }
 
@@ -270,13 +276,15 @@ public class CrossFrame {
         ArrayList<Car> carList;
         pedestrianList = roi.getPedestrianList();
         carList = roi.getCarList();
-        for(int i=0;i<pedestrianList.size();i++){
-            addObjLeft(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
-                    pedestrianList.get(i).getPedestrianDirection());
-        }
-        for(int i=0;i<carList.size();i++){
-            addObjLeft(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
-        }
+//        for(int i=0;i<pedestrianList.size();i++){
+//            addObjLeft(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
+//                    pedestrianList.get(i).getPedestrianDirection());
+//        }
+//        for(int i=0;i<carList.size();i++){
+//            addObjLeft(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
+//        }
+        addObjLeft(0, 0, 0, 0);
+        addObjLeft(300, 500, 0, 1);
         leftdlg.show();
     }
 
@@ -308,12 +316,32 @@ public class CrossFrame {
     public void addObjFront(int left, int top, int obj, int direction){
         ImageView iv = new ImageView(context);
 
-        // 오브젝트 받아서 if로 나누면 댐
-        iv.setImageResource(R.drawable.person_direction);
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        param.width = 50;
-        param.height = 50;
-        param.setMargins(left,top,0,0);
+        param.width = 60;
+        param.height = 60;
+
+        if(obj == 0){
+            if(direction == 0){
+                iv.setImageResource(R.drawable.person);
+            }
+            else{
+                iv.setImageResource(R.drawable.person_direction);
+                param.width = 100;
+                param.height = 60;
+                if(direction == 1){
+                    iv.setRotation(-180.0f);
+                }
+            }
+        }
+
+        else{
+            iv.setImageResource(R.drawable.car);
+        }
+        // 오브젝트 받아서 if로 나누면 댐
+
+
+        param.setMargins(convertMargin500(left, param.width),convertMargin300(top, param.height),0,0);
+
         frontdlg.addContentView(iv, param);
         viewFrontList.add(iv);
     }
@@ -321,12 +349,34 @@ public class CrossFrame {
     public void addObjRight(int left, int top, int obj, int direction){
         ImageView iv = new ImageView(context);
 
-        // 오브젝트 받아서 if로 나누면 댐
-        iv.setImageResource(R.drawable.person_direction);
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        param.width = 50;
-        param.height = 50;
-        param.setMargins(left,top,0,0);
+        param.width = 60;
+        param.height = 60;
+
+        if(obj == 0){
+            if(direction == 0){
+                iv.setImageResource(R.drawable.person);
+            }
+            else{
+                iv.setImageResource(R.drawable.person_direction);
+                param.width = 60;
+                param.height = 100;
+                if(direction == 1){
+                    iv.setRotation(-90.0f);
+                }
+                if(direction == -1){
+                    iv.setRotation(90.0f);
+                }
+            }
+        }
+
+        else{
+            iv.setImageResource(R.drawable.car);
+        }
+
+        // 오브젝트 받아서 if로 나누면 댐
+        System.out.println(" 컨버트 " + convertMargin300(left, param.height) + " " + convertMargin500(top, param.width));
+        param.setMargins(convertMargin300(left, param.width),convertMargin500(top, param.width),0,0);
         rightdlg.addContentView(iv, param);
         viewRightList.add(iv);
     }
@@ -334,12 +384,30 @@ public class CrossFrame {
     public void addObjBack(int left, int top, int obj, int direction){
         ImageView iv = new ImageView(context);
 
-        // 오브젝트 받아서 if로 나누면 댐
-        iv.setImageResource(R.drawable.person_direction);
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        param.width = 50;
-        param.height = 50;
-        param.setMargins(left,top,0,0);
+        param.width = 60;
+        param.height = 60;
+
+        // 오브젝트 받아서 if로 나누면 댐
+        if(obj == 0){
+            if(direction == 0){
+                iv.setImageResource(R.drawable.person);
+            }
+            else{
+                iv.setImageResource(R.drawable.person_direction);
+                param.width = 100;
+                param.height = 60;
+                if(direction == -1){
+                    iv.setRotation(-180.0f);
+                }
+            }
+        }
+
+        else{
+            iv.setImageResource(R.drawable.car);
+        }
+
+        param.setMargins(convertMargin500(left, param.width),convertMargin300(top, param.height),0,0);
         backdlg.addContentView(iv, param);
         viewBackList.add(iv);
     }
@@ -347,12 +415,32 @@ public class CrossFrame {
     public void addObjLeft(int left, int top, int obj, int direction){
         ImageView iv = new ImageView(context);
 
-        // 오브젝트 받아서 if로 나누면 댐
-        iv.setImageResource(R.drawable.person_direction);
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        param.width = 50;
-        param.height = 50;
-        param.setMargins(left,top,0,0);
+        param.width = 60;
+        param.height = 60;
+
+        // 오브젝트 받아서 if로 나누면 댐
+        if(obj == 0){
+            if(direction == 0){
+                iv.setImageResource(R.drawable.person);
+            }
+            else{
+                iv.setImageResource(R.drawable.person_direction);
+                param.width = 100;
+                param.height = 60;
+                if(direction == 1){
+                    iv.setRotation(90.0f);
+                }
+                if(direction == -1){
+                    iv.setRotation(-90.0f);
+                }
+            }
+        }
+
+        else{
+            iv.setImageResource(R.drawable.car);
+        }
+        param.setMargins(convertMargin300(left, param.height),convertMargin500(top, param.width),0,0);
         leftdlg.addContentView(iv, param);
         viewLeftList.add(iv);
     }
@@ -363,6 +451,20 @@ public class CrossFrame {
 
     public void setInROI(boolean inROI) {
         isInROI = inROI;
+    }
+
+    public int convertMargin500(int margin, int param){
+        // 500 : 500 - param = margin : convert
+        int convert = 0;
+        convert = (margin * (500 - param)) / 500;
+        return convert;
+    }
+
+    public int convertMargin300(int margin, int param){
+        // 300 : 300 - param = margin : convert
+        int convert = 0;
+        convert = (margin * (300 - param)) / 300;
+        return convert;
     }
 
 }
