@@ -198,7 +198,7 @@ public class CrossFrame {
         }
         //((ViewManager)iv.getParent()).removeView(iv);
         viewFrontList.clear();
-        if(isShowingWaningFront){
+        if(isShowingWaningFront && warningFrontImg.getParent() != null){
             ((ViewManager)warningFrontImg.getParent()).removeView(warningFrontImg);
         }
 
@@ -236,7 +236,7 @@ public class CrossFrame {
         }
         //((ViewManager)iv.getParent()).removeView(iv);
         viewRightList.clear();
-        if(isShowingWaningRight){
+        if(isShowingWaningRight && warningRightImg.getParent() != null){
             ((ViewManager)warningRightImg.getParent()).removeView(warningRightImg);
         }
 
@@ -272,7 +272,7 @@ public class CrossFrame {
         }
         //((ViewManager)iv.getParent()).removeView(iv);
         viewBackList.clear();
-        if(isShowingWaningBack){
+        if(isShowingWaningBack && warningBackImg.getParent() != null){
             ((ViewManager)warningBackImg.getParent()).removeView(warningBackImg);
         }
 
@@ -310,7 +310,7 @@ public class CrossFrame {
         }
         //((ViewManager)iv.getParent()).removeView(iv);
         viewLeftList.clear();
-        if(isShowingWaningLeft){
+        if(isShowingWaningLeft && warningLeftImg.getParent() != null){
             ((ViewManager)warningLeftImg.getParent()).removeView(warningLeftImg);
         }
         System.out.println(" 리프레쉬 초기화 됐나 봅시다 " + "  " + viewLeftList.size());

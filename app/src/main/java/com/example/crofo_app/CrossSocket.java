@@ -126,9 +126,31 @@ public class CrossSocket {
             try {
                 JSONArray jsonArr = jsonObj.getJSONArray("arr");
                 int cnt = jsonArr.length();
+                if(cnt == 0) {
+                    Handler mHandler = new Handler(Looper.getMainLooper());
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("교차로 최신화" + roi.getFrontCrosswalk().getCrosswalkLocation()[0]);
+
+                            switch (crosswalk){
+                                case 0:
+                                    crossFrame.refreshFrontFrame(null); break;
+                                case 1:
+                                    crossFrame.refreshRightFrame(null); break;
+                                case 2:
+                                    crossFrame.refreshBackFrame(null); break;
+                                case 3:
+                                    crossFrame.refreshLeftFrame(null); break;
+                            }
+                        }
+                    }, 0);
+                }
+
                 double loc[] = new double[2];
                 loc[0] = jsonObj.getDouble("loc_x");
                 loc[1] = jsonObj.getDouble("loc_y");
+
                 switch (crosswalk){
                     case 0:
                         roi.getFrontCrosswalk().setCrosswalkLocation(loc); roi.getFrontCrosswalk().clearLists(); break;

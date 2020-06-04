@@ -165,12 +165,13 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
                     CrossInfo roi = safetyDrive.ifHaveManyROI(safetyDrive.getCurrentBearing(), roiList, safetyDrive.getCurrentLocation());
                     safetyDrive.drawPolygon(roi.getCrossLocation0(), roi.getCrossLocation1(), roi.getCrossLocation2(), roi.getCrossLocation3());
                     // =================횡단보도 정보 요청=========================== //
-                    System.out.println(" 교차로 내 횡단보도 정보를 요청합니다 ");
+                    System.out.println(" 교차로 내 횡단보도 정보를 요청합니다 " + roi.getCrossID());
 
                     // =================횡단보도 띄우기=========================== //
                     System.out.println(" isinroi 초기값" + safetyDrive.getCrossFrame().getIsInROI());
                     if(!safetyDrive.getCrossFrame().getIsInROI()){
                         int direction = decideDirection(roi, safetyDrive.getCurrentLocation());
+                        direction = 2;
                         System.out.println(" direction은 무엇인가 ? " + direction);
                         safetyDrive.getCrossFrame().setInROI(true);
                         safetyDrive.getCrossFrame().initAllCrossFrame();
@@ -196,7 +197,7 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
                                     sock[i].disconnect();
                                 }
                                 System.out.println(" 인터섹션 아이디 " + roi.getCrossID());
-                                sock[i].setSocket(roi.getCrossID(), i, roi, safetyDrive.getCrossFrame(), direction, crossAlert);
+                                sock[i].setSocket(roi.getCrossID(), i , roi, safetyDrive.getCrossFrame(), direction, crossAlert);
                                 sock[i].connect();
                                 sock[i].run();
                             }
