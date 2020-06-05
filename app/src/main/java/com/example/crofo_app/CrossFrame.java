@@ -191,6 +191,7 @@ public class CrossFrame {
         rightdlg.show();
         leftdlg.show();
     }
+    
 
     public void refreshFrontFrame(Crosswalk roi){
         for(int i = 0;i<viewFrontList.size();i++){
