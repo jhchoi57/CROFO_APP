@@ -126,6 +126,7 @@ public class CrossSocket {
             try {
                 JSONArray jsonArr = jsonObj.getJSONArray("arr");
                 int cnt = jsonArr.length();
+                // 횡단보도에 사람 없을 때
                 if(cnt == 0) {
                     Handler mHandler = new Handler(Looper.getMainLooper());
                     mHandler.postDelayed(new Runnable() {
@@ -170,12 +171,14 @@ public class CrossSocket {
                     //0 사람 1 차 2 bike 3 버스 4 트럭
                     int type = json.getInt("type");
                     System.out.println("컨벌트전 " + json.getInt("x") + json.getInt("y"));
-                    int typeLocation[] = convertByDirection(json.getInt("x"), json.getInt("y"), crosswalk);
+                    int[] typeLocation = convertByDirection(json.getInt("x"), json.getInt("y"), crosswalk);
                     System.out.println("컨벌트후 " + typeLocation[0] + "/" + typeLocation[1]);
 
                     int typeDirection = json.getInt("direction");
                     crossAlert.alertSound();
                     crossAlert.setIsAlertTrue();
+
+
                     // 사람일 때
                     if(type == 0 || type == 2){
                         switch (crosswalk){

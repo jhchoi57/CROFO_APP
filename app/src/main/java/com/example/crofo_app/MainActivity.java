@@ -109,39 +109,16 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         // 커스텀 다이얼로그를 호출한다.
 //        CrossFrame crossFrame = new CrossFrame(MainActivity.this);
+//        crossFrame.initAllCrossFrame();
+//        CrossInfo roi = new CrossInfo();
+//        int[] carLoc = new int[2]; carLoc[0] = 50; carLoc[1] = 50;
+//        roi.getFrontCrosswalk().addCarList(new Car(carLoc));
+//        crossFrame.refreshFrontFrame(roi.getFrontCrosswalk());
+//        //crossFrame.addObjFront(50,50,1, -1);
 //        crossFrame.showAllCrossFrame();
-//        //crossFrame.addObjFront(50,50,0);
-//        //crossFrame.addObjFront(100,100,0);
-//        //crossFrame.addObjFront(150,150,0);
-//        //crossFrame.deleteAllCrossFrame();
-//        crossFrame.callCrossFront();
-//        crossFrame.showAllCrossFrame();
+//
 
-        // 현재 위치 타이머로 5초마다 계속 얻기
-        //tMapView.setTrackingMode(true);
-        //initTimerTask();
-        //Timer gpsCheckTimer = new Timer();
-        //gpsCheckTimer.schedule(gpsCheckTimerTask, 0, 1000);
 
-        // 길찾기 시작되면 어디서 우회전 하는지 어느 방향에서 진입 하는지 받아 올 수 있음
-        // 예시 > 37.563857889963195  126.98510938364018  341.15804530424913(북쪽0도, 360도기준)
-        // 서버에 CrossINfo 리스트로 보내고 전방 우측 횡단보도 채워서 CrossInfo 리스트로 받아오면 되려나?
-
-        ArrayList<CrossInfo> serverTestList = new ArrayList<CrossInfo>();
-        double[] coordinate1 = {37.564091213912015, 126.98609817581536};
-        double[] coordinate2 = {37.564677282550214, 126.9875285844233};
-        double[] coordinate3 = {37.570137763308296, 126.9877839620249};
-        double[] test = {37.681552191332905, 126.81314396874748};
-//        CrossInfo crossInfoTest1 = new CrossInfo(coordinate1, 338.1527729935401);
-//        CrossInfo crossInfoTest2 = new CrossInfo(coordinate2, 242.66650609871442);
-//        CrossInfo crossInfoTest3 = new CrossInfo(coordinate3, 182.1230581504779);
-//        serverTestList.add(crossInfoTest1);
-//        serverTestList.add(crossInfoTest2);
-//        serverTestList.add(crossInfoTest3);
-
-        //new CrossRequest(serverTestList).execute("http://bic4907.diskstation.me:4446/app/cross/list"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
-        //new FindCrossRequest(test).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
-        //System.out.println("보냇어용");
 //        CrossSock
         //sock.disconnect();  // 소켓 해제et sock = new CrossSocket("http://bic4907.diskstation.me:4446"); // 소켓 생성
         ////        sock.setSocket(1, 0, null, null, 2, null);

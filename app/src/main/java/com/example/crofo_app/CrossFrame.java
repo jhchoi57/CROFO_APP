@@ -218,13 +218,13 @@ public class CrossFrame {
         ArrayList<Car> carList;
         pedestrianList = roi.getPedestrianList();
         carList = roi.getCarList();
+
         for(int i=0;i<pedestrianList.size();i++){
             System.out.println(" front 에 찍히는 거 " + pedestrianList.get(i).getPedestrianLocation()[0]+ "  " + pedestrianList.get(i).getPedestrianLocation()[1]);
             addObjFront(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
                     pedestrianList.get(i).getPedestrianDirection());
         }
         for(int i=0;i<carList.size();i++){
-            System.out.println(" front 에 찍히는 거 " + pedestrianList.get(i).getPedestrianLocation()[0]+ "  " + pedestrianList.get(i).getPedestrianLocation()[1]);
             addObjFront(carList.get(i).getCarLocation()[0], carList.get(i).getCarLocation()[1], 1, -1);
         }
         frontdlg.show();
@@ -400,6 +400,8 @@ public class CrossFrame {
         }
 
         else{
+            param.width = 90;
+            param.height = 150;
             iv.setImageResource(R.drawable.car);
         }
         // 오브젝트 받아서 if로 나누면 댐
@@ -433,6 +435,8 @@ public class CrossFrame {
         }
 
         else{
+            param.width = 150;
+            param.height = 90;
             iv.setImageResource(R.drawable.car);
         }
 
@@ -466,6 +470,8 @@ public class CrossFrame {
         }
 
         else{
+            param.width = 90;
+            param.height = 150;
             iv.setImageResource(R.drawable.car);
         }
 
@@ -491,12 +497,16 @@ public class CrossFrame {
                 param.width = 60;
                 param.height = 100;
                 if(direction == 1){
+                    param.width = 90;
+                    param.height = 150;
                     iv.setRotation(180.0f);
                 }
             }
         }
 
         else{
+            param.width = 150;
+            param.height = 90;
             iv.setImageResource(R.drawable.car);
         }
         param.setMargins(convertMargin300(left, param.width),convertMargin500(top, param.height),0,0);
