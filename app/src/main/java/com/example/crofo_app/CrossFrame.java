@@ -191,7 +191,7 @@ public class CrossFrame {
         rightdlg.show();
         leftdlg.show();
     }
-    
+
 
     public void refreshFrontFrame(Crosswalk roi){
         for(int i = 0;i<viewFrontList.size();i++){
@@ -437,7 +437,7 @@ public class CrossFrame {
         else{
             param.width = 150;
             param.height = 90;
-            iv.setImageResource(R.drawable.car);
+            iv.setImageResource(R.drawable.car2);
         }
 
         // 오브젝트 받아서 if로 나누면 댐
@@ -507,7 +507,7 @@ public class CrossFrame {
         else{
             param.width = 150;
             param.height = 90;
-            iv.setImageResource(R.drawable.car);
+            iv.setImageResource(R.drawable.car2);
         }
         param.setMargins(convertMargin300(left, param.width),convertMargin500(top, param.height),0,0);
         leftdlg.addContentView(iv, param);
