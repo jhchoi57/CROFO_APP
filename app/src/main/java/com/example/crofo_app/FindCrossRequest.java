@@ -150,11 +150,32 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
                     CrossLocation2[1] = jsonObj.getDouble("loc_y2");
                     CrossLocation3[0] = jsonObj.getDouble("loc_x3");
                     CrossLocation3[1] = jsonObj.getDouble("loc_y3");
+                    double[] crosswalkLocation0 = new double[2];
+                    double[] crosswalkLocation1 = new double[2];
+                    double[] crosswalkLocation2 = new double[2];
+                    double[] crosswalkLocation3 = new double[2];
+                    crosswalkLocation0[0] = jsonObj.getDouble("cen_x0");
+                    crosswalkLocation0[1] = jsonObj.getDouble("cen_y0");
+
+                    crosswalkLocation1[0] = jsonObj.getDouble("cen_x1");
+                    crosswalkLocation1[1] = jsonObj.getDouble("cen_y1");
+
+                    crosswalkLocation2[0] = jsonObj.getDouble("cen_x2");
+                    crosswalkLocation2[1] = jsonObj.getDouble("cen_y2");
+
+                    crosswalkLocation3[0] = jsonObj.getDouble("cen_x3");
+                    crosswalkLocation3[1] = jsonObj.getDouble("cen_y3");
+
                     crossInfo.setCenterLocation(centerLocation);
                     crossInfo.setCrossLocation0(CrossLocation0);
                     crossInfo.setCrossLocation1(CrossLocation1);
                     crossInfo.setCrossLocation2(CrossLocation2);
                     crossInfo.setCrossLocation3(CrossLocation3);
+
+                    crossInfo.setCrosswalkLocation0(crosswalkLocation0);
+                    crossInfo.setCrosswalkLocation1(crosswalkLocation1);
+                    crossInfo.setCrosswalkLocation2(crosswalkLocation2);
+                    crossInfo.setCrosswalkLocation3(crosswalkLocation3);
 
                     safetyDrive.addList(crossInfo);
                 }
@@ -168,11 +189,16 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
                     System.out.println(" 교차로 내 횡단보도 정보를 요청합니다 " + roi.getCrossID());
 
                     // =================횡단보도 띄우기=========================== //
-                    System.out.println(" isinroi 초기값" + safetyDrive.getCrossFrame().getIsInROI());
+
                     if(!safetyDrive.getCrossFrame().getIsInROI()){
-                        int direction = decideDirection(roi, safetyDrive.getCurrentLocation());
-                        direction = 2;
-                        System.out.println(" direction은 무엇인가 ? " + direction);
+                        double[] direction = decideDirection(roi, safetyDrive.getCurrentLocation());
+//                        double[] direction = new double[2];
+//                        direction[0] = 37.679679;
+//                        direction[1] = 126.811145;
+                        int findDirection = findDirection(roi, direction);
+                        findDirection = (findDirection + 3) % 4;
+                        System.out.println(" direction은 무엇인가 ? " + direction[0] + "   횡단보도 번호 : " + findDirection);
+
                         safetyDrive.getCrossFrame().setInROI(true);
                         safetyDrive.getCrossFrame().initAllCrossFrame();
 
@@ -184,7 +210,14 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
                                         sock[i].disconnect();
                                     }
                                     System.out.println(" 인터섹션 아이디 " + roi.getCrossID());
-                                    sock[i].setSocket(roi.getCrossID(), i + 1, roi, safetyDrive.getCrossFrame(), direction, crossAlert);
+                                    double[] crosswalkPoint = null;
+                                    switch (i){
+                                        case 0:
+                                            crosswalkPoint = roi.getCrosswalkLocation1(); break;
+                                        case 1:
+                                            crosswalkPoint = roi.getCrosswalkLocation2(); break;
+                                    }
+                                    sock[i].setSocket(roi.getCrossID(), crosswalkPoint, roi, safetyDrive.getCrossFrame(), direction, crossAlert, i+1, findDirection);
                                     sock[i].connect();
                                     sock[i].run();
                                 }
@@ -197,7 +230,18 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
                                     sock[i].disconnect();
                                 }
                                 System.out.println(" 인터섹션 아이디 " + roi.getCrossID());
-                                sock[i].setSocket(roi.getCrossID(), i , roi, safetyDrive.getCrossFrame(), direction, crossAlert);
+                                double[] crosswalkPoint = null;
+                                switch (i){
+                                    case 0:
+                                        crosswalkPoint = roi.getCrosswalkLocation0(); break;
+                                    case 1:
+                                        crosswalkPoint = roi.getCrosswalkLocation1(); break;
+                                    case 2:
+                                        crosswalkPoint = roi.getCrosswalkLocation2(); break;
+                                    case 3:
+                                        crosswalkPoint = roi.getCrosswalkLocation3(); break;
+                                }
+                                sock[i].setSocket(roi.getCrossID(), crosswalkPoint, roi, safetyDrive.getCrossFrame(), direction, crossAlert, i, findDirection);
                                 sock[i].connect();
                                 sock[i].run();
                             }
@@ -240,49 +284,34 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
         return "" + dou;
     }
 
-    public int decideDirection(CrossInfo crossInfo, double[] currentLocation){
+    public double[] decideDirection(CrossInfo crossInfo, double[] currentLocation){
         //  1 0
         //  2 3
         //
         // Front:0 // Right:1 // Back:2 // Left:3
-        crossInfo.getCrossLocation0();
-        crossInfo.getCrossLocation1();
-        crossInfo.getCrossLocation2();
-        crossInfo.getCrossLocation3();
 
-        int direction = 0;
-        int[] minLocation = new int[2];
-        double[] minDistance = new double[2];
-        double distance;
-        minDistance[0] = getDistance(crossInfo.getCrossLocation0(), currentLocation);
-        minDistance[1] = getDistance(crossInfo.getCrossLocation1(), currentLocation);
-        minLocation[0] = 0;
-        minLocation[1] = 1;
+        double[] direction = new double[2];
+        double minDistance = getDistance(currentLocation, crossInfo.getCrosswalkLocation0());
+        double distance = 0;
+        direction = crossInfo.getCrosswalkLocation0();
 
-        distance = getDistance(crossInfo.getCrossLocation2(), currentLocation);
-        if(minDistance[0] > distance){
-            minDistance[0] = distance;
-            minLocation[0] = 2;
-        }
-        else if(minDistance[1] > distance){
-            minDistance[1] = distance;
-            minLocation[1] = 2;
+        distance = getDistance(currentLocation, crossInfo.getCrosswalkLocation1());
+        if(minDistance > distance){
+            minDistance = distance;
+            direction = crossInfo.getCrosswalkLocation1();
         }
 
-        distance = getDistance(crossInfo.getCrossLocation3(), currentLocation);
-        if(minDistance[0] > distance){
-            minDistance[0] = distance;
-            minLocation[0] = 3;
-        }
-        else if(minDistance[1] > distance){
-            minDistance[1] = distance;
-            minLocation[1] = 3;
+        distance = getDistance(currentLocation, crossInfo.getCrosswalkLocation2());
+        if(minDistance > distance){
+            minDistance = distance;
+            direction = crossInfo.getCrosswalkLocation2();
         }
 
-        if((minLocation[0] == 0 && minLocation[1] == 1) || (minLocation[0] == 1 && minLocation[1] == 0)) direction = 0;
-        if((minLocation[0] == 0 && minLocation[1] == 3) || (minLocation[0] == 3 && minLocation[1] == 0)) direction = 1;
-        if((minLocation[0] == 3 && minLocation[1] == 2) || (minLocation[0] == 2 && minLocation[1] == 3)) direction = 2;
-        if((minLocation[0] == 2 && minLocation[1] == 1) || (minLocation[0] == 1 && minLocation[1] == 2)) direction = 3;
+        distance = getDistance(currentLocation, crossInfo.getCrosswalkLocation3());
+        if(minDistance > distance){
+            minDistance = distance;
+            direction = crossInfo.getCrosswalkLocation3();
+        }
 
 
         return direction;
@@ -316,5 +345,21 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
     // 주어진 라디언(radian) 값을 도(degree) 값으로 변환
     private double rad2deg(double rad){
         return (double)(rad * (double)180d / Math.PI);
+    }
+
+    private int findDirection(CrossInfo roi, double[] direction){
+        if(roi.getCrosswalkLocation0() == direction){
+            return 0;
+        }
+        if(roi.getCrosswalkLocation1() == direction){
+            return 1;
+        }
+        if(roi.getCrosswalkLocation2() == direction){
+            return 2;
+        }
+        if(roi.getCrosswalkLocation3() == direction){
+            return 3;
+        }
+        return -1;
     }
 }

@@ -14,6 +14,13 @@ public class CrossInfo {
     private double[] crossLocation2;         // 2 3
     private double[] crossLocation3;         //
     private double trueBearing;             // 방향 북쪽 0도, 360도 기준
+    private double[] crosswalkLocation0 = new double[2];
+    private double[] crosswalkLocation1 = new double[2];
+    private double[] crosswalkLocation2 = new double[2];
+
+
+
+    private double[] crosswalkLocation3 = new double[2];
 
     public CrossInfo(){
         frontCrosswalk = new Crosswalk();
@@ -25,6 +32,10 @@ public class CrossInfo {
         crossLocation1 = null;
         crossLocation2 = null;
         crossLocation3 = null;
+        crosswalkLocation0 = new double[2];
+        crosswalkLocation1 = new double[2];
+        crosswalkLocation2 = new double[2];
+        crosswalkLocation3 = new double[2];
         trueBearing = -1;
     }
 
@@ -140,6 +151,38 @@ public class CrossInfo {
 
     public void setTrueBearing(double trueBearing) {
         this.trueBearing = trueBearing;
+    }
+
+    public double[] getCrosswalkLocation0() {
+        return crosswalkLocation0;
+    }
+
+    public void setCrosswalkLocation0(double[] crosswalkLocation0) {
+        this.crosswalkLocation0 = crosswalkLocation0;
+    }
+
+    public double[] getCrosswalkLocation1() {
+        return crosswalkLocation1;
+    }
+
+    public void setCrosswalkLocation1(double[] crosswalkLocation1) {
+        this.crosswalkLocation1 = crosswalkLocation1;
+    }
+
+    public double[] getCrosswalkLocation2() {
+        return crosswalkLocation2;
+    }
+
+    public void setCrosswalkLocation2(double[] crosswalkLocation2) {
+        this.crosswalkLocation2 = crosswalkLocation2;
+    }
+
+    public double[] getCrosswalkLocation3() {
+        return crosswalkLocation3;
+    }
+
+    public void setCrosswalkLocation3(double[] crosswalkLocation3) {
+        this.crosswalkLocation3 = crosswalkLocation3;
     }
 
 }

@@ -19,13 +19,15 @@ public class CrossSocket {
     private Socket socket;
     private String url;
     private int crosswalk;
+    private double[] crosswalkLocation;
     private int intersection;
     private boolean isConnected;
     private boolean stop;
     private CrossInfo roi;
     public CrossFrame crossFrame;
-    public int direction;
+    public double[] direction;
     private CrossAlert crossAlert;
+    private int directionNumber;
 
     public CrossSocket(String url) {
         this.url = url;
@@ -33,15 +35,17 @@ public class CrossSocket {
         stop = true;
     }
 
-    public void setSocket(int intersection_id, int crosswalk_id, CrossInfo roi, CrossFrame cF, int direction, CrossAlert cA) {
+    public void setSocket(int intersection_id, double[] crosswalk_point, CrossInfo roi, CrossFrame cF, double[] direction_point, CrossAlert cA, int cw, int dN) {
         this.intersection = intersection_id;
-        this.crosswalk = crosswalk_id;
+        this.crosswalkLocation = crosswalk_point;
         isConnected = false;
         stop = true;
         this.roi = roi;
         crossFrame = cF;
-        this.direction = direction;
+        this.direction = direction_point;
         crossAlert = cA;
+        crosswalk = cw;
+        directionNumber = dN;
     }
 
     public void run() {
@@ -81,7 +85,7 @@ public class CrossSocket {
             return;
         }
         this.intersection = intersection_id;
-        this.crosswalk = crosswalk_id;
+        //this.crosswalk = crosswalk_id;
     }
 
     public boolean isConnected() {
@@ -100,8 +104,10 @@ public class CrossSocket {
             try {
                 JSONObject jsonObj = new JSONObject();
                 jsonObj.accumulate("in", intersection);
-                jsonObj.accumulate("cr", crosswalk);
-                jsonObj.accumulate("di", direction);
+                jsonObj.accumulate("x0", direction[0]);
+                jsonObj.accumulate("y0", direction[1]);
+                jsonObj.accumulate("x1", crosswalkLocation[0]);
+                jsonObj.accumulate("y1", crosswalkLocation[1]);
                 socket.emit("where", jsonObj);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -132,8 +138,6 @@ public class CrossSocket {
                     mHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            System.out.println("교차로 최신화" + roi.getFrontCrosswalk().getCrosswalkLocation()[0]);
-
                             switch (crosswalk){
                                 case 0:
                                     crossFrame.refreshFrontFrame(null); break;
@@ -148,21 +152,16 @@ public class CrossSocket {
                     }, 0);
                 }
 
-                double loc[] = new double[2];
-                loc[0] = jsonObj.getDouble("loc_x");
-                loc[1] = jsonObj.getDouble("loc_y");
-
                 switch (crosswalk){
                     case 0:
-                        roi.getFrontCrosswalk().setCrosswalkLocation(loc); roi.getFrontCrosswalk().clearLists(); break;
+                        roi.getFrontCrosswalk().clearLists(); break;
                     case 1:
-                        roi.getRightCrosswalk().setCrosswalkLocation(loc); roi.getRightCrosswalk().clearLists(); break;
+                        roi.getRightCrosswalk().clearLists(); break;
                     case 2:
-                        roi.getBackCrosswalk().setCrosswalkLocation(loc);  roi.getBackCrosswalk().clearLists(); break;
+                        roi.getBackCrosswalk().clearLists(); break;
                     case 3:
-                        roi.getLeftCrosswalk().setCrosswalkLocation(loc);  roi.getLeftCrosswalk().clearLists(); break;
+                        roi.getLeftCrosswalk().clearLists(); break;
                 }
-                System.out.println(" 위치 " + roi.getFrontCrosswalk().getCrosswalkLocation()[0]);
 
 
 
@@ -170,18 +169,35 @@ public class CrossSocket {
                     JSONObject json = jsonArr.getJSONObject(i);
                     //0 사람 1 차 2 bike 3 버스 4 트럭
                     int type = json.getInt("type");
-                    System.out.println("컨벌트전 " + json.getInt("x") + json.getInt("y"));
-                    int[] typeLocation = convertByDirection(json.getInt("x"), json.getInt("y"), crosswalk);
+
+                    System.out.println(" 원하는 횡단보도 " + crosswalk + " 진입 방향 " + directionNumber);
+                    System.out.println("컨벌트전 " + json.getInt("x") +  "  /  "  + json.getInt("y"));
+                    int[] typeLocation = convertByDirection(json.getInt("x"), json.getInt("y"), crosswalk, directionNumber);
                     System.out.println("컨벌트후 " + typeLocation[0] + "/" + typeLocation[1]);
 
-                    int typeDirection = json.getInt("direction");
+
+
                     crossAlert.alertSound();
                     crossAlert.setIsAlertTrue();
 
-
                     // 사람일 때
-                    if(type == 0 || type == 2){
-                        switch (crosswalk){
+                    if(type == 0){
+                        int typeDirection = json.getInt("direction");
+                        switch ((crosswalk + 3) % 4){
+                            case 0:
+                                roi.getFrontCrosswalk().addPedestrianList(new Pedestrian(typeLocation, typeDirection)); break;
+                            case 1:
+                                roi.getRightCrosswalk().addPedestrianList(new Pedestrian(typeLocation, typeDirection)); break;
+                            case 2:
+                                roi.getBackCrosswalk().addPedestrianList(new Pedestrian(typeLocation, typeDirection)); break;
+                            case 3:
+                                roi.getLeftCrosswalk().addPedestrianList(new Pedestrian(typeLocation, typeDirection)); break;
+                        }
+                    }
+
+                    else if(type == 2){
+                        int typeDirection = 0;
+                        switch ((crosswalk + 3) % 4){
                             case 0:
                                 roi.getFrontCrosswalk().addPedestrianList(new Pedestrian(typeLocation, typeDirection)); break;
                             case 1:
@@ -195,7 +211,7 @@ public class CrossSocket {
 
                     // 차일 때
                     else{
-                        switch (crosswalk){
+                        switch ((crosswalk + 3) % 4){
                             case 0:
                                 roi.getFrontCrosswalk().addCarList(new Car(typeLocation)); break;
                             case 1:
@@ -217,14 +233,12 @@ public class CrossSocket {
                     //right 추가
                     //left 추가
 
-//                    System.out.println("교차로 그리기1" + roi.getFrontCrosswalk().getCrosswalkLocation()[0]);
                     Handler mHandler = new Handler(Looper.getMainLooper());
                     mHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            System.out.println("교차로 최신화" + roi.getFrontCrosswalk().getCrosswalkLocation()[0]);
 
-                            switch (crosswalk){
+                            switch ((crosswalk + 3) % 4){
                                 case 0:
                                     crossFrame.refreshFrontFrame(roi.getFrontCrosswalk()); break;
                                 case 1:
@@ -286,30 +300,110 @@ public class CrossSocket {
         crossFrame.setRoi(roi);
     }
 
-    public int[] convertByDirection(int x, int y, int crosswalk_id){
+    public int[] convertByDirection(int x, int y, int crosswalk_id, int direction){
        int[] coordinates = new int[2];
        int convertX = 0, convertY = 0;
        switch (crosswalk_id){
            case 0:
-               convertX = 500 - x;
-               convertY = 300 - y;
+               switch(direction){
+                   case 0:
+                       convertX = x;
+                       convertY = y;
+                       break;
+                   case 1:
+                       convertX = y;
+                       convertY = 500 - x;
+                       break;
+                   case 2:
+                       convertX = 300 - y;
+                       convertY = x;
+                       break;
+                   case 3:
+                       convertX = 300 - y;
+                       convertY = x;
+                       break;
+               }
                break;
            case 1:
-               convertX = y;
-               convertY = 500 - x;
+               switch(direction){
+                   case 0:
+                       convertX = 300 - y;
+                       convertY = x;
+                       break;
+                   case 1:
+                       convertX = x;
+                       convertY = y;
+                       break;
+                   case 2:
+                       convertX = 500 - x;
+                       convertY = 300 - y;
+                       break;
+                   case 3:
+                       convertX = 500 - x;
+                       convertY = 300 - y;
+                       break;
+               }
                break;
            case 2:
-               convertX = x;
-               convertY = y;
+               switch(direction){
+                   case 0:
+                       convertX = 500 - x;
+                       convertY = 300 - y;
+                       break;
+                   case 1:
+                       convertX = 300 - y;
+                       convertY = x;
+                       break;
+                   case 2:
+                       convertX = y;
+                       convertY = 500 - x;
+                       break;
+                   case 3:
+                       convertX = y;
+                       convertY = 500 - x;
+                       break;
+               }
                break;
            case 3:
-               convertX = 300 - y;
-               convertY = x;
+               switch(direction){
+               case 0:
+                   convertX = y;
+                   convertY = 500 - x;
+                   break;
+               case 1:
+                   convertX = 500 - x;
+                   convertY = 300 - y;
+                   break;
+               case 2:
+                   convertX = x;
+                   convertY = y;
+                   break;
+               case 3:
+                   convertX = x;
+                   convertY = 300 - y;
+                   break;
+               }
                break;
        }
        coordinates[0] = convertX;
        coordinates[1] = convertY;
        return coordinates;
+    }
+
+    private int findDirection(CrossInfo roi, double[] direction){
+        if(roi.getCrosswalkLocation0() == direction){
+            return 0;
+        }
+        if(roi.getCrosswalkLocation1() == direction){
+            return 1;
+        }
+        if(roi.getCrosswalkLocation2() == direction){
+            return 2;
+        }
+        if(roi.getCrosswalkLocation3() == direction){
+            return 3;
+        }
+        return -1;
     }
 
 }

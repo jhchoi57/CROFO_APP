@@ -82,7 +82,7 @@ public class CrossFrame {
 
         // 커스텀 다이얼로그 위치 조정
         LayoutParams params = frontdlg.getWindow().getAttributes();
-        params.x = 250;
+        params.x = 400;
         params.y = 300;
         // params.width = 300;
         // params.height = 300;
@@ -109,8 +109,8 @@ public class CrossFrame {
 
         // 커스텀 다이얼로그 위치 조정
         LayoutParams params = backdlg.getWindow().getAttributes();
-        params.x = 250;
-        params.y = 800 + 300;
+        params.x = 400;
+        params.y = 800 + 300 + 600;
         // params.width = 300;
         // params.height = 300;
         backdlg.getWindow().setAttributes(params);
@@ -137,7 +137,7 @@ public class CrossFrame {
         // 커스텀 다이얼로그 위치 조정
         LayoutParams params = leftdlg.getWindow().getAttributes();
         // params.x = 500;
-        params.y = 300 + 300;
+        params.y = 300 + 600;
         // params.width = 300;
         // params.height = 300;
         leftdlg.getWindow().setAttributes(params);
@@ -163,8 +163,8 @@ public class CrossFrame {
 
         // 커스텀 다이얼로그 위치 조정
         LayoutParams params = rightdlg.getWindow().getAttributes();
-        params.x = 800;
-        params.y = 300 + 300;
+        params.x = 1150;
+        params.y = 300 + 600;
         // params.width = 300;
         // params.height = 300;
         rightdlg.getWindow().setAttributes(params);

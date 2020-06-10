@@ -114,6 +114,12 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 //        int[] carLoc = new int[2]; carLoc[0] = 50; carLoc[1] = 50;
 //        roi.getFrontCrosswalk().addCarList(new Car(carLoc));
 //        crossFrame.refreshFrontFrame(roi.getFrontCrosswalk());
+//        roi.getRightCrosswalk().addCarList(new Car(carLoc));
+//        crossFrame.refreshRightFrame(roi.getFrontCrosswalk());
+//        roi.getBackCrosswalk().addCarList(new Car(carLoc));
+//        crossFrame.refreshBackFrame(roi.getFrontCrosswalk());
+//        roi.getLeftCrosswalk().addCarList(new Car(carLoc));
+//        crossFrame.refreshLeftFrame(roi.getFrontCrosswalk());
 //        //crossFrame.addObjFront(50,50,1, -1);
 //        crossFrame.showAllCrossFrame();
 //

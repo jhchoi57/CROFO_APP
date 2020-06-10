@@ -61,7 +61,8 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
 //        sock[0] = new CrossSocket("http://bic4907.diskstation.me:4446");
 //        sock[0] = new CrossSocket("http://192.168.0.8:8080");
         for(int i = 0;i<4;i++){
-            sock[i] = new CrossSocket("http://bic4907.diskstation.me:4446"); // 소켓 생성
+            sock[i] = new CrossSocket("http://bic4907.diskstation.me:8081"); // 소켓 생성
+//            sock[i] = new CrossSocket("http://192.168.0.7:8080"); // 소켓 생성
         }
     }
 
@@ -73,7 +74,9 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         this.isNavi = true;
         crossFrame = new CrossFrame(context);
         for(int i = 0;i<2;i++){
-            sock[i] = new CrossSocket("http://bic4907.diskstation.me:4446"); // 소켓 생성
+//            sock[i] = new CrossSocket("http://192.168.0.7:8080"); // 소켓 생성
+            sock[i] = new CrossSocket("http://bic4907.diskstation.me:8081"); // 소켓 생성
+
         }
     }
 
@@ -216,10 +219,12 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
                 currentBearing = getTrueBearing(recentLocation, currentLocation);
 
                 if(isNavi){
-                    new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock, true).execute("http://bic4907.diskstation.me:4446/app/cross/find");
+//                    new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock, true).execute("http://192.168.0.7:8080/app/cross/find");
+                    new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock, true).execute("http://bic4907.diskstation.me:8081/app/cross/find");
                 }
                 else {
-                    new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock).execute("http://bic4907.diskstation.me:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
+                    new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock).execute("http://bic4907.diskstation.me:8081/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
+//                    new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock).execute("http://192.168.0.7:8080/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
                 }
                 System.out.println("보냇어용");
 
