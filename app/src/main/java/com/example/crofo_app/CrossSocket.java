@@ -183,7 +183,7 @@ public class CrossSocket {
                     // 사람일 때
                     if(type == 0){
                         int typeDirection = json.getInt("direction");
-                        switch ((crosswalk + 3) % 4){
+                        switch (crosswalk){
                             case 0:
                                 roi.getFrontCrosswalk().addPedestrianList(new Pedestrian(typeLocation, typeDirection)); break;
                             case 1:
@@ -197,7 +197,7 @@ public class CrossSocket {
 
                     else if(type == 2){
                         int typeDirection = 0;
-                        switch ((crosswalk + 3) % 4){
+                        switch (crosswalk){
                             case 0:
                                 roi.getFrontCrosswalk().addPedestrianList(new Pedestrian(typeLocation, typeDirection)); break;
                             case 1:
@@ -211,7 +211,7 @@ public class CrossSocket {
 
                     // 차일 때
                     else{
-                        switch ((crosswalk + 3) % 4){
+                        switch (crosswalk){
                             case 0:
                                 roi.getFrontCrosswalk().addCarList(new Car(typeLocation)); break;
                             case 1:
@@ -238,7 +238,7 @@ public class CrossSocket {
                         @Override
                         public void run() {
 
-                            switch ((crosswalk + 3) % 4){
+                            switch (crosswalk){
                                 case 0:
                                     crossFrame.refreshFrontFrame(roi.getFrontCrosswalk()); break;
                                 case 1:
@@ -305,84 +305,20 @@ public class CrossSocket {
        int convertX = 0, convertY = 0;
        switch (crosswalk_id){
            case 0:
-               switch(direction){
-                   case 0:
-                       convertX = x;
-                       convertY = y;
-                       break;
-                   case 1:
-                       convertX = y;
-                       convertY = 500 - x;
-                       break;
-                   case 2:
-                       convertX = 300 - y;
-                       convertY = x;
-                       break;
-                   case 3:
-                       convertX = 300 - y;
-                       convertY = x;
-                       break;
-               }
+               convertX = 500 - x;
+               convertY = 300 - y;
                break;
            case 1:
-               switch(direction){
-                   case 0:
-                       convertX = 300 - y;
-                       convertY = x;
-                       break;
-                   case 1:
-                       convertX = x;
-                       convertY = y;
-                       break;
-                   case 2:
-                       convertX = 500 - x;
-                       convertY = 300 - y;
-                       break;
-                   case 3:
-                       convertX = 500 - x;
-                       convertY = 300 - y;
-                       break;
-               }
+               convertX = y;
+               convertY = 500 - x;
                break;
            case 2:
-               switch(direction){
-                   case 0:
-                       convertX = 500 - x;
-                       convertY = 300 - y;
-                       break;
-                   case 1:
-                       convertX = 300 - y;
-                       convertY = x;
-                       break;
-                   case 2:
-                       convertX = y;
-                       convertY = 500 - x;
-                       break;
-                   case 3:
-                       convertX = y;
-                       convertY = 500 - x;
-                       break;
-               }
+               convertX = x;
+               convertY = y;
                break;
            case 3:
-               switch(direction){
-               case 0:
-                   convertX = y;
-                   convertY = 500 - x;
-                   break;
-               case 1:
-                   convertX = 500 - x;
-                   convertY = 300 - y;
-                   break;
-               case 2:
-                   convertX = x;
-                   convertY = y;
-                   break;
-               case 3:
-                   convertX = x;
-                   convertY = 300 - y;
-                   break;
-               }
+               convertX = 300 - y;
+               convertY = x;
                break;
        }
        coordinates[0] = convertX;
