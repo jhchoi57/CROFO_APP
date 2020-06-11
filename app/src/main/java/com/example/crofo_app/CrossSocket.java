@@ -223,15 +223,6 @@ public class CrossSocket {
                         }
                     }
 
-                    // 정보 반영해서 방향 결정하고 show
-
-                    // 방향이랑 횡단보도 정보 넘겨줘서 출력 할까? 음..
-
-                    //obj 추가
-                    //front 추가
-                    //back 추가
-                    //right 추가
-                    //left 추가
 
                     Handler mHandler = new Handler(Looper.getMainLooper());
                     mHandler.postDelayed(new Runnable() {
