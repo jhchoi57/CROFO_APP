@@ -84,9 +84,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         acceptLocationPermission();
         setGps();
         receiveLocation();
-
-        //tts 한국어로 초기화, Tmap 띄우기
-        //initTTS();
         setTMAP();
 
         // 시작 중심 좌표, 시작 현위치로
@@ -95,8 +92,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         currentPoint.setLatitude(tMapView.getLocationPoint().getLatitude());
         currentPoint.setLongitude(tMapView.getLocationPoint().getLongitude());
-        //markerItemCurrent.setTMapPoint(currentPoint);
-        //tMapView.addMarkerItem("current",markerItemCurrent);
 
         // 마커 아이콘 지정, 버튼 설정, tMapView 클릭 이벤트
         setMarkerIcon();
@@ -106,35 +101,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         setButton();
         tMapViewClickEvent();
         tMapViewLongClickEvent();
-
-        // 커스텀 다이얼로그를 호출한다.
-//        CrossFrame crossFrame = new CrossFrame(MainActivity.this);
-//        crossFrame.initAllCrossFrame();
-//        CrossInfo roi = new CrossInfo();
-//        int[] carLoc = new int[2]; carLoc[0] = 50; carLoc[1] = 50;
-//        roi.getFrontCrosswalk().addCarList(new Car(carLoc));
-//        crossFrame.refreshFrontFrame(roi.getFrontCrosswalk());
-//        roi.getRightCrosswalk().addCarList(new Car(carLoc));
-//        crossFrame.refreshRightFrame(roi.getFrontCrosswalk());
-//        roi.getBackCrosswalk().addCarList(new Car(carLoc));
-//        crossFrame.refreshBackFrame(roi.getFrontCrosswalk());
-//        roi.getLeftCrosswalk().addCarList(new Car(carLoc));
-//        crossFrame.refreshLeftFrame(roi.getFrontCrosswalk());
-//        //crossFrame.addObjFront(50,50,1, -1);
-//        crossFrame.showAllCrossFrame();
-//
-
-
-//        CrossSock
-        //sock.disconnect();  // 소켓 해제et sock = new CrossSocket("http://bic4907.diskstation.me:4446"); // 소켓 생성
-        ////        sock.setSocket(1, 0, null, null, 2, null);
-        ////        sock.connect(); // 노드 서버 소켓과 연결
-        ////        sock.run(); // 메시지 수신
-        //sock.setKey(123, 1); // key 바꾸기
-        //sock.connect(); // 노드 서버 소켓과 연결
-        //sock.run(); // 메시지 수신
-        //sock.disconnect(); // 소켓 해제
-
     }
 
     // onCreate 끝
@@ -163,17 +129,11 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                     Toast.makeText(getApplicationContext(), "위도 : " + endPoint.getLatitude() + "\n경도 : " + endPoint.getLongitude(), Toast.LENGTH_LONG).show();
 
                     // 출발지가 0 0 이 아니면 네비게이션 시작
-                    if(startPoint.getLongitude() != 0 && startPoint.getLatitude() != 0){
-//                        Navigation navigation = new Navigation(startPoint, endPoint, tMapView, MainActivity.this);
-//                        navigation.execute(startPoint, endPoint);
-
+                    if(startPoint.getLongitude() != 0 && startPoint.getLatitude() != 0){//
                         safetyDrive = new SafetyDrive(startPoint, endPoint, tMapView, MainActivity.this);
                         safetyDrive.execute(startPoint, endPoint);
 
                         btnFinish.setVisibility(View.VISIBLE);
-
-
-
                     }
 
                     else{

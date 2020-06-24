@@ -17,9 +17,6 @@ public class CrossInfo {
     private double[] crosswalkLocation0 = new double[2];
     private double[] crosswalkLocation1 = new double[2];
     private double[] crosswalkLocation2 = new double[2];
-
-
-
     private double[] crosswalkLocation3 = new double[2];
 
     public CrossInfo(){
@@ -37,28 +34,6 @@ public class CrossInfo {
         crosswalkLocation2 = new double[2];
         crosswalkLocation3 = new double[2];
         trueBearing = -1;
-    }
-
-    public CrossInfo(Crosswalk fC, Crosswalk rC, Crosswalk lC, Crosswalk bC, double[] cenL, double[] cL0, double[] cL1, double[] cL2, double[] cL3, double tB){
-        frontCrosswalk = fC;
-        rightCrosswalk = rC;
-        leftCrosswalk = lC;
-        backCrosswalk = bC;
-        centerLocation = cenL;
-        crossLocation0 = cL0;
-        crossLocation1 = cL1;
-        crossLocation2 = cL2;
-        crossLocation3 = cL3;
-        trueBearing = tB;
-    }
-
-    public CrossInfo(int cid, double[] cenL, double[] cL0, double[] cL1, double[] cL2, double[] cL3){
-        crossID = cid;
-        centerLocation = cenL;
-        crossLocation0 = cL0;
-        crossLocation1 = cL1;
-        crossLocation2 = cL2;
-        crossLocation3 = cL3;
     }
 
     public int getCrossID() {

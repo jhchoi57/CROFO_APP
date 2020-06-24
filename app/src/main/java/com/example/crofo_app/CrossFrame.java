@@ -91,9 +91,6 @@ public class CrossFrame {
 
         // 배경 어두워지는거 없애기
         frontdlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-
-        // 커스텀 다이얼로그를 노출한다
-        //frontdlg.show();
     }
 
     public void callCrossBack() {
@@ -119,8 +116,6 @@ public class CrossFrame {
         // 배경 어두워지는거 없애기
         backdlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
-        // 커스텀 다이얼로그를 노출한다
-        //backdlg.show();
     }
 
     public void callCrossLeft() {
@@ -146,8 +141,6 @@ public class CrossFrame {
         // 배경 어두워지는거 없애기
         leftdlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
-        // 커스텀 다이얼로그를 노출한다
-        //leftdlg.show();
     }
 
     public void callCrossRight() {
@@ -173,8 +166,6 @@ public class CrossFrame {
         // 배경 어두워지는거 없애기
         rightdlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
-        // 커스텀 다이얼로그를 노출한다
-        //rightdlg.show();
     }
 
     public void initAllCrossFrame(){
@@ -293,7 +284,6 @@ public class CrossFrame {
         pedestrianList = roi.getPedestrianList();
         carList = roi.getCarList();
         for(int i=0;i<pedestrianList.size();i++){
-            System.out.println(" back 에 찍히는 거 " + pedestrianList.get(i).getPedestrianLocation()[0]+ "  " + pedestrianList.get(i).getPedestrianLocation()[1]);
             addObjBack(pedestrianList.get(i).getPedestrianLocation()[0], pedestrianList.get(i).getPedestrianLocation()[1], 0,
                     pedestrianList.get(i).getPedestrianDirection());
         }
@@ -305,7 +295,6 @@ public class CrossFrame {
 
     public void refreshLeftFrame(Crosswalk roi){
 
-        System.out.println(" 리프레쉬에 객체 있나 봅시다 " + "  " + viewLeftList.size());
         for(int i = 0;i<viewLeftList.size();i++){
             ((ViewManager)viewLeftList.get(i).getParent()).removeView(viewLeftList.get(i));
         }
@@ -314,7 +303,6 @@ public class CrossFrame {
         if(isShowingWaningLeft && warningLeftImg.getParent() != null){
             ((ViewManager)warningLeftImg.getParent()).removeView(warningLeftImg);
         }
-        System.out.println(" 리프레쉬 초기화 됐나 봅시다 " + "  " + viewLeftList.size());
 
         if(roi == null) {
             leftdlg.show();
@@ -368,14 +356,6 @@ public class CrossFrame {
             Log.e("dismiss error", String.valueOf(e));
         }
 
-    }
-
-    public CrossInfo getROIInfo(CrossSocket sock){
-        CrossInfo roi = null;
-        sock.connect(); // 노드 서버 소켓과 연결
-        sock.run(); // 메시지 수신
-        //sock.disconnect();  // 소켓 해제
-        return roi;
     }
 
     public void addObjFront(int left, int top, int obj, int direction){

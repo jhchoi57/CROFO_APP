@@ -287,10 +287,6 @@ public class CrossSocket {
         System.out.println("Android-Node socket is disconnected");
     }
 
-    public void setCrossFrameROI(CrossFrame crossFrame){
-        crossFrame.setRoi(roi);
-    }
-
     public int[] convertByDirection(int x, int y, int crosswalk_id, int direction){
        int[] coordinates = new int[2];
        int convertX = 0, convertY = 0;
@@ -315,22 +311,6 @@ public class CrossSocket {
        coordinates[0] = convertX;
        coordinates[1] = convertY;
        return coordinates;
-    }
-
-    private int findDirection(CrossInfo roi, double[] direction){
-        if(roi.getCrosswalkLocation0() == direction){
-            return 0;
-        }
-        if(roi.getCrosswalkLocation1() == direction){
-            return 1;
-        }
-        if(roi.getCrosswalkLocation2() == direction){
-            return 2;
-        }
-        if(roi.getCrosswalkLocation3() == direction){
-            return 3;
-        }
-        return -1;
     }
 
 }

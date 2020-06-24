@@ -192,9 +192,7 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
 
                     if(!safetyDrive.getCrossFrame().getIsInROI()){
                         double[] direction = decideDirection(roi, safetyDrive.getCurrentLocation());
-//                        double[] direction = new double[2];
-//                        direction[0] = 37.679679;
-//                        direction[1] = 126.811145;
+
                         int findDirection = findDirection(roi, direction);
                         findDirection = (findDirection + 3) % 4;
                         System.out.println(" direction은 무엇인가 ? " + direction[0] + "   횡단보도 번호 : " + findDirection);
