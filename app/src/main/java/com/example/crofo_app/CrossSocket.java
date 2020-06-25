@@ -27,7 +27,6 @@ public class CrossSocket {
     public CrossFrame crossFrame;
     public double[] direction;
     private CrossAlert crossAlert;
-    private int directionNumber;
 
     public CrossSocket(String url) {
         this.url = url;
@@ -35,7 +34,7 @@ public class CrossSocket {
         stop = true;
     }
 
-    public void setSocket(int intersection_id, double[] crosswalk_point, CrossInfo roi, CrossFrame cF, double[] direction_point, CrossAlert cA, int cw, int dN) {
+    public void setSocket(int intersection_id, double[] crosswalk_point, CrossInfo roi, CrossFrame cF, double[] direction_point, CrossAlert cA, int cw) {
         this.intersection = intersection_id;
         this.crosswalkLocation = crosswalk_point;
         isConnected = false;
@@ -45,7 +44,6 @@ public class CrossSocket {
         this.direction = direction_point;
         crossAlert = cA;
         crosswalk = cw;
-        directionNumber = dN;
     }
 
     public void run() {
@@ -170,9 +168,8 @@ public class CrossSocket {
                     //0 사람 1 차 2 bike 3 버스 4 트럭
                     int type = json.getInt("type");
 
-                    System.out.println(" 원하는 횡단보도 " + crosswalk + " 진입 방향 " + directionNumber);
                     System.out.println("컨벌트전 " + json.getInt("x") +  "  /  "  + json.getInt("y"));
-                    int[] typeLocation = convertByDirection(json.getInt("x"), json.getInt("y"), crosswalk, directionNumber);
+                    int[] typeLocation = convertByDirection(json.getInt("x"), json.getInt("y"), crosswalk);
                     System.out.println("컨벌트후 " + typeLocation[0] + "/" + typeLocation[1]);
 
 
@@ -287,7 +284,7 @@ public class CrossSocket {
         System.out.println("Android-Node socket is disconnected");
     }
 
-    public int[] convertByDirection(int x, int y, int crosswalk_id, int direction){
+    public int[] convertByDirection(int x, int y, int crosswalk_id){
        int[] coordinates = new int[2];
        int convertX = 0, convertY = 0;
        switch (crosswalk_id){

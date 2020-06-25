@@ -192,10 +192,7 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
 
                     if(!safetyDrive.getCrossFrame().getIsInROI()){
                         double[] direction = decideDirection(roi, safetyDrive.getCurrentLocation());
-
-                        int findDirection = findDirection(roi, direction);
-                        findDirection = (findDirection + 3) % 4;
-                        System.out.println(" direction은 무엇인가 ? " + direction[0] + "   횡단보도 번호 : " + findDirection);
+                        System.out.println(" direction은 무엇인가 ? " + direction[0]);
 
                         safetyDrive.getCrossFrame().setInROI(true);
                         safetyDrive.getCrossFrame().initAllCrossFrame();
@@ -215,7 +212,7 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
                                         case 1:
                                             crosswalkPoint = roi.getCrosswalkLocation2(); break;
                                     }
-                                    sock[i].setSocket(roi.getCrossID(), crosswalkPoint, roi, safetyDrive.getCrossFrame(), direction, crossAlert, i+1, findDirection);
+                                    sock[i].setSocket(roi.getCrossID(), crosswalkPoint, roi, safetyDrive.getCrossFrame(), direction, crossAlert, i+1);
                                     sock[i].connect();
                                     sock[i].run();
                                 }
@@ -239,7 +236,7 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
                                     case 3:
                                         crosswalkPoint = roi.getCrosswalkLocation3(); break;
                                 }
-                                sock[i].setSocket(roi.getCrossID(), crosswalkPoint, roi, safetyDrive.getCrossFrame(), direction, crossAlert, i, findDirection);
+                                sock[i].setSocket(roi.getCrossID(), crosswalkPoint, roi, safetyDrive.getCrossFrame(), direction, crossAlert, i);
                                 sock[i].connect();
                                 sock[i].run();
                             }
