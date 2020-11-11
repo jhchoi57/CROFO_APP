@@ -130,9 +130,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
                     // 출발지가 0 0 이 아니면 네비게이션 시작
                     if(startPoint.getLongitude() != 0 && startPoint.getLatitude() != 0){//
+                        safetyDrive = null;
                         safetyDrive = new SafetyDrive(startPoint, endPoint, tMapView, MainActivity.this);
                         safetyDrive.execute(startPoint, endPoint);
-
                         btnFinish.setVisibility(View.VISIBLE);
                     }
 
@@ -163,6 +163,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                     // 출발지, 목적지 초기화
                     startPoint = new TMapPoint(0,0);
                     endPoint = new TMapPoint(0,0);
+
+                    // 스레드 정지
+                    safetyDrive.cancelTimerTask();
 
                     // 출발지, 목적지 초기화 됐는지 출력 해볼게용
                     Toast.makeText(getApplicationContext(), "출발지 " + startPoint.getLatitude() + ", " + startPoint.getLongitude() +
@@ -265,8 +268,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         gps.setMinDistance(2);
         // 현재 위치 인터넷으로 받기 gps 면 GPS_PROVIDER
         // GPS_PROVIDER NETWORK_PROVIDER
-        //gps.setProvider(gps.NETWORK_PROVIDER);
-        gps.setProvider(gps.GPS_PROVIDER);
+        gps.setProvider(gps.NETWORK_PROVIDER);
+        //gps.setProvider(gps.GPS_PROVIDER);
         gps.OpenGps();
     }
 

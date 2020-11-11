@@ -164,9 +164,9 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
                                     TMapPoint point = new TMapPoint(Double.parseDouble(splitXY[1]), Double.parseDouble(splitXY[0]));
                                     double[] pointDouble = {Double.parseDouble(splitXY[1]), Double.parseDouble(splitXY[0])};
                                     coordinatesList.add(pointDouble);
-                                    TMapMarkerItem Marker = new TMapMarkerItem();
-                                    Marker.setTMapPoint(point);
-                                    tMapView.addMarkerItem("asd" + point, Marker);
+                                    //TMapMarkerItem Marker = new TMapMarkerItem();
+                                    //Marker.setTMapPoint(point);
+                                    //tMapView.addMarkerItem("asd" + point, Marker);
                                 }
                             }
                         }
@@ -230,6 +230,10 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
 
             }
         };
+    }
+
+    public void cancelTimerTask(){
+        gpsCheckTimerTask.cancel();
     }
 
     public double getTrueBearing(double[] point1, double[] point2){
