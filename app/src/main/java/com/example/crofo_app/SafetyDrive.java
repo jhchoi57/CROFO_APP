@@ -61,8 +61,8 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
 //        sock[0] = new CrossSocket("http://bic4907.diskstation.me:4446");
 //        sock[0] = new CrossSocket("http://192.168.0.8:8080");
         for(int i = 0;i<4;i++){
-            sock[i] = new CrossSocket("http://bic4907.diskstation.me:8081"); // 소켓 생성
-//            sock[i] = new CrossSocket("http://192.168.0.7:8080"); // 소켓 생성
+            sock[i] = new CrossSocket("http://test.inchang.dev:4446"); // 소켓 생성
+//            sock[i] = new CrossSocket("http://192.168.43.165:8080"); // 소켓 생성
         }
     }
 
@@ -74,8 +74,8 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
         this.isNavi = true;
         crossFrame = new CrossFrame(context);
         for(int i = 0;i<2;i++){
-//            sock[i] = new CrossSocket("http://192.168.0.7:8080"); // 소켓 생성
-            sock[i] = new CrossSocket("http://bic4907.diskstation.me:8081"); // 소켓 생성
+//            sock[i] = new CrossSocket("http://192.168.43.165:8080"); // 소켓 생성
+            sock[i] = new CrossSocket("http://test.inchang.dev:4446"); // 소켓 생성
 
         }
     }
@@ -219,12 +219,12 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
                 currentBearing = getTrueBearing(recentLocation, currentLocation);
 
                 if(isNavi){
-//                    new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock, true).execute("http://192.168.0.7:8080/app/cross/find");
-                    new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock, true).execute("http://bic4907.diskstation.me:8081/app/cross/find");
+//                    new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock, true).execute("http://192.168.43.165:8080/app/cross/find");
+                    new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock, true).execute("http://test.inchang.dev:4446/app/cross/find");
                 }
                 else {
-                    new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock).execute("http://bic4907.diskstation.me:8081/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
-//                    new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock).execute("http://192.168.0.7:8080/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
+                    new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock).execute("http://test.inchang.dev:4446/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
+//                   new FindCrossRequest(currentLocation, SafetyDrive.this, context, sock).execute("http://192.168.43.165:8080/app/cross/find"); // 처음에 경로 찾고 교차로 목록 이렇게 보내면 됨.
                 }
                 System.out.println("보냇어용");
 
@@ -313,6 +313,7 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
 
     // ROI 안에 들어온 교차로 리스트 return
     public ArrayList<CrossInfo> crossListInROI(double curLat, double curLon){
+
         double[] currentLocation = new double[2];
         currentLocation[0] = curLat;
         currentLocation[1] = curLon;
@@ -322,7 +323,6 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
                 List.add(crossInfoList.get(i));
             }
         }
-
         if(List.size() == 0) isInCross = false;
         else isInCross = true;
 
@@ -396,9 +396,9 @@ public class SafetyDrive extends AsyncTask<TMapPoint, Void, Void> {
 
     public void drawPolygon(double[] ext0, double[] ext1, double[] ext2, double[] ext3){
         TMapPolygon tMapPolygon = new TMapPolygon();
-        tMapPolygon.setLineColor(Color.BLUE);
+        tMapPolygon.setLineColor(Color.TRANSPARENT);
         tMapPolygon.setPolygonWidth(2);
-        tMapPolygon.setAreaColor(Color.GRAY);
+        tMapPolygon.setAreaColor(0x00FF7F); //spring green
         tMapPolygon.setAreaAlpha(100);
         tMapPolygon.addPolygonPoint( new TMapPoint(ext0[0], ext0[1]));
         tMapPolygon.addPolygonPoint( new TMapPoint(ext1[0], ext1[1]));

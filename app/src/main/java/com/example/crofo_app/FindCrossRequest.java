@@ -123,8 +123,10 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
         super.onPostExecute(result);
         try {
             JSONObject resultJson = new JSONObject(result);
-            boolean res = resultJson.getBoolean("result");
-            if (res) {
+            System.out.println("왓는데" + "");
+            int res = resultJson.getInt("code");
+            System.out.println("왓는데22" + "");
+            if (res == 1) {
                 JSONArray resultArr = resultJson.getJSONArray("arr");
                 int cnt = resultArr.length();
                 // =================CrossInfo 리스트 초기화=========================== //
@@ -180,7 +182,9 @@ public class FindCrossRequest extends AsyncTask<String, String, String> {
                     safetyDrive.addList(crossInfo);
                 }
                 // =================ROI 체크=========================== //
+
                 ArrayList<CrossInfo> roiList = safetyDrive.crossListInROI(lat, lon);
+
                 // =================ROI 하나 고르기=========================== //
                 if(roiList.size() > 0) {
                     CrossInfo roi = safetyDrive.ifHaveManyROI(safetyDrive.getCurrentBearing(), roiList, safetyDrive.getCurrentLocation());

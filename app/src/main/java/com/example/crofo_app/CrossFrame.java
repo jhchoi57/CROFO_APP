@@ -84,8 +84,9 @@ public class CrossFrame {
         LayoutParams params = frontdlg.getWindow().getAttributes();
         params.x = 400;
         params.y = 300;
+        // a90 250 s8 400
         // params.width = 300;
-        // params.height = 300;
+        // params.height = 300;c
         frontdlg.getWindow().setAttributes(params);
         frontdlg.getWindow().setGravity(Gravity.TOP | Gravity.LEFT);
 
@@ -107,6 +108,7 @@ public class CrossFrame {
         // 커스텀 다이얼로그 위치 조정
         LayoutParams params = backdlg.getWindow().getAttributes();
         params.x = 400;
+        // a90 250 s8 400
         params.y = 800 + 300 + 600;
         // params.width = 300;
         // params.height = 300;
